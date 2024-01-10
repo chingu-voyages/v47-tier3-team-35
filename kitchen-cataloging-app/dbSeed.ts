@@ -4,8 +4,10 @@
 
 const { MongoClient, ObjectId } = require('mongodb');
 
-const url =
-  "mongodb+srv://njhcode:gKckl1X2AZAqTblm@kitchen-cataloging-app.zgpby1t.mongodb.net/?retryWrites=true&w=majority";
+const dotenv = require('dotenv');
+dotenv.config();
+
+const url = process.env.DATABASE_URL
 
 //  Connect to the Atlas cluster
 const client = new MongoClient(url);
