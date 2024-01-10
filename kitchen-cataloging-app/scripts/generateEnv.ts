@@ -67,6 +67,7 @@ const main = async () => {
     if (!val) console.error(`Error getting secret ${names[idx]}`);
   });
   const filteredContentArr = contentArr.filter((val) => val) as string[];
+  if (filteredContentArr.length === 0) return;
   const content = filteredContentArr.reduce((a, b) => a + b);
   generateEnvFile(content);
   //logout for secruity
