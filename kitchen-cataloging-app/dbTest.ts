@@ -3,7 +3,7 @@
 // Run this test with this command:
   // npx ts-node dbTest.ts
 
-import { PrismaClient } from '@prisma/client'
+const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient()
 
@@ -13,13 +13,13 @@ interface user {
   last: string;
 }
 
-async function main() {
+async function getDb() {
   // Prisma Client queries:
   const allUsers: user[] = await prisma.testCollection.findMany()
   console.log(`Found user: ${allUsers[0].last}, ${allUsers[0].first}`)
 }
 
-main()
+getDb()
   .then(async () => {
     await prisma.$disconnect()
   })
