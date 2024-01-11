@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "secrets": "npx ts-node ./scripts/generateEnv.ts",
+    "migrate:mongo": "dotenv -e .env.local -- npx prisma db push",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.29.2",
     "@prisma/client": "^5.8.0",
+    "dotenv-cli": "^7.3.0",
     "mongodb": "6.3",
     "next": "14.0.4",
     "react": "^18",

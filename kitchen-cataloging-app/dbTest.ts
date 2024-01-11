@@ -1,7 +1,10 @@
 // This file uses prisma to query the MongoDB Atlas Database
 
 // Run this test with this command:
-  // npx ts-node dbTest.ts
+// npx ts-node dbTest.ts
+  
+const { config } = require('dotenv');
+config({ path: '.env.local' })
 
 const { PrismaClient } = require('@prisma/client');
 
