@@ -1,6 +1,12 @@
 import { redirect } from 'next/navigation';
-import { prisma } from '../../../lib/prisma';
+// import { prisma } from '../../../lib/prisma';
 import { currentUser } from '@clerk/nextjs';
+const { PrismaClient } = require("@prisma/client");
+ 
+const { config } = require("dotenv");
+config({ path: ".env.local" });
+
+const prisma = new PrismaClient({});
 
 // Function to create a new user
 const createNewUser = async () => {
@@ -19,8 +25,8 @@ const createNewUser = async () => {
     await prisma.user.create({
       data: {
         clerkId: user?.id as string, // Use the Clerk ID as the unique identifier
-        email: user?.email as string, // Use the email from the Clerk user
-        name: user?.name as string, // Use the name from the Clerk user
+        email: user?.emailAddresses[0].emailAddress as string, // Use the email from the Clerk user
+        name: user?.emailAddresses[0].emailAddress as string, // Use the name from the Clerk user
       },
     });
   }
@@ -31,6 +37,7 @@ const createNewUser = async () => {
 
 // The main component
 const NewUser = async () => {
+
   // Create the new user
   await createNewUser();
 
