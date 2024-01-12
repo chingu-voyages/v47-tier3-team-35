@@ -26,7 +26,8 @@ const createNewUser = async () => {
       data: {
         clerkId: user?.id as string, // Use the Clerk ID as the unique identifier
         email: user?.emailAddresses[0].emailAddress as string, // Use the email from the Clerk user
-        name: user?.emailAddresses[0].emailAddress as string, // Use the name from the Clerk user
+        firstName: user?.firstName, //Use the first name from the Clerk user -- Need to add ability for users to add first name in local method
+        lastName: user?.lastName, ///Use the last name from the Clerk user -- Need to add ability for users to add last name in local method
       },
     });
   }
