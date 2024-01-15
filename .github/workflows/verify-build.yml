@@ -1,0 +1,19 @@
+name: Verify build
+
+on: 
+  push: 
+    branches:
+      - workflow-setup
+
+jobs:
+  verify-packages:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: verify-node
+        run: node --v
+        working-directory: ./kitchen-cataloging-app
+
+      - name: verify-npm
+        run: npm -v
+        working-directory: ./kitchen-cataloging-app
+       
