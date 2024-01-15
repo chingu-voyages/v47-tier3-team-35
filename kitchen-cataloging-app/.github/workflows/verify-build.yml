@@ -1,0 +1,14 @@
+name: Verify build
+
+on: 
+  push: 
+    branches:
+      - dev
+
+jobs:
+  verify-packages:
+    runs-on: ubuntu-latest
+    steps: 
+      - run: node --v
+      - run: npm -v
+       
