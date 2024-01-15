@@ -1,5 +1,10 @@
 import Link from 'next/link';
-export default function Home() {
+import { auth } from '@clerk/nextjs';
+import HomePageButtons from './components/HomePageButtons';
+export default async function Home() {
+  //check to see if the user has been autheticated
+  const { userId } = await auth();
+
   return (
     <div className='flex flex-col items-center justify-center h-screen bg-gray-100 p-5'>
       <h1 className='text-2xl text-gray-800 mb-5'>Kitchen Cataloging App</h1>
@@ -7,18 +12,7 @@ export default function Home() {
         Please sign in to manage your kitchen items
       </p>
       <div className='flex gap-4'>
-        <Link
-          href='/sign-in'
-          className='px-4 py-2 bg-blue-500 text-white rounded'
-        >
-          Sign In
-        </Link>
-        <Link
-          href='/sign-up'
-          className='px-4 py-2 bg-green-500 text-white rounded'
-        >
-          Sign Up
-        </Link>
+        <HomePageButtons userId={userId || ''} />
       </div>
     </div>
   );
