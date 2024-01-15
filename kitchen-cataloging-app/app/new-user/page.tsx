@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation';
 // import { prisma } from '../../../lib/prisma';
 import { currentUser } from '@clerk/nextjs';
-const { PrismaClient } = require("@prisma/client");
- 
-const { config } = require("dotenv");
-config({ path: ".env.local" });
+
+const { PrismaClient } = require('@prisma/client');
+
+const { config } = require('dotenv');
+config({ path: '.env.local' });
 
 const prisma = new PrismaClient({});
 
@@ -26,24 +27,25 @@ const createNewUser = async () => {
       data: {
         clerkId: user?.id as string, // Use the Clerk ID as the unique identifier
         email: user?.emailAddresses[0].emailAddress as string, // Use the email from the Clerk user
-        firstName: user?.firstName, //Use the first name from the Clerk user 
-        lastName: user?.lastName, ///Use the last name from the Clerk user 
+        firstName: user?.firstName, //Use the first name from the Clerk user
+        lastName: user?.lastName, ///Use the last name from the Clerk user
       },
     });
   }
 
-  // Redirect the user to the dashboard
   redirect('/dashboard');
 };
 
 // The main component
 const NewUser = async () => {
-
   // Create the new user
   await createNewUser();
 
-  // Render a loading message while the user is being created
-  return <div>...loading</div>;
+  return (
+    <div className='flex flex-col items-center justify-center h-screen bg-gray-100 p-5'>
+      Loading...
+    </div>
+  );
 };
 
 export default NewUser;
