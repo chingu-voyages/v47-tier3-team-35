@@ -15,7 +15,7 @@ jobs:
           path: kitchen-cataloging-app  # Specify the subdirectory
 
       - name: verify-node
-        run: node --v
+        run: node -v
         working-directory: kitchen-cataloging-app
 
       - name: verify-npm
