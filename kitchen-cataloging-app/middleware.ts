@@ -7,6 +7,7 @@ export default authMiddleware({
   //these are the routes we are not protecting
   publicRoutes: ["/"],
   afterAuth(auth, req, evt) {
+
     if (!auth.userId && !auth.isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: req.url });
     }

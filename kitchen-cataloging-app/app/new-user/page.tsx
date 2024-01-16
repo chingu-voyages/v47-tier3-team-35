@@ -26,13 +26,20 @@ const createNewUser = async () => {
       },
     });
   }
-  redirect("/dashboard");
 };
 
 // The main component
 const NewUser = async () => {
   // Create the new user
-  createNewUser();
+  createNewUser()
+    //redirect according to status
+    .then(() => {
+      redirect("/dashboard");
+    })
+    .catch((err) => {
+      console.error(err);
+      redirect("/sign-up");
+    });
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-5">
       <LoadingPage />
