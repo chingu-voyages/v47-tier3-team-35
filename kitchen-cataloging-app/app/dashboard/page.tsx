@@ -1,5 +1,4 @@
 import { UserButton, currentUser } from '@clerk/nextjs';
-
 export default async function Dashboard() {
   const user = await currentUser();
 

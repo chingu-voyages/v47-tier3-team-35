@@ -1,10 +1,5 @@
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-
 export default function HomePageButtons({ userId }: { userId: string }) {
-  if (userId) {
-    redirect('/dashboard');
-  }
   return (
     <>
       <Link
