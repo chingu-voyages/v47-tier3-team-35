@@ -20,6 +20,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   foods Food[]
+  rooms Room[]
+}
+
+model Room {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  title String
+  foods Food[]
+  user User @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
 }
 
 // food items model. Stored as an array in User
@@ -28,16 +37,18 @@ model Food {
   createdAt DateTime @default(now()) //purchase date
   updatedAt DateTime @updatedAt 
   description String 
-  currPrice Float //limit to 2 decimal places
-  currAmount Int
+  price Float //limit to 2 decimal places
+  amount Int
   category String //limit to available categories
   threshold Int?
   expirationDate DateTime?
   image String?
   notes String?
-  log Log[] //stores log for each time user purchases this food
+  log Log[] //stores log for each time user adds or subtracts this food
   user User @relation(fields: [userId], references: [id])
   userId String @db.ObjectId
+  room Room @relation(fields: [roomId], references: [id])
+  roomId String @db.ObjectId
 }
 
 // Food log model -- created upon every purchase of food. Stored as an array in Food
