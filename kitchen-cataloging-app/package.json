@@ -5,6 +5,7 @@
   "scripts": {
     "secrets": "npx ts-node ./scripts/generateEnv.ts",
     "migrate:mongo": "dotenv -e .env.local -- npx prisma db push",
+    "postinstall": "prisma generate",
     "dev": "npm run migrate:mongo && npx next dev",
     "build": "next build",
     "start": "next start",

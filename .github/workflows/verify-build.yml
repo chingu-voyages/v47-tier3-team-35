@@ -1,0 +1,24 @@
+name: Verify build
+
+on: 
+  push: 
+    branches:
+      - workflow-setup
+
+jobs:
+  verify-packages:
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          path: kitchen-cataloging-app  # Specify the subdirectory
+
+      - name: verify-node
+        run: node -v
+        working-directory: kitchen-cataloging-app
+
+      - name: verify-npm
+        run: npm -v
+        working-directory: kitchen-cataloging-app
+       
