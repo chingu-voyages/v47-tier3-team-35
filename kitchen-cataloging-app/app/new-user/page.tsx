@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
-import { PrismaClient } from "@prisma/client";
+import prisma from "../../prisma/client";
 import LoadingPage from "@/components/utils/LoadingPage";
-const prisma = new PrismaClient({});
+
 // Function to create a new user
 const createNewUser = async () => {
   // Get the current user
