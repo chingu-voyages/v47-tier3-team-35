@@ -101,7 +101,7 @@ export const seedData = {
         {
             createdAt: new Date(Date.now()),
             updatedAt: new Date(Date.now()),
-            description: '5-Gallon bucket of Cheese Balls',
+            description: '5-Gallon bucket of Cheese Puffs',
             price: 8.00,
             amount: 1,
             category: 'Snack',
