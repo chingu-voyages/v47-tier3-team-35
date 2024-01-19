@@ -1,22 +1,33 @@
 name: Vercel Production Deployment
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
   push:
     branches:
-        - main
+      - main
 jobs:
   Deploy-Production:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Pull Secrets from HashiCorp
+        id: hashicorp-vault-secrets
+        uses: aasmal97/HashicorpVaultSecrets@v1.0.0
+        with:
+          CLIENT_ID: ${{ secrets.HASHICORP_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.HASHICORP_CLIENT_SECRET }}
+          ORGANIZATION_NAME: "kitchen-cataloging-app"
+          PROJECT_NAME: "next-js-app"
+          APP_NAME: "ci-cd"
+          SECRET_NAMES: '["VERCEL_TOKEN", "VERCEL_ORG_ID", "VERCEL_PROJECT_ID"]'
+      - name: Set Vercel Environment Vars
+        run: | 
+          echo "VERCEL_PROJECT_ID=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_PROJECT_ID}}" >> $GITHUB_ENV
+          echo "VERCEL_CLIENT_ID=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_CLIENT_ID}}" >> $GITHUB_ENV
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Pull Vercel Environment Information
-        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_TOKEN}}
       - name: Build Project Artifacts
-        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_TOKEN}}
       - name: Deploy Project Artifacts to Vercel
-        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        run: vercel deploy --prebuilt --prod --token=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_TOKEN}}
