@@ -22,7 +22,7 @@ jobs:
       - name: Set Vercel Environment Vars
         run: | 
           echo "VERCEL_PROJECT_ID=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_PROJECT_ID}}" >> $GITHUB_ENV
-          echo "VERCEL_CLIENT_ID=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_CLIENT_ID}}" >> $GITHUB_ENV
+          echo "VERCEL_ORG_ID=${{ steps.hashicorp-vault-secrets.outputs.VERCEL_ORG_ID}}" >> $GITHUB_ENV
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
       - name: Pull Vercel Environment Information
