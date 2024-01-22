@@ -5,13 +5,6 @@ import RoomListItem from './RoomListItem';
 import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-// import FormData from
-
-// dashboard/room/id3yr28u429
-
-//dashboard(layout.tsx header,{children}, footer)
-
-// /temp/db-test
 
 const RoomPage = async () => {
   const user = await currentUser();
