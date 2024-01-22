@@ -19,9 +19,9 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
         <p>{title}</p>
       ) : (
         <form
-          action={async() => {
-            editRoom
-
+          action={async (formData) => {
+            editRoom(formData);
+            setIsEditing(false);
           }}
         >
           <input
