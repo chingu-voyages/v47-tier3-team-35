@@ -5,15 +5,17 @@ import Link from "next/link";
 
 interface Room {
   params: {
-    roomId: string;
+    roomTitle: string;
   };
 }
 
 // api call to get all room info and foods for the room
 
-const Room = async ({ params }: { params: { roomId: string } }) => {
+const Room = async ({ params }: { params: { roomTitle: string } }) => {
   const user = await currentUser();
-  const roomId = params.roomId;
+
+  // Uses room name to find room based on the user id. Also includes foods that matches that room name
+  const roomTitle = params.roomTitle;
 
   if (!user) {
     redirect("/");
@@ -26,15 +28,14 @@ const Room = async ({ params }: { params: { roomId: string } }) => {
     include: {
       rooms: {
         where: {
-          id: roomId,
+          id: roomTitle,
         },
       },
-// Right now, the foods are related to the room by the room NAME. Should we change the schema to save the room ID to avoid multple API calls?
-    //   foods: {
-    //     where: {
-    //       room: roomId,
-    //     }
-    //   }
+      foods: {
+        where: {
+          room: roomTitle,
+        }
+      }
     },
   });
 
@@ -43,8 +44,14 @@ const Room = async ({ params }: { params: { roomId: string } }) => {
 
   return (
     <div>
-      <p>This is room: {thisRoom?.title}</p>
+      <h1>This is room: {thisRoom?.title}</h1>
       <Link href='/dashboard/rooms'>Back to all Rooms</Link>
+      <p>Here are the food items in this room:</p>
+      <ul>
+        {thisUser?.foods.map((food) => (
+          <li key={food.id}>{food.description}</li>
+      ))}
+      </ul> 
     </div>
   );
 };

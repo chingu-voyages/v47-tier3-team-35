@@ -6,6 +6,8 @@ import { currentUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { RoomSchema } from './schema';
+import RoomList from './RoomList';
+import { RoomType } from '../../../data/types';
 
 const RoomPage = async () => {
   const user = await currentUser();
@@ -14,18 +16,60 @@ const RoomPage = async () => {
     redirect('/');
   }
 
+  // Sadly, there is no way to paginate (take/ skip) included relations in prisma, so two calls are needed: one for the user, one for the initial rooms shown.
+  // This also includes the count of total rooms to be used for pagination
   const thisUser = await prisma.user.findUnique({
     where: {
       clerkId: user?.id,
     },
     include: {
-      rooms: true,
-    },
+      _count: {
+        select: {rooms: true}
+      }
+    }
   });
 
-  const rooms = thisUser?.rooms;
+// Returns first 5 rooms upon page load. Use paginate rooms to show next group of 5 rooms (function found in RoomList component).
+  const rooms = await prisma.room.findMany({
+    take: 5,
+    where: {
+      userId: thisUser?.id
+    }
+  });
 
-  
+
+  // Paginate rooms
+  const paginateRooms = async (
+    userId: string,
+    cursor: string,
+    take: number
+  ): Promise<RoomType[]> => {
+    "use server";
+    console.log(take)
+    try {
+      if (userId && cursor) {
+        const nextRooms = await prisma.room.findMany({
+          take: take,
+          skip: 1, // Skip the cursor
+          cursor: {
+            id: cursor,
+          },
+          where: {
+            userId: userId,
+          },
+        });
+        if (nextRooms) {
+          return nextRooms;
+        } else {
+          throw new Error("No rooms found");
+        }
+      }
+    } catch (error) {
+      console.error("Error paginating rooms:", error);
+    }
+    return [];
+  };
+
   const addRoom = async (formData: FormData) => {
     'use server';
 
@@ -76,12 +120,12 @@ const RoomPage = async () => {
     const roomName = formData.get('roomName');
     const id = formData.get('id');
 
+    // Validate room name (between 3-30 characters)
     const validation = RoomSchema.safeParse(roomName);
 
-    // Validate room name (between 3-30 characters)
     if (!validation.success) {
-      console.error(validation.error.issues)
-      return
+      // validation.issues.error is a ZodError[], so had to join. 
+      throw new Error(validation.error.issues.join())      
     }
 
     if (thisUser) {
@@ -94,8 +138,7 @@ const RoomPage = async () => {
         });
 
         if (existingRoomName) {
-          console.error("Error: Room name already exists");
-          return;
+          throw new Error("Room name already exists");
         }
         // Update room name if all checks/validation passed
         await prisma.room.update({
@@ -113,22 +156,27 @@ const RoomPage = async () => {
     revalidatePath('/rooms');
   };
 
-  const deleteRoom = async (id: string) => {
+  const deleteRoom = async (title: string, id: string) => {
     'use server';
-    // Do something with id
     if (thisUser) {
+
       try {
+        // Make sure no food exists in this room before deleting. Use room title to access food
+        const foodinRoom = await prisma.food.findMany({
+          where: {
+            room: title
+          }
+        })
+        if (foodinRoom.length > 0) {
+          throw new Error('You cannot delete a room with food in it.')
+        }
+
+        // Need to use id to delete becuase it is unique
         await prisma.room.delete({
           where: {
             id: id,
           },
         });
-        // To delete food, we want the room to be related by the room's ID, not the room's name.
-        // await prisma.food.deleteMany({
-        //   where: {
-        //     room: id,
-        //   }
-        // })
       } catch (error) {
         console.error('Error deleting room:', error);
       }
@@ -139,21 +187,14 @@ const RoomPage = async () => {
   return (
     <main>
       <h1>Room Page</h1>
-      <section>
-        <h2>Your current rooms: {rooms?.length} </h2>
-        <ul className="list-none">
-          {rooms?.map((room) => (
-            <li key={room.id} className="flex px-2 py-1 gap-2">
-              <RoomListItem
-                id={room.id}
-                title={room.title}
-                editRoom={editRoom}
-                deleteRoom={deleteRoom}
-              />
-            </li>
-          ))}
-        </ul>
-      </section>
+      <RoomList
+        rooms={rooms ? rooms : []}
+        userId={thisUser?.id ? thisUser.id : ''}
+        totalRooms={thisUser?._count.rooms ? thisUser._count.rooms : 0}
+        editRoom={editRoom}
+        deleteRoom={deleteRoom}
+        paginateRooms={paginateRooms}
+      />
       <hr />
       <section>
         <form className="flex flex-col gap-3" action={addRoom}>

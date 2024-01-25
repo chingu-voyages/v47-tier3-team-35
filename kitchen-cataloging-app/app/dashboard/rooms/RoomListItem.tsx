@@ -7,7 +7,7 @@ interface RoomListItem {
   id: string;
   title: string;
   editRoom: (formData: FormData) => void;
-  deleteRoom: (id: string) => void;
+  deleteRoom: (title: string, id: string) => void;
 }
 
 const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
@@ -17,7 +17,7 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
   return (
     <>
       {!isEditing ? (
-        <Link className='font-bold underline text-gray-900 hover:text-blue-500 active:text-red-500' href={`rooms/${id}`}>{title}</Link>
+        <Link className='font-bold underline text-gray-900 hover:text-blue-500 active:text-red-500' href={`rooms/${title}`}>{title}</Link>
       ) : (
         <form
             action={async (formData) => {
@@ -32,7 +32,8 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
             name="roomName"
-          />
+            />
+            {/* Uses the id to access the room -- need to send the id in the form in order to use server action with form. Therefore, a hidden input: */}
           <input className="hidden" type="text" value={id} name="id" readOnly />
           <button type="submit">Submit</button>
         </form>
@@ -45,7 +46,7 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
       </button>
       <button
         className={"border border-red-300 rounded-md p-1"}
-        onClick={() => deleteRoom(id)}
+        onClick={() => deleteRoom(title, id)}
       >
         Delete
       </button>
