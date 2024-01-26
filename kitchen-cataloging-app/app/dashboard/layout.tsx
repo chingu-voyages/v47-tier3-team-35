@@ -5,7 +5,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <section>
       <Navbar />
-      {children}
+      <div className="flex flex-col p-[1.5rem]">{children}</div>
     </section>
   );
 };
