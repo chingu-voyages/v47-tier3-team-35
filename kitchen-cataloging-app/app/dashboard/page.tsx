@@ -1,17 +1,36 @@
-import { UserButton, currentUser } from '@clerk/nextjs';
-import Link from 'next/link';
-
-export default async function Dashboard() {
+import { currentUser } from "@clerk/nextjs";
+import { Container, Grid, Typography } from "@mui/material";
+import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
+export const DashboardGreeting = async () => {
   const user = await currentUser();
-
   return (
-    <div className='flex flex-col items-center justify-center h-screen bg-gray-100 p-5'>
-      <div className='absolute top-5 right-5 flex gap-2 items-center'>
-        <UserButton showName={true} afterSignOutUrl='/sign-in' />
-      </div>
-      <h1 className='text-2xl text-gray-800 mb-5'>Welcome {user?.firstName}</h1>
-      <p className='text-xl text-gray-600 mb-5'>Here are your items</p>
-      <Link href='/dashboard/rooms'>My Spaces</Link>
+    <Container className="flex flex-row items-center p-0">
+      <Typography
+        variant="h5"
+        sx={{
+          fontSize: "1.8rem",
+          width: "auto",
+        }}
+      >
+        Welcome, {user?.firstName}!
+      </Typography>
+      <WavingHandTwoToneIcon />
+    </Container>
+  );
+};
+export const DashboardContent = () => {
+  return (
+    <Grid container rowSpacing={2} columnSpacing={1}>
+      <Grid item xs={12} sm={6} md={8}></Grid>
+      <Grid item xs={12} sm={6} md={4}></Grid>
+    </Grid>
+  );
+};
+export default async function Dashboard() {
+  return (
+    <div>
+      <DashboardGreeting />
+      <DashboardContent />
     </div>
   );
 }

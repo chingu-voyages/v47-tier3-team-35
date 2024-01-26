@@ -3,6 +3,7 @@ import LoadingPage from "@/components/utils/LoadingPage";
 //clerck auth
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { StyledEngineProvider } from "@mui/material";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,20 +18,17 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      // style={{
-      //   background: "white",
-      // }}
     >
       <body
-        // style={{
-        //   background: "white",
-        // }}
+        id={"__next"}
       >
         <ClerkProvider>
           <ClerkLoading>
             <LoadingPage />
           </ClerkLoading>
-          <ClerkLoaded>{children}</ClerkLoaded>
+          <ClerkLoaded>
+            <StyledEngineProvider injectFirst>{children}</StyledEngineProvider>
+          </ClerkLoaded>
         </ClerkProvider>
       </body>
     </html>
