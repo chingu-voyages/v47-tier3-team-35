@@ -22,7 +22,7 @@ export default function Navbar() {
         >
           Photos
         </Typography>
-        {userId && <UserButton showName={true} afterSignOutUrl="/sign-in" />}
+        {userId && <UserButton showName={true} afterSignOutUrl="/auth/sign-in" />}
       </Toolbar>
     </AppBar>
   );

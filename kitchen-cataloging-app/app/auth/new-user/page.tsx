@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
-import prisma from "../../prisma/client";
+import prisma from "../../../prisma/client";
 import LoadingPage from "@/components/utils/LoadingPage";
 
 // Function to create a new user

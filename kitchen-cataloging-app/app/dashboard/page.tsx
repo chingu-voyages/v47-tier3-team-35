@@ -1,8 +1,8 @@
-import { currentUser } from "@clerk/nextjs";
 import { Container, Grid, Typography } from "@mui/material";
 import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
+import getUserInfo from "@/providers/auth/ServerAuthProvider";
 export const DashboardGreeting = async () => {
-  const user = await currentUser();
+  const user = await getUserInfo()
   return (
     <Container className="flex flex-row items-center p-0">
       <Typography
