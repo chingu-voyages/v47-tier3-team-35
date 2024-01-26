@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { deleteRoom, editRoom } from "./actions";
 
 interface RoomListItem {
   id: string;
   title: string;
-  editRoom: (formData: FormData) => void;
-  deleteRoom: (title: string, id: string) => void;
+  userId: string;
 }
 
-const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
+const RoomListItem = ({ id, title, userId}: RoomListItem) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(title);
 
@@ -21,7 +21,7 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
       ) : (
         <form
             action={async (formData) => {
-            editRoom(formData);
+              editRoom(formData, userId);
               setIsEditing(false);
               setEditName(title);
           }}
@@ -46,7 +46,7 @@ const RoomListItem = ({ id, title, editRoom, deleteRoom }: RoomListItem) => {
       </button>
       <button
         className={"border border-red-300 rounded-md p-1"}
-        onClick={() => deleteRoom(title, id)}
+        onClick={() => deleteRoom(title, id, userId)}
       >
         Delete
       </button>

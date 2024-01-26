@@ -1,73 +1,165 @@
+'use server'
+
 import { revalidatePath } from 'next/cache';
 import prisma from '../../../prisma/client';
+import { RoomSchema } from './schema';
+import { RoomType } from '../../../data/types';
 
-export const addRoom = async (formData: FormData, thisUser: any) => {
-  'use server';
 
-  const roomName = formData.get('roomName');
+// PAGINATE ROOMS -----------
 
-  if (!roomName) {
-    return;
-  }
+  export const paginateRooms = async (
+    userId: string,
+    cursor: string,
+    take: number
+  ): Promise<RoomType[]> => {
 
-  if (thisUser) {
     try {
-      await prisma.room.create({
-        data: {
-          title: roomName as string,
-          userId: thisUser?.id,
-        },
-      });
+      if (userId && cursor) {
+        const nextRooms = await prisma.room.findMany({
+          take: take,
+          skip: 1, // Skip the cursor
+          cursor: {
+            id: cursor,
+          },
+          where: {
+            userId: userId,
+          },
+          orderBy: {
+            id: "desc",
+          },
+        });
+        if (nextRooms) {
+          return nextRooms;
+        } else {
+          throw new Error("No rooms found");
+        }
+      }
     } catch (error) {
-      console.error('Error creating room:', error);
+      console.error("Error paginating rooms:", error);
     }
-  }
+    return [];
+  };
 
-  revalidatePath('/room');
-};
 
-export const editRoom = async (formData: FormData, thisUser: any) => {
-  'use server';
-  // Do something with formData
-  const roomName = formData.get('roomName');
-  const id = formData.get('id');
 
-  console.log('roomName', roomName);
-  console.log('id', id);
 
-  if (!roomName) {
-    return;
-  }
-  if (thisUser) {
-    try {
-      await prisma.room.update({
-        where: {
-          id: id as string,
-        },
-        data: {
-          title: roomName as string,
-        },
-      });
-    } catch (error) {
-      console.error('Error updating room:', error);
+// ADD ROOM ----------
+  export const addRoom = async (formData: FormData, userId: string) => {
+
+    const roomName = formData.get('roomName');
+
+    const validation = RoomSchema.safeParse(roomName);
+
+    // Validate room name (between 3-30 characters)
+    if (!validation.success) {
+      console.error(validation.error.issues);
+      return;
     }
-  }
-  revalidatePath('/room');
-};
 
-export const deleteRoom = async (id: string, thisUser: any) => {
-  'use server';
-  // Do something with id
-  if (thisUser) {
-    try {
-      await prisma.room.delete({
-        where: {
-          id: id,
-        },
-      });
-    } catch (error) {
-      console.error('Error deleting room:', error);
+      // Make sure room name is unique for this user
+        
+    if (userId) {
+      try {
+        // Make sure room name is unique for this user
+        const existingRoomName = await prisma.room.findFirst({
+          where: {
+            title: roomName as string,
+          },
+        });
+
+        if (existingRoomName) {
+          console.error("Error: Room name already exists");
+          return;
+        }
+
+        // Add new room if all checks/validation passed
+        await prisma.room.create({
+          data: {
+            title: roomName as string,
+            userId: userId,
+          },
+        });
+      } catch (error) {
+        console.error('Error creating room:', error);
+      }
     }
-  }
-  revalidatePath('/room');
-};
+
+    revalidatePath('/rooms');
+  };
+
+
+// DELETE ROOM ----------
+  
+
+  export const deleteRoom = async (title: string, id: string, userId: string) => {
+    if (userId) {
+
+      try {
+        // Make sure no food exists in this room before deleting. Use room title to access food
+        const foodinRoom = await prisma.food.findMany({
+          where: {
+            room: title
+          }
+        })
+        if (foodinRoom.length > 0) {
+          throw new Error('You cannot delete a room with food in it.')
+        }
+
+        // Need to use id to delete becuase it is unique
+        await prisma.room.delete({
+          where: {
+            id: id,
+          },
+        });
+      } catch (error) {
+        console.error('Error deleting room:', error);
+      }
+    }
+    revalidatePath('/rooms');
+  };
+
+
+// EDIT ROOM ---------------
+  
+
+  export const editRoom = async (formData: FormData, userId: string) => {
+    // Do something with formData
+    const roomName = formData.get('roomName');
+    const id = formData.get('id');
+
+    // Validate room name (between 3-30 characters)
+    const validation = RoomSchema.safeParse(roomName);
+
+    if (!validation.success) {
+      // validation.issues.error is a ZodError[], so had to join. 
+      throw new Error(validation.error.issues.join())      
+    }
+
+    if (userId) {
+      // Make sure room name is unique for this user
+      try {
+        const existingRoomName = await prisma.room.findFirst({
+          where: {
+            title: roomName as string,
+          },
+        });
+
+        if (existingRoomName) {
+          throw new Error("Room name already exists");
+        }
+        // Update room name if all checks/validation passed
+        await prisma.room.update({
+          where: {
+            id: id as string,
+          },
+          data: {
+            title: roomName as string,
+          },
+        });
+      } catch (error) {
+        console.error('Error updating room:', error);
+      }
+    }
+    revalidatePath('/rooms');
+  };
