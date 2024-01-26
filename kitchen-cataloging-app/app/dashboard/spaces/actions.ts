@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import prisma from "../../../prisma/client";
 import { RoomSchema } from "./utils/schema";
 import { RoomType } from "../../../data/types";
-import getUserInfo from "@/providers/auth/ServerAuthProvider";
+import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 type PaginationProps = {
   cursor?: string;
   take: number;

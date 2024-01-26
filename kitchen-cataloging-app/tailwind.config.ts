@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-
+import theme from "./theme";
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,6 +8,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      ...theme,
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -15,7 +16,6 @@ const config: Config = {
       },
     },
   },
-
   plugins: [],
   important: "#__next",
 };
