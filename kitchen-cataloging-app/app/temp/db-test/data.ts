@@ -1,10 +1,10 @@
-type RoomType = {
+export type RoomType = {
   id: string;
   title: string;
   userId: string;
 };
 
-type FoodType = {
+export type FoodType = {
   id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -21,7 +21,7 @@ type FoodType = {
   room: string;
 };
 
-type LogType = {
+export type LogType = {
   id: string;
   price: number;
   amount: number;

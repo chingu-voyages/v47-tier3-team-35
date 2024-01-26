@@ -1,4 +1,6 @@
 import { UserButton, currentUser } from '@clerk/nextjs';
+import Link from 'next/link';
+
 export default async function Dashboard() {
   const user = await currentUser();
 
@@ -9,6 +11,7 @@ export default async function Dashboard() {
       </div>
       <h1 className='text-2xl text-gray-800 mb-5'>Welcome {user?.firstName}</h1>
       <p className='text-xl text-gray-600 mb-5'>Here are your items</p>
+      <Link href='/dashboard/rooms'>My Spaces</Link>
     </div>
   );
 }
