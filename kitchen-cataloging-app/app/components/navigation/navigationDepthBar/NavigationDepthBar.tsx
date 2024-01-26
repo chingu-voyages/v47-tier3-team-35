@@ -1,5 +1,6 @@
 "use client";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import { Typography } from "@mui/material";
 import Link from "next/link";
 export type NavigationDepthBarItemsProps = {
   routePath: string;
@@ -18,6 +19,26 @@ export const generateDepthLinks = (items: NavigationDepthBarItemsProps[]) => {
     return "/" + newPath.substring(0, newPath.length - 1);
   });
   return depthPaths;
+};
+const NavigationLink = ({
+  path,
+  title,
+  showSplit,
+}: {
+  path: string;
+  title: string;
+  showSplit: boolean;
+}) => {
+  return (
+    <>
+      <Link key={path} href={path}>
+        <Typography className={`text-2xl font-medium ${showSplit ? "" : ""}`}>
+          {title}
+        </Typography>
+      </Link>
+      {showSplit && <Typography className="text-2xl font-medium">/</Typography>}
+    </>
+  );
 };
 /** 
     Returns a Navigation Depth Bar based on items passed in. Each subsequent path in the array 
@@ -45,18 +66,16 @@ const NavigationDepthBar = ({
 }) => {
   const depthPaths = generateDepthLinks(items);
   const mobileView = useWindowWidth(640);
+  if (!mobileView) return <></>;
   return (
-    <div className="navigation-depth-bar">
+    <div className={"flex flex-row items-center space-x-4"}>
       {depthPaths.map((path, idx) => (
-        <Link
+        <NavigationLink
           key={path}
-          href={path}
-          className={`navigation-depth-bar-item ${
-            mobileView ? "text-sm" : "text-base"
-          }`}
-        >
-          {items[idx].title}
-        </Link>
+          path={path}
+          title={items[idx].title}
+          showSplit={idx !== items.length - 1}
+        />
       ))}
     </div>
   );

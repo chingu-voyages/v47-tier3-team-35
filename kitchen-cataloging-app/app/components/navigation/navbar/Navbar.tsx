@@ -1,9 +1,8 @@
-import { UserButton, currentUser } from "@clerk/nextjs";
+import { UserButton, auth } from "@clerk/nextjs";
 import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-// import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
-export default async function Navbar() {
-  const user = await currentUser();
+export default function Navbar() {
+  const { userId } = auth();
   return (
     <AppBar position="static">
       <Toolbar>
@@ -23,7 +22,7 @@ export default async function Navbar() {
         >
           Photos
         </Typography>
-        {user && <UserButton showName={true} afterSignOutUrl="/sign-in" />}
+        {userId && <UserButton showName={true} afterSignOutUrl="/sign-in" />}
       </Toolbar>
     </AppBar>
   );
