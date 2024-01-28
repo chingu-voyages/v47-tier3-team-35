@@ -45,19 +45,20 @@ export type PaginationWrapperProps<T> = {
  * ```
  * @example
  * ```
- * <PaginationWrapper
- *  paginate={paginateRooms}
- *  take={20}
- *  defaultItems={defaultItems}
- * >
- *  {(props) => (
- *      <div>
- *          {props.data.map((item) => (
- *              <div>{item.id}</div>
- *         ))}
- *      </div>
- *  )}
- *</PaginationWrapper>
+<PaginationWrapper
+      paginate={paginateRooms}
+      take={20}
+      defaultItems={defaultItems}
+      loadingComponent={(ref) => <CircularProgress ref={ref} size={"large"} />}
+    >
+      {(props) => (
+        <div>
+          {props.data.map((item) => (
+            <div>{item.id}</div>
+          ))}
+        </div>
+      )}
+</PaginationWrapper>
  * ```
  */
 function PaginationWrapper<T>({

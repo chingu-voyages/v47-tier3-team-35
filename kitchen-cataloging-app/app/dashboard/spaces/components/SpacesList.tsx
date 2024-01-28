@@ -5,6 +5,7 @@ import { useInView } from "react-intersection-observer";
 import { paginateRooms } from "../actions";
 import { unstable_batchedUpdates } from "react-dom";
 import PaginationWrapper from "@/components/utils/PaginationWrapper";
+import { CircularProgress } from "@mui/material";
 const SpaceList = ({ defaultItems }: { defaultItems: Room[] | null }) => {
   //   const [data, setData] = useState<Room[]>(defaultItems ? defaultItems : []);
   //   const [cursor, setCursor] = useState<string | null>(null);
@@ -33,6 +34,7 @@ const SpaceList = ({ defaultItems }: { defaultItems: Room[] | null }) => {
       paginate={paginateRooms}
       take={20}
       defaultItems={defaultItems}
+      loadingComponent={(ref) => <CircularProgress ref={ref} size={"large"} />}
     >
       {(props) => (
         <div>
