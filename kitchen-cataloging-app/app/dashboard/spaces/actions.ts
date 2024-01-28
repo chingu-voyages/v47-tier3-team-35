@@ -5,7 +5,7 @@ import { RoomSchema } from "./utils/schema";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 import { Room } from "@prisma/client";
 type PaginationProps = {
-  cursor?: string;
+  cursor?: string | null;
   take: number;
 };
 // PAGINATE ROOMS -----------
