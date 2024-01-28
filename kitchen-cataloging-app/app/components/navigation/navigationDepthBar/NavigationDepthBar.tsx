@@ -32,11 +32,25 @@ const NavigationLink = ({
   return (
     <>
       <Link key={path} href={path}>
-        <Typography className={`text-2xl font-medium ${showSplit ? "" : ""}`}>
+        <Typography
+          variant="subtitle2"
+          className={`font-medium ${
+            showSplit
+              ? "text-default-ref-neutral-neutral60"
+              : "text-default-ref-neutral-neutral30"
+          }`}
+        >
           {title}
         </Typography>
       </Link>
-      {showSplit && <Typography className="text-2xl font-medium">/</Typography>}
+      {showSplit && (
+        <Typography
+          variant="subtitle2"
+          className="font-medium text-default-ref-neutral-neutral60"
+        >
+          /
+        </Typography>
+      )}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs";
-import prisma from "../../../../prisma/client";
+import prisma from "../../../prisma/client";
 const getUserInfo = async () => {
   try {
     const { userId } = auth();

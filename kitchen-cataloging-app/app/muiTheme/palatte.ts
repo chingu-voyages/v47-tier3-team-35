@@ -1,12 +1,12 @@
 const palatte = {
   primary: {
-    main: "#10212D",
+    main: "#266489",
   },
   secondary: {
-    main: "#778B85",
+    main: "#056B5B",
   },
   error: {
-    main: "#FF5449",
+    main: "#BA1A1A",
   },
 };
 export default palatte;

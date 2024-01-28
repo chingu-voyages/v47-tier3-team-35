@@ -1,9 +1,9 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import prisma from "../../../prisma/client";
+import prisma from "../../prisma/client";
 import { RoomSchema } from "./utils/schema";
-import { RoomType } from "../../../data/types";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
+import { Room } from "@prisma/client";
 type PaginationProps = {
   cursor?: string;
   take: number;
@@ -12,7 +12,7 @@ type PaginationProps = {
 export const paginateRooms = async ({
   cursor,
   take,
-}: PaginationProps): Promise<RoomType[] | null> => {
+}: PaginationProps): Promise<Room[] | null> => {
   try {
     //ensure user only grabs rooms belonging to them
     const userInfo = await getUserInfo();
@@ -97,13 +97,17 @@ export const addRoom = async (formData: FormData, userId: string) => {
 
 // DELETE ROOM ----------
 
-export const deleteRoom = async (title: string, id: string, userId: string) => {
+export const deleteRoom = async (
+  roomId: string,
+  id: string,
+  userId: string
+) => {
   if (userId) {
     try {
       // Make sure no food exists in this room before deleting. Use room title to access food
       const foodinRoom = await prisma.food.findMany({
         where: {
-          room: title,
+          roomId: roomId,
         },
       });
       if (foodinRoom.length > 0) {
