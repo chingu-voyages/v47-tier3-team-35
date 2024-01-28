@@ -1,47 +1,41 @@
 "use client";
 import { Room } from "@prisma/client";
-import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
 import { paginateRooms } from "../actions";
-import { unstable_batchedUpdates } from "react-dom";
 import PaginationWrapper from "@/components/utils/PaginationWrapper";
 import { CircularProgress } from "@mui/material";
+import Link from "next/link";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import { Grid } from "@mui/material";
+const ListDesktop = () => {};
+const ListMobile = () => {};
 const SpaceList = ({ defaultItems }: { defaultItems: Room[] | null }) => {
-  //   const [data, setData] = useState<Room[]>(defaultItems ? defaultItems : []);
-  //   const [cursor, setCursor] = useState<string | null>(null);
-  //   const [ref, inView] = useInView();
-  //   const loadMore = async () => {
-  //     const newItems = await paginateRooms({
-  //       cursor: cursor ? cursor : undefined,
-  //       take: 20,
-  //     });
-  //     if (!newItems) {
-  //       return setCursor(null);
-  //     }
-  //     const newCursor = newItems[newItems.length - 1].id;
-  //     unstable_batchedUpdates(() => {
-  //       setData((prev) => [...prev, ...newItems]);
-  //       setCursor(newCursor);
-  //     });
-  //   };
-  //   useEffect(() => {
-  //     if (inView) {
-  //       loadMore();
-  //     }
-  //   }, [inView]);
+  const mediumWidth = useWindowWidth(640);
+  const largeWidth = useWindowWidth(1024);
   return (
     <PaginationWrapper
       paginate={paginateRooms}
       take={20}
       defaultItems={defaultItems}
-      loadingComponent={(ref) => <CircularProgress ref={ref} size={"large"} />}
+      loadingComponent={(ref) => (
+        <CircularProgress
+          ref={ref}
+          size={largeWidth ? "large" : mediumWidth ? "medium" : "small"}
+        />
+      )}
     >
       {(props) => (
-        <div>
+        <Grid container spacing={2}>
           {props.data.map((item) => (
-            <div>{item.id}</div>
+            <Grid item key={item.id} >
+              <Link
+                className="flex flex-col"
+                href={`/dashboard/spaces/${item.id}}`}
+              >
+                {item.id}
+              </Link>
+            </Grid>
           ))}
-        </div>
+        </Grid>
       )}
     </PaginationWrapper>
   );

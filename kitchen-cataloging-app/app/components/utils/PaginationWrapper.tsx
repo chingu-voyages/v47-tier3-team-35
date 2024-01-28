@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { unstable_batchedUpdates } from "react-dom";
 export type IdRequiredObj<T> = {
   id: string;
 } & T;
 export type PaginationChildrenProps<T> = {
+  isLoading: boolean;
   data: IdRequiredObj<T>[];
   loadMore?: () => Promise<void>;
 };
@@ -33,11 +34,9 @@ export type PaginationWrapperProps<T> = {
  * @param defaultItems - The initial data to display, rendered on the server
  * @param paginate - A function that returns new data, and takes a  `cursor` which
  * is a string and a `take` value, which is a number
- * @param children - A function that takes a `ref` and `data` props, and returns a
- * ReactNode. The `ref` is a function that takes a DOM node as an argument, and
- * is used to track the intersection observer, to decide when to paginate.
- * This is usually the list container of your paginated items. The `data`
- * contains the new current list data
+ * @param children - A function that passes `data`,`loading` and `loadMore` props, and returns a
+ * ReactNode. The `data`contains the new current list data, and `loading` contains the current fetch state. 
+ * You can also arbitraly trigger `loadMore` elsewhere by attaching to a component
  * @param threshold - Optional parameter that sets a container threshold for when the loading spinner is seen
  * @returns a function that contains `data`, and `loadMore` as parameters,
  * and returns your React.Node tree
@@ -76,16 +75,24 @@ function PaginationWrapper<T>({
   const [ref, inView] = useInView({
     threshold: threshold,
   });
+  const [isLoading, setIsLoading] = useState(false);
   const loadMore = async () => {
+    //don't get any new data if loading is false
+    if (isLoading) return;
+    setIsLoading(true);
     const newItems = await paginate({
       cursor: cursor ? cursor : undefined,
       take,
     });
     if (!newItems) {
-      return setCursor(null);
+      return unstable_batchedUpdates(() => {
+        setIsLoading(false);
+        setCursor(null);
+      });
     }
     const newCursor = newItems[newItems.length - 1].id;
     unstable_batchedUpdates(() => {
+      setIsLoading(false);
       setData((prev) => [...prev, ...newItems]);
       setCursor(newCursor);
     });
@@ -94,12 +101,13 @@ function PaginationWrapper<T>({
     if (inView) {
       loadMore();
     }
-  }, [inView]);
+  }, [inView, loadMore]);
   return (
     <>
       {children({
         data,
         loadMore,
+        isLoading
       })}
       {cursor && loadingComponent && loadingComponent(ref)}
     </>
