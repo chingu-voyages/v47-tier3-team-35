@@ -1,5 +1,4 @@
 "use server";
-
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 import { Food } from "@prisma/client";
 import prisma from "@/prisma/client";
