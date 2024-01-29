@@ -1,6 +1,6 @@
 "use client";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Link from "next/link";
 export type NavigationDepthBarItemsProps = {
   routePath: string;
@@ -83,16 +83,18 @@ const NavigationDepthBar = ({
   const mobileView = useWindowWidth(640);
   if (!mobileView) return <></>;
   return (
-    <div className={"flex flex-row items-center sm:space-x-2.5 lg:space-x-4"}>
-      {depthPaths.map((path, idx) => (
-        <NavigationLink
-          key={path}
-          path={path}
-          title={items[idx].title}
-          showSplit={idx !== items.length - 1}
-        />
-      ))}
-    </div>
+    <Box className="flex flex-col pt-6 sm:pt-7 lg:pt-12">
+      <Box className={"flex flex-row items-center sm:space-x-2.5 lg:space-x-4"}>
+        {depthPaths.map((path, idx) => (
+          <NavigationLink
+            key={path}
+            path={path}
+            title={items[idx].title}
+            showSplit={idx !== items.length - 1}
+          />
+        ))}
+      </Box>
+    </Box>
   );
 };
 export default NavigationDepthBar;
