@@ -28,12 +28,13 @@ const NavigationLink = ({
   path: string;
   title: string;
   showSplit: boolean;
-}) => {
+  }) => {
+  const largeWidth = useWindowWidth(1024);
   return (
     <>
       <Link key={path} href={path}>
         <Typography
-          variant="subtitle2"
+          variant={largeWidth ? "subtitle2" : "body1"}
           className={`font-medium ${
             showSplit
               ? "text-default-ref-neutral-neutral60"
@@ -45,7 +46,7 @@ const NavigationLink = ({
       </Link>
       {showSplit && (
         <Typography
-          variant="subtitle2"
+          variant={largeWidth ? "subtitle2" : "body1"}
           className="font-medium text-default-ref-neutral-neutral60"
         >
           /
@@ -82,7 +83,7 @@ const NavigationDepthBar = ({
   const mobileView = useWindowWidth(640);
   if (!mobileView) return <></>;
   return (
-    <div className={"flex flex-row items-center space-x-4"}>
+    <div className={"flex flex-row items-center sm:space-x-2.5 lg:space-x-4"}>
       {depthPaths.map((path, idx) => (
         <NavigationLink
           key={path}
