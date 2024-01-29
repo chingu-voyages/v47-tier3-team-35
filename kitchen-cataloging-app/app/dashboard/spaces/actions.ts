@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import prisma from "../../prisma/client";
+import prisma from "@/prisma/client";
 import { RoomSchema } from "./utils/schema";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 import { Room } from "@prisma/client";

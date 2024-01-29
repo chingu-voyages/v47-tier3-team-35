@@ -1,29 +1,13 @@
 // "use client";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { Box } from "@mui/material";
+import { Room } from "@prisma/client";
 // import useWindowWidth from "@/hooks/useWindowWidth";
-const navigationDepthArr = ({
-  spaceId,
-  spaceName,
-}: {
-  spaceId: string;
-  spaceName: string;
-}) => [
-  { routePath: "dashboard", title: "Home" },
-  { routePath: "spaces", title: "Spaces" },
-  { routePath: spaceId, title: spaceName },
-];
-const SpaceHeader = ({
-  spaceId,
-  spaceName,
-}: {
-  spaceId: string;
-  spaceName: string;
-}) => {
+const SpaceHeader = ({ defaultData }: { defaultData: Room }) => {
   return (
-    <Box className="flex flex-col w-full">
-      <NavigationDepthBar items={navigationDepthArr({ spaceId, spaceName })} />
-    </Box>
+    <>
+      <Box className="flex flex-col w-full">{defaultData.title}</Box>
+    </>
   );
 };
 export default SpaceHeader;
