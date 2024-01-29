@@ -4,6 +4,9 @@ import prisma from "../../prisma/client";
 import { RoomSchema } from "./utils/schema";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 import { Room } from "@prisma/client";
+import { RoomType } from "@/prisma/mock/mockData";
+import { Prisma } from "@prisma/client";
+
 type PaginationProps = {
   cursor?: string | null;
   take: number;
@@ -41,7 +44,9 @@ export const paginateRooms = async ({
     return null;
   }
 };
-export const getSingleRoom = async ({ id }: { id: string }) => {
+// GET ONE ROOM -----------
+
+export const getSingleRoom = async (id: string)=> {
   const userInfo = await getUserInfo();
   if (!userInfo?.id) return null;
   const doc = await prisma.room.findFirst({
@@ -49,9 +54,13 @@ export const getSingleRoom = async ({ id }: { id: string }) => {
       userId: userInfo.id,
       id: id,
     },
+    include: {
+      foods: true
+    }
   });
   return doc;
 };
+
 // ADD ROOM ----------
 export const addRoom = async (formData: FormData, userId: string) => {
   const roomName = formData.get("roomName");

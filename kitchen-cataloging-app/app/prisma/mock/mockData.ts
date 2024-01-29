@@ -1,4 +1,4 @@
-import { Food, Room, Log, User } from "@prisma/client";
+import { Food, Room, Log, User} from "@prisma/client";
 export function isErrorType(e: any): e is ErrorType {
   return !!e.error;
 }

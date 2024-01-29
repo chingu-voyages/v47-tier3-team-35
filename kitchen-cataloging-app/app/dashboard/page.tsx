@@ -1,6 +1,7 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography, Button } from "@mui/material";
 import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
+import Link from "next/link";
 export const DashboardGreeting = async () => {
   const user = await getUserInfo();
   return (
@@ -23,6 +24,10 @@ export const DashboardContent = () => {
     <Grid container rowSpacing={2} columnSpacing={1}>
       <Grid item xs={12} sm={6} md={8}></Grid>
       <Grid item xs={12} sm={6} md={4}></Grid>
+      {/* Temporary button for route testing purposes */}
+      <Link href={"/dashboard/spaces"}>
+        <Button>My Spaces</Button>
+      </Link>
     </Grid>
   );
 };

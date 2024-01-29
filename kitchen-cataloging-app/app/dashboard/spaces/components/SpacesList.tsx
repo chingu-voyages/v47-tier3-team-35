@@ -29,9 +29,9 @@ const SpaceList = ({ defaultItems }: { defaultItems: Room[] | null }) => {
             <Grid item key={item.id} >
               <Link
                 className="flex flex-col"
-                href={`/dashboard/spaces/${item.id}}`}
+                href={`/dashboard/spaces/${item.id}`}
               >
-                {item.id}
+                {item.title}
               </Link>
             </Grid>
           ))}
