@@ -14,7 +14,7 @@ const tempFoodData = {
     category: "Beverage",
     threshold: 5,
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
-    img: `https://source.unsplash.com/random`,
+    img: ``,
     labels: ["It's beer"],
     logs: [{price: 10.99, amount: 10, totalCost: 109.90}, {price: 10.99, amount: -1, totalCost: -10.99}]
 }
@@ -27,9 +27,10 @@ interface Food {
 
 const Food = ({ params, searchParams }: Food) => {
 
+    const food = tempFoodData;
+
     const { spaceId, foodId } = params;
     const spaceTitle = searchParams.spaceTitle;
-    const food = tempFoodData;
 
     return (
       <>
@@ -48,27 +49,44 @@ const Food = ({ params, searchParams }: Food) => {
           ]}
         />
         <Box
+          className="w-full max-w-[70rem] mx-auto"
           sx={{
             display: "grid",
-            gridTemplateColumns: { base: "1fr", lg: "repeat(2, fr)" },
+            gridTemplateColumns: { xs: "100%", md: "repeat(2, 50%)" },
             gap: 1,
-            gridTemplateRows: { base: "auto", lg: "repeat(3, fr)" },
+            gridTemplateRows: { xs: "repeat(4, 1fr)", md: "repeat(3, 1fr)" },
             gridTemplateAreas: {
-              base: `"img" "info" "inventory" "activity"`,
-              lg: `"img activity" "info activity" "inventory inventory"`,
+              xs: `"img" "info" "inventory" "activity"`,
+              md: `"img activity" "info activity" "inventory inventory"`,
             },
           }}
         >
-          <Box sx={{ BoxArea: "img" }}>
-            <FoodImg />
+          <Box
+            className={
+              "border h-[30vh] min-h-[15rem] w-full  max-w-[30rem] p-3 mx-auto"
+            }
+            sx={{ BoxArea: "img" }}
+          >
+            <FoodImg imgUrl={food.img} description={food.description} />
           </Box>
-          <Box sx={{ gridArea: "info" }}>
-            <FoodInfo />
+          <Box
+            className={
+              "border h-[30vh] min-h-[15rem] w-full max-w-[30rem] p-3 mx-auto"
+            }
+            sx={{ gridArea: "info" }}
+          >
+            <FoodInfo
+              space={spaceTitle}
+              description={food.description}
+              price={food.price}
+              category={food.category}
+              labels={food.labels}
+            />
           </Box>
-          <Box sx={{ gridArea: "activity" }}>
+          <Box className={"border p-3"} sx={{ gridArea: "activity" }}>
             <FoodActivity />
           </Box>
-          <Box sx={{ gridArea: "inventory" }}>
+          <Box className={"border p-3"} sx={{ gridArea: "inventory" }}>
             <FoodInventory />
           </Box>
         </Box>
