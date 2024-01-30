@@ -5,6 +5,7 @@ import FoodInfo from "./components/FoodInfo";
 import FoodActivity from "./components/FoodActivity";
 import FoodInventory from "./components/FoodInventory";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
+import { FoodType } from "@/prisma/mock/mockData";
 // import { useParams } from "next/navigation";
 
 const tempFoodData = {
@@ -14,7 +15,7 @@ const tempFoodData = {
     category: "Beverage",
     threshold: 5,
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
-    img: ``,
+    image: ``,
     labels: ["It's beer"],
     logs: [{ price: 10.99, amount: 10, totalCost: 109.90 }, { price: 10.99, amount: -1, totalCost: -10.99 }],
     roomTitle: 'Kitchen',
@@ -27,7 +28,10 @@ interface Food {
 
 const Food = ({ params }: Food) => {
 
-    const food = tempFoodData;
+    const food: Omit<
+      FoodType,
+      "id" | "createdAt" | "updatedAt" | "user" | "userId" | "room" | "roomId"
+    > = tempFoodData;
 
     const { spaceId, foodId } = params;
 
@@ -66,7 +70,7 @@ const Food = ({ params }: Food) => {
             }
             sx={{ BoxArea: "img" }}
           >
-            <FoodImg imgUrl={food.img} description={food.description} />
+            <FoodImg description={food.description} imgUrl={food.image ? food.image : undefined} />
           </Box>
           <Box
             className={
@@ -83,7 +87,8 @@ const Food = ({ params }: Food) => {
             />
           </Box>
           <Box className={"border p-3"} sx={{ gridArea: "activity" }}>
-            <FoodActivity />
+            {/* <FoodActivity foodLogs={food.logs} /> */}
+            activity
           </Box>
           <Box className={"border p-3"} sx={{ gridArea: "inventory" }}>
             <FoodInventory />

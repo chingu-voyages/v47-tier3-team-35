@@ -1,4 +1,8 @@
-import React from 'react'
+import { LogType } from "@/prisma/mock/mockData"
+
+interface FoodActivity {
+  foodLogs: LogType[];
+}
 
 const FoodActivity = () => {
   return (

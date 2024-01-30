@@ -1,12 +1,13 @@
 'use client'
 
-import { Stack, Typography, Box } from "@mui/material";
+import { Stack, Typography, Box, IconButton } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import IncrementButton from "@/components/UI/IncrementButton";
 import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 interface FoodInfo {
   space: string;
@@ -55,18 +56,20 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
           <DeleteIcon color={"error"} />
         </Stack>
         <Stack direction={"row"} className={"w-20 justify-end gap-2"}>
-          <IncrementButton
-            direction={"+"}
-            onClick={handleIncrement}
-            args={["+"]}
-            size={6}
-          />
-          <IncrementButton
-            direction={"-"}
-            onClick={handleIncrement}
-            args={["-"]}
-            size={6}
-          />
+          <IconButton
+            className="bg-slate-300 shadow-[0px_1px_2px_gray] hover:bg-slate-200"
+            size={"small"}
+            onClick={() => console.log("click")}
+          >
+            <AddIcon className={`text-sm`} />
+          </IconButton>
+          <IconButton
+            className="bg-slate-300 shadow-[0px_1px_2px_gray] hover:bg-slate-200"
+            size={"small"}
+            onClick={() => console.log("click")}
+          >
+            <RemoveIcon className={`text-sm`} />
+          </IconButton>
         </Stack>
       </Stack>
       {/* Pills -- category -- these might end up being mapped */}
@@ -74,7 +77,7 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
         <Pill text={category} textVariant={"body3" as Variant}></Pill>
       </Stack>
       {/*  */}
-      <Typography className="mt-5">{labels.join(",")}</Typography>
+      <Typography variant={'body3'} className="mt-5 text-slate-400">{labels.join(",")}</Typography>
     </>
   );
 }

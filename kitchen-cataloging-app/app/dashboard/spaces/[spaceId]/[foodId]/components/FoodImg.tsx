@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 
 interface FoodImg {
-  imgUrl: string;
   description: string;
+  imgUrl?: string;
 }
 
 const FoodImg = ({imgUrl, description}: FoodImg) => {
