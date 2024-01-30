@@ -71,7 +71,11 @@ function PaginationWrapper<T>({
   const [data, setData] = useState<IdRequiredObj<T>[]>(
     defaultItems ? defaultItems : []
   );
-  const [cursor, setCursor] = useState<string | null>(null);
+  const [cursor, setCursor] = useState<string | null>(
+    defaultItems && defaultItems.length > 0
+      ? defaultItems[defaultItems.length - 1].id
+      : null
+  );
   const [ref, inView] = useInView({
     threshold: threshold,
   });
@@ -107,7 +111,7 @@ function PaginationWrapper<T>({
       {children({
         data,
         loadMore,
-        isLoading
+        isLoading,
       })}
       {cursor && loadingComponent && loadingComponent(ref)}
     </>

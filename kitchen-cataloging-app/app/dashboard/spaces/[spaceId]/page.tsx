@@ -1,36 +1,40 @@
-import Link from "next/link";
+import { Box } from "@mui/material";
 import { getSingleRoom } from "../actions";
-import { Button } from "@mui/material";
-
-
-const Space = async ({ params }: { params: { spaceId: string } }) => {
+import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
+import SpaceHeader from "./SpaceHeader";
+import { paginateFoodItems } from "./actions";
+import InventoryList from "./InventoryList";
+const navigationDepthArr = ({
+  spaceId,
+  spaceName,
+}: {
+  spaceId: string;
+  spaceName: string;
+}) => [
+  { routePath: "dashboard", title: "Home" },
+  { routePath: "spaces", title: "Spaces" },
+  { routePath: spaceId, title: spaceName },
+];
+// api call to get all room info and foods for the room
+const Room = async ({ params }: { params: { spaceId: string } }) => {
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
   const spaceId = params.spaceId;
-  
-  const spaceData = await getSingleRoom(spaceId)
-
+  const roomData = await getSingleRoom(spaceId);
+  const itemData = await paginateFoodItems({ spaceId: spaceId, take: 20 });
+  //guard clause in case no data is returned
+  if (!roomData) return <></>;
   return (
-    <div>
-      <h1>This is room: {spaceData?.title}</h1>
-      <Link href="/dashboard/spaces">Back to all Rooms</Link>
-      <p>Here are the food items in this room:</p>
-      <ul>
-        {spaceData?.foods.map((food) => (
-          <li key={food.id}>
-            <Link
-              href={{ pathname: `/dashboard/spaces/${spaceId}/${food.id}`,
-                query: {
-                  spaceTitle: spaceData.title
-                }
-              }}
-            >
-              <Button>{food.description}</Button>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Box className="flex flex-col">
+      <NavigationDepthBar
+        items={navigationDepthArr({
+          spaceId: roomData?.id,
+          spaceName: roomData?.title,
+        })}
+      />
+      <SpaceHeader defaultData={roomData} />
+      <InventoryList spaceId={roomData.id} defaultItems={itemData} />
+    </Box>
   );
 };
 
-export default Space;
+export default Room;

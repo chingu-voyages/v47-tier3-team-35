@@ -8,7 +8,7 @@ const typography = {
     '"Apple Color Emoji"',
     '"Segoe UI Emoji"',
     '"Segoe UI Symbol"',
-  ].join(" "),
+  ].join(","),
   h1: { fontSize: "3.375rem" },
   h2: {
     fontSize: "2.875rem",
@@ -47,4 +47,4 @@ const typography = {
     fontSize: "0.625rem",
   },
 };
-export default typography
+export default typography;
