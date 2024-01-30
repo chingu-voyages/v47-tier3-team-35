@@ -581,5 +581,11 @@ const theme = {
     "52xl": "5.755728721618652rem",
     full: "9999px",
   },
+  screens: {
+    sm: "640px",
+    md: "768px",
+    lg: "1024px",
+    xl: "1280px",
+  },
 };
 export default theme;

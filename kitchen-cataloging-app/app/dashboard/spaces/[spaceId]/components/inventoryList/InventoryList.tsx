@@ -1,10 +1,11 @@
 "use client";
 import PaginationWrapper from "@/components/utils/PaginationWrapper";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import { Food } from "@prisma/client";
-import { paginateFoodItems } from "./actions";
+import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
+import ItemContent from "./ItemContent";
 const InventoryList = ({
   spaceId,
   defaultItems,
@@ -26,33 +27,37 @@ const InventoryList = ({
       take={20}
       defaultItems={defaultItems}
       loadingComponent={(ref) => (
-        <CircularProgress
-          ref={ref}
-          size={largeWidth ? "large" : mediumWidth ? "medium" : "small"}
-        />
+        <Box className="flex justify-center w-full p-6 sm:p-10 lg:p-14">
+          <CircularProgress
+            size={largeWidth ? "3.5rem" : mediumWidth ? "3rem" : "2.5rem"}
+            ref={ref}
+          />
+        </Box>
       )}
     >
       {(props) => (
         <Grid
           container
           rowSpacing={{
-            sm: 2,
+            xs: 1.5,
+            sm: 3,
             md: 3,
             lg: 4,
           }}
           columnSpacing={{
-            sm: 2,
+            xs: 1.5,
+            sm: 3,
             md: 3,
             lg: 4,
           }}
         >
           {props.data.map((item) => (
-            <Grid key={item.id} item sm={6} md={4} xl={3}>
+            <Grid key={item.id} item xs={6} md={4} lg={3} xl={2.4}>
               <Link
                 className="flex w-full h-full"
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
               >
-                <Typography variant="body1">{item.category}</Typography>
+                <ItemContent item={item} mediumWidth={mediumWidth} />
               </Link>
             </Grid>
           ))}

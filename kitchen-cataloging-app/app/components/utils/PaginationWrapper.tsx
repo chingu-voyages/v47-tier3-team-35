@@ -97,7 +97,16 @@ function PaginationWrapper<T>({
     const newCursor = newItems[newItems.length - 1].id;
     unstable_batchedUpdates(() => {
       setIsLoading(false);
-      setData((prev) => [...prev, ...newItems]);
+      //filter out data to improve stability, since
+      //sometimes duplicate keys might arise when stressing system
+      setData((prev) => {
+        const map = Object.assign(
+          {},
+          ...prev.map((prev) => ({ [prev.id]: false }))
+        );
+        const newItemsFilter = newItems.filter((a) => !(a.id in map));
+        return [...prev, ...newItemsFilter];
+      });
       setCursor(newCursor);
     });
   };
