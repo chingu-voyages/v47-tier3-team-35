@@ -2,12 +2,11 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import prisma from "../../prisma/client";
 import LoadingPage from "@/components/utils/LoadingPage";
-
 // Function to create a new user
 const createNewUser = async () => {
   // Get the current user
   const user = await currentUser();
-
+  if (!user) return redirect("/auth/sign-up");
   // Try to find a user in the database with the same Clerk ID
   const match = await prisma.user.findUnique({
     where: {
@@ -38,7 +37,7 @@ const NewUser = async () => {
     })
     .catch((err) => {
       console.error(err);
-      redirect("/sign-up");
+      redirect("/auth/sign-up");
     });
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100 p-5">
