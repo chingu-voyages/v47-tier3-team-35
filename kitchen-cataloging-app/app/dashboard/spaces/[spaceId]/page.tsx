@@ -3,7 +3,7 @@ import { getSingleRoom } from "../actions";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import SpaceHeader from "./SpaceHeader";
 import { paginateFoodItems } from "./actions";
-import InventoryList from "./InventoryList";
+import InventoryList from "./components/inventoryList/InventoryList";
 const navigationDepthArr = ({
   spaceId,
   spaceName,
