@@ -33,7 +33,7 @@ const ItemStockInfoAndBtns = ({
       />
       <Box className="flex space-x-3">
         <Button
-          aria-label={`add-${item.category}-item`}
+          aria-label={`add-${item.title}-item`}
           variant="contained"
           className="rounded-36xl aspect-square p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 "
           sx={{
@@ -45,7 +45,7 @@ const ItemStockInfoAndBtns = ({
           <AddIcon />
         </Button>
         <Button
-          aria-label={`delete-${item.category}-item`}
+          aria-label={`delete-${item.title}-item`}
           variant="contained"
           className="rounded-36xl aspect-square p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
           sx={{
@@ -143,7 +143,7 @@ const ItemContent = ({
         <ItemStockInfoAndBtns item={item} mediumWidth={mediumWidth} />
         <ItemDescription
           expirationDate={item.expirationDate}
-          title={item.category}
+          title={item.title}
           mediumWidth={mediumWidth}
         />
       </Box>
