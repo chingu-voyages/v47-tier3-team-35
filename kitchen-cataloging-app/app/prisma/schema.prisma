@@ -37,19 +37,20 @@ model Food {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now()) //purchase date
   updatedAt DateTime @updatedAt 
-  description String 
+  title String //limit to max 30 chars
+  description String? //limit to 400 chars  
+  labels String[] //limit to 20 items
   price Float //limit to 2 decimal places
   amount Int
-  category String //limit to available categories
   threshold Int?
   expirationDate DateTime?
   image String?
-  labels String[]
   logs Log[] //stores log for each time user adds or subtracts this food
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId
+  roomTitle String?
 }
 
 // Food log model -- created upon every purchase of food. Stored as an array in Food

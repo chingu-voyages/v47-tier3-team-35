@@ -52,7 +52,7 @@ const InventoryList = ({
           }}
         >
           {props.data.map((item) => (
-            <Grid key={item.id} item sm={6} md={4} lg={3} xl={2.4}>
+            <Grid key={item.id} item xs={6} md={4} lg={3} xl={2.4}>
               <Link
                 className="flex w-full h-full"
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}

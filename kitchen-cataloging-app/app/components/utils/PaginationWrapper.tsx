@@ -122,8 +122,7 @@ function PaginationWrapper<T>({
         loadMore,
         isLoading,
       })}
-      {/* {cursor && loadingComponent && loadingComponent(ref)} */}
-      {loadingComponent && loadingComponent(() => null)}
+      {cursor && loadingComponent && loadingComponent(ref)}
     </>
   );
 }
