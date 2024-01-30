@@ -44,6 +44,7 @@ const foods = [
     category: "Beverage",
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
     labels: ["It's beer"],
+    roomTitle: "Kitchen",
   },
   {
     description: "Donuts",
@@ -52,6 +53,7 @@ const foods = [
     category: "Pastry",
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), //10 days from now
     labels: ["Original glazed"],
+    roomTitle: "My Secret Snack Stash",
   },
   {
     description: "5-Gallon bucket of Cheese Puffs",
@@ -60,6 +62,7 @@ const foods = [
     category: "Snack",
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 50), //50 days from now
     labels: ["Don't ask"],
+    roomTitle: "My Secret Snack Stash",
   },
 ].map((food) => ({
   ...food,

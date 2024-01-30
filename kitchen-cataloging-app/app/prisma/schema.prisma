@@ -46,6 +46,7 @@ model Food {
   image String?
   labels String[]
   logs Log[] //stores log for each time user adds or subtracts this food
+  roomTitle String
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
   room Room? @relation(fields: [roomId], references: [id])

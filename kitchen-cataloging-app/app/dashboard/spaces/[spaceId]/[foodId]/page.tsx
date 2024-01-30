@@ -16,21 +16,20 @@ const tempFoodData = {
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
     img: ``,
     labels: ["It's beer"],
-    logs: [{price: 10.99, amount: 10, totalCost: 109.90}, {price: 10.99, amount: -1, totalCost: -10.99}]
+    logs: [{ price: 10.99, amount: 10, totalCost: 109.90 }, { price: 10.99, amount: -1, totalCost: -10.99 }],
+    roomTitle: 'Kitchen',
 }
 
 interface Food {
   params: { spaceId: string; foodId: string };
-  searchParams: { spaceTitle: string };
 }
 
 
-const Food = ({ params, searchParams }: Food) => {
+const Food = ({ params }: Food) => {
 
     const food = tempFoodData;
 
     const { spaceId, foodId } = params;
-    const spaceTitle = searchParams.spaceTitle;
 
     return (
       <>
@@ -40,10 +39,10 @@ const Food = ({ params, searchParams }: Food) => {
             { routePath: "spaces", title: "Spaces" },
             {
               routePath: `${spaceId}`,
-              title: `${spaceTitle}`,
+              title: `${food.roomTitle}`,
             },
             {
-              routePath: `${foodId}?spaceTitle=${spaceTitle}`,
+              routePath: `${foodId}`,
               title: `${food.description}`,
             },
           ]}
@@ -76,7 +75,7 @@ const Food = ({ params, searchParams }: Food) => {
             sx={{ gridArea: "info" }}
           >
             <FoodInfo
-              space={spaceTitle}
+              space={food.roomTitle}
               description={food.description}
               price={food.price}
               category={food.category}

@@ -17,7 +17,7 @@ const FoodImg = ({imgUrl, description}: FoodImg) => {
         
       }}
       alt="The house from the offer."
-      src={imgUrl ? imgUrl : `https://source.unsplash.com/random/${description}`}
+      src={imgUrl ? imgUrl : `https://source.unsplash.com/random/?${description}`}
     />
   );
 }
