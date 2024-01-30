@@ -1,4 +1,4 @@
-import { Box } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 
 import FoodImg from "./components/FoodImg";
 import FoodInfo from "./components/FoodInfo";

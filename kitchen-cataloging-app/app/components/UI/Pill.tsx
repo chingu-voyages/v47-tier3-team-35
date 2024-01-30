@@ -1,17 +1,30 @@
 import { Stack, Typography } from "@mui/material";
+import { Variant } from "@mui/material/styles/createTypography";
 
 interface Pill {
-    text: string;
+  text: string;
+  borderColor?: string;
+  bgColor?: string;
+  textColor?: string;
+  textVariant?: Variant;
 }
 
-const Pill = ({text}: Pill) => {
+// Example usage: You will need to import { Variant } from "@mui/material/styles/createTypography" to pass a valid text variant; 
+// <Pill text={category} textVariant={"body3" as Variant}></Pill>
+
+const Pill = ({text, borderColor, bgColor, textColor, textVariant}: Pill) => {
+  
+  const classNames = `
+  border-${borderColor ? borderColor : "slate-400"} 
+  text-${textColor ? textColor : "black"} 
+  bg-${bgColor ? bgColor : "white"}
+  border px-3 py-1 rounded-[1rem] justify-center`;
+  
   return (
     <Stack
-      className={
-        "border-slate-400 border px-2 py-1 rounded-[8px] justify-center"
-      }
+      className={classNames}
     >
-      <Typography className="text-sm">{text}</Typography>
+      <Typography variant={textVariant ? textVariant : 'body3'}>{text}</Typography>
     </Stack>
   );
 }

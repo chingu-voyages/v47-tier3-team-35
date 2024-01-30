@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IncrementButton from "@/components/UI/IncrementButton";
 import Pill from "@/components/UI/Pill";
+import { Variant } from "@mui/material/styles/createTypography";
 
 interface FoodInfo {
   space: string;
@@ -70,7 +71,7 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
       </Stack>
       {/* Pills -- category -- these might end up being mapped */}
       <Stack direction={"row"} className="w-full items-center mt-5">
-        <Pill text={category}></Pill>
+        <Pill text={category} textVariant={"body3" as Variant}></Pill>
       </Stack>
       {/*  */}
       <Typography className="mt-5">{labels.join(",")}</Typography>
