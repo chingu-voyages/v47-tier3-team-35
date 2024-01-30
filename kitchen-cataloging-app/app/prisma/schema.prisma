@@ -51,7 +51,6 @@ model Food {
   userId String @db.ObjectId
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId
-  roomTitle String?
 }
 
 // Food log model -- created upon every purchase of food. Stored as an array in Food

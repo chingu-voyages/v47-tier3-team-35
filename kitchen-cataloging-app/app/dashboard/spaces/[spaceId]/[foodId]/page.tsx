@@ -5,21 +5,37 @@ import FoodInfo from "./components/FoodInfo";
 import FoodActivity from "./components/FoodActivity";
 import FoodInventory from "./components/FoodInventory";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
-import { FoodType } from "@/prisma/mock/mockData";
+import { FoodType, LogType } from "@/prisma/mock/mockData";
 // import { useParams } from "next/navigation";
+// Types for data 
+export type LogDataType = Omit<LogType, "id" | "userId" | "foodId">
+export type FoodDataType = Omit<FoodType, "id" | "createdAt" | "updatedAt" | "user" | "userId" | "room" | "roomId"> & { logs: LogDataType[] }
 
-const tempFoodData = {
-    description: "Beer",
-    price: 10.99,
-    amount: 9,
-    category: "Beverage",
-    threshold: 5,
-    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
-    image: ``,
-    labels: ["It's beer"],
-    logs: [{ price: 10.99, amount: 10, totalCost: 109.90 }, { price: 10.99, amount: -1, totalCost: -10.99 }],
-    roomTitle: 'Kitchen',
-}
+const tempFoodData: FoodDataType = {
+  title: "Beer",
+  price: 10.99,
+  amount: 9,
+  labels: ["Beverage", "Alcohol"],
+  threshold: 5,
+  expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
+  image: ``,
+  description: "It's beer",
+  roomTitle: "Kitchen",
+  logs: [
+    {
+      price: 10.99,
+      amount: 10,
+      totalCost: 109.9,
+      timestamp: new Date(Date.now()),
+    },
+    {
+      price: 10.99,
+      amount: -1,
+      totalCost: -10.99,
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
+    },
+  ],
+};
 
 interface Food {
   params: { spaceId: string; foodId: string };
@@ -28,10 +44,7 @@ interface Food {
 
 const Food = ({ params }: Food) => {
 
-    const food: Omit<
-      FoodType,
-      "id" | "createdAt" | "updatedAt" | "user" | "userId" | "room" | "roomId"
-    > = tempFoodData;
+    const food: FoodDataType = tempFoodData;
 
     const { spaceId, foodId } = params;
 
@@ -47,7 +60,7 @@ const Food = ({ params }: Food) => {
             },
             {
               routePath: `${foodId}`,
-              title: `${food.description}`,
+              title: `${food.title}`,
             },
           ]}
         />
@@ -70,7 +83,10 @@ const Food = ({ params }: Food) => {
             }
             sx={{ BoxArea: "img" }}
           >
-            <FoodImg description={food.description} imgUrl={food.image ? food.image : undefined} />
+            <FoodImg
+              description={food.description ? food.description : ""}
+              imgUrl={food.image ? food.image : ""}
+            />
           </Box>
           <Box
             className={
@@ -80,15 +96,14 @@ const Food = ({ params }: Food) => {
           >
             <FoodInfo
               space={food.roomTitle}
-              description={food.description}
+              title={food.title}
+              description={food.description ? food.description : ""}
               price={food.price}
-              category={food.category}
               labels={food.labels}
             />
           </Box>
           <Box className={"border p-3"} sx={{ gridArea: "activity" }}>
-            {/* <FoodActivity foodLogs={food.logs} /> */}
-            activity
+            <FoodActivity foodLogs={food.logs} />
           </Box>
           <Box className={"border p-3"} sx={{ gridArea: "inventory" }}>
             <FoodInventory />

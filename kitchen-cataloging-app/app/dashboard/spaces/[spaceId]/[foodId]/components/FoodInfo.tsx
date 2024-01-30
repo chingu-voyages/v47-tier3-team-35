@@ -1,9 +1,9 @@
 'use client'
 
 import { Stack, Typography, Box, IconButton } from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
@@ -11,14 +11,14 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 interface FoodInfo {
   space: string;
+  title: string;
   description: string;
   price: number;
-  category: string;
   labels: string[];
   
 }
 
-const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => {
+const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
   
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toString().split(".")[1];
@@ -34,15 +34,19 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
       <Stack direction={"row"} className="justify-between items-start">
         {/* title/space */}
         <Stack direction={"column"} className="items-start">
-          <Typography variant="caption">{space}</Typography>
-          <Typography variant={"subtitle2"}>{description}</Typography>
+          <Typography variant="caption" className={"text-slate-500"}>
+            {space}
+          </Typography>
+          <Typography variant={"subtitle1"}>{title}</Typography>
         </Stack>
         {/* Price */}
         <Stack direction={"column"} className="items-end">
-          <Typography variant="caption">Price</Typography>
+          <Typography variant="caption" className={"text-slate-500"}>
+            Price
+          </Typography>
           <Stack direction={"row"} className="items-start">
-            <Typography variant={"subtitle2"}>${priceDollars}</Typography>
-            <Typography variant={"body2"} className="pt-1">
+            <Typography variant={"subtitle1"}>${priceDollars}</Typography>
+            <Typography variant={"body2"} className="pt-[0.33rem]">
               {priceCents}
             </Typography>
           </Stack>
@@ -51,9 +55,9 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
       {/* Icons + add/subtract buttons */}
       <Stack direction={"row"} className={"w-full justify-between mt-3 px-1"}>
         <Stack direction={"row"} className={"gap-2"}>
-          <ShoppingCartIcon color={"primary"} />
-          <EditIcon color={"secondary"} />
-          <DeleteIcon color={"error"} />
+          <AddShoppingCartOutlinedIcon color={"primary"} />
+          <EditOutlinedIcon color={"secondary"} />
+          <DeleteForeverOutlinedIcon color={"error"} />
         </Stack>
         <Stack direction={"row"} className={"w-20 justify-end gap-2"}>
           <IconButton
@@ -73,11 +77,21 @@ const FoodInfo = ({ space, description, price, category, labels }: FoodInfo) => 
         </Stack>
       </Stack>
       {/* Pills -- category -- these might end up being mapped */}
-      <Stack direction={"row"} className="w-full items-center mt-5">
-        <Pill text={category} textVariant={"body3" as Variant}></Pill>
+      <Stack direction={"row"} className="w-full items-center my-5 gap-2">
+        {labels.map((label, i) => (
+          <Pill
+            key={i}
+            text={label}
+            borderColor="secondary.main"
+            textColor="secondary.main"
+            textVariant={"body3" as Variant}
+          ></Pill>
+        ))}
       </Stack>
       {/*  */}
-      <Typography variant={'body3'} className="mt-5 text-slate-400">{labels.join(",")}</Typography>
+      <Typography variant={"body3"} className="text-slate-600 italic mt-5">
+        {description}
+      </Typography>
     </>
   );
 }

@@ -10,21 +10,22 @@ interface Pill {
 }
 
 // Example usage: You will need to import { Variant } from "@mui/material/styles/createTypography" to pass a valid text variant; 
-// <Pill text={category} textVariant={"body3" as Variant}></Pill>
+// <Pill key={i} text={label} borderColor="secondary.main" textVariant={"body3" as Variant}></Pill>
 
-const Pill = ({text, borderColor, bgColor, textColor, textVariant}: Pill) => {
+const Pill = ({text, borderColor='black', bgColor='transparent', textColor='black', textVariant}: Pill) => {
   
-  const classNames = `
-  border-${borderColor ? borderColor : "slate-400"} 
-  text-${textColor ? textColor : "black"} 
-  bg-${bgColor ? bgColor : "white"}
-  border px-3 py-1 rounded-[1rem] justify-center`;
+  const classNames = `border px-3 py-1 rounded-[1rem] justify-center`;
   
   return (
     <Stack
-      className={classNames}
+      className='border px-3 py-1 rounded-[1rem] justify-center'
+      sx={{
+        backgroundColor: bgColor,
+        borderColor: borderColor,
+        color: textColor
+      }}
     >
-      <Typography variant={textVariant ? textVariant : 'body3'}>{text}</Typography>
+      <Typography variant={textVariant ? textVariant : 'body4'}>{text}</Typography>
     </Stack>
   );
 }
