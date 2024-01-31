@@ -16,14 +16,12 @@ export default function Page({
     ?.replace("http://", "");
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="w-full max-w-xs">
-        <SignIn
-          path="/auth/sign-in"
-          routing="path"
-          signUpUrl="/auth/sign-up"
-          afterSignInUrl={redirectUrl}
-        />
-      </div>
+      <SignIn
+        path="/auth/sign-in"
+        routing="path"
+        signUpUrl="/auth/sign-up"
+        afterSignInUrl={redirectUrl}
+      />
     </div>
   );
 }
