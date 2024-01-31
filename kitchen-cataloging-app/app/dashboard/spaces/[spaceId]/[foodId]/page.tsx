@@ -11,7 +11,7 @@ import { FoodType, LogType } from "@/prisma/mock/mockData";
 export type LogDataType = Omit<LogType, "id" | "userId" | "foodId">
 export type FoodDataType = Omit<FoodType, "id" | "createdAt" | "updatedAt" | "user" | "userId" | "room" | "roomId"> & { logs: LogDataType[] }
 
-const tempFoodData: FoodDataType = {
+const tempFoodData: FoodDataType[] = [{
   title: "Beer",
   price: 10.99,
   amount: 9,
@@ -35,7 +35,7 @@ const tempFoodData: FoodDataType = {
       timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
     },
   ],
-};
+}];
 
 interface Food {
   params: { spaceId: string; foodId: string };
@@ -44,7 +44,7 @@ interface Food {
 
 const Food = ({ params }: Food) => {
 
-    const food: FoodDataType = tempFoodData;
+    const food: FoodDataType = tempFoodData[0];
 
     const { spaceId, foodId } = params;
 
@@ -65,23 +65,26 @@ const Food = ({ params }: Food) => {
           ]}
         />
         <Box
-          className="w-full max-w-[70rem] mx-auto"
+          className="w-full max-w-[72rem] mx-auto mt-3"
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "100%", md: "repeat(2, 50%)" },
-            gap: 1,
+            gap: "1rem",
             gridTemplateRows: { xs: "repeat(4, 1fr)", md: "repeat(3, 1fr)" },
             gridTemplateAreas: {
               xs: `"img" "info" "inventory" "activity"`,
               md: `"img activity" "info activity" "inventory inventory"`,
             },
+            justifyContent: "space-between",
           }}
         >
           <Box
             className={
-              "border h-[30vh] min-h-[15rem] w-full  max-w-[30rem] p-3 mx-auto"
+              "h-[35vh] min-h-[20rem] w-full max-w-[34rem] p-3 mx-auto"
             }
-            sx={{ BoxArea: "img" }}
+            sx={{
+              BoxArea: "img",
+            }}
           >
             <FoodImg
               description={food.description ? food.description : ""}
@@ -90,7 +93,7 @@ const Food = ({ params }: Food) => {
           </Box>
           <Box
             className={
-              "border h-[30vh] min-h-[15rem] w-full max-w-[30rem] p-3 mx-auto"
+              "h-[35vh] min-h-[18rem] w-full max-w-[34rem] p-3 mx-auto"
             }
             sx={{ gridArea: "info" }}
           >
@@ -102,11 +105,22 @@ const Food = ({ params }: Food) => {
               labels={food.labels}
             />
           </Box>
-          <Box className={"border p-3"} sx={{ gridArea: "activity" }}>
+          <Box
+            className={"h-[39rem] p-3 w-full max-w-[34rem] mx-auto"}
+            sx={{ gridArea: "activity" }}
+          >
             <FoodActivity foodLogs={food.logs} />
           </Box>
-          <Box className={"border p-3"} sx={{ gridArea: "inventory" }}>
-            <FoodInventory />
+          <Box
+            //
+            className={
+              "h-[32vh] min-h-[20rem] max-w-[72rem] w-full p-3 mx-auto"
+            }
+            sx={{ gridArea: "inventory" }}
+          >
+            <FoodInventory 
+              foodData={tempFoodData}
+            />
           </Box>
         </Box>
       </>

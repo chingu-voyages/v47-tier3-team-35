@@ -1,7 +1,6 @@
 'use client'
 
 import * as React from "react";
-import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -14,13 +13,6 @@ import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 
 import { LogDataType } from "../page";
@@ -128,16 +120,16 @@ function stableSort<T>(
     //   label: "Price",
     // },
     {
+      id: "totalCost",
+      numeric: true,
+      disablePadding: true,
+      label: "Inventory Value",
+    },
+    {
       id: "amount",
       numeric: true,
       disablePadding: false,
       label: "Quantity",
-    },
-    {
-      id: "totalCost",
-      numeric: true,
-      disablePadding: false,
-      label: "Inventory Value",
     },
   ];
 
@@ -178,17 +170,25 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             }}
           />
         </TableCell> */}
-        {headCells.map((headCell) => (
+        {headCells.map((headCell, i) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
+            align={
+              i === 0 ? "left" : i === headCells.length - 1 ? "right" : "center"
+            }
+            padding={'none'}
             sortDirection={orderBy === headCell.id ? order : false}
+            className="text-default-ref-neutral-neutral60 px-4 pb-2"
+            sx={{
+              fontSize: "1rem",
+              minWidth: i === 0 ? '9rem' : undefined,
+            }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
+              className="text-default-ref-neutral-neutral60"
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -225,14 +225,15 @@ function EnhancedTableToolbar() {
           {numSelected} selected
         </Typography>
       ) : ( */}
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Your Activity
-        </Typography>
+      <Typography
+        sx={{ flex: "1 1 100%" }}
+        variant="subtitle1"
+        id="tableTitle"
+        component="div"
+        className="text-default-ref-neutral-neutral40 py-4 ps-2"
+      >
+        Your Activity
+      </Typography>
       {/* )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -251,7 +252,7 @@ function EnhancedTableToolbar() {
   );
 }
 
-const [order, setOrder] = React.useState<Order>("asc");
+const [order, setOrder] = React.useState<Order>("desc");
 const [orderBy, setOrderBy] = React.useState<keyof LogDataTypeMod>("timestamp");
 const [selected, setSelected] = React.useState<readonly number[]>([]);
 const [page, setPage] = React.useState(0);
@@ -267,14 +268,14 @@ const handleRequestSort = (
   setOrderBy(property);
 };
 
-const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-  if (event.target.checked) {
-    const newSelected = rows.map((n) => n.id);
-    setSelected(newSelected);
-    return;
-  }
-  setSelected([]);
-};
+// const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+//   if (event.target.checked) {
+//     const newSelected = rows.map((n) => n.id);
+//     setSelected(newSelected);
+//     return;
+//   }
+//   setSelected([]);
+// };
 
 const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
   const selectedIndex = selected.indexOf(id);
@@ -306,9 +307,9 @@ const handleChangeRowsPerPage = (
   setPage(0);
 };
 
-const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-  setDense(event.target.checked);
-};
+// const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+//   setDense(event.target.checked);
+// };
 
 const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
@@ -333,7 +334,7 @@ return (
         <Table
           // sx={{ minWidth: 750 }}
           aria-labelledby="tableTitle"
-          size={dense ? "small" : "medium"}
+          // size={dense ? "small" : "medium"}
         >
           <EnhancedTableHead
             order={order}
@@ -360,6 +361,17 @@ return (
                 >
                   <TableCell
                     component="th"
+                    className={`text-default-ref-neutral-neutral40 
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: "1rem",
+                      border: "none",
+                    }}
                     id={labelId}
                     scope="row"
                   >
@@ -369,9 +381,53 @@ return (
                       day: "numeric",
                     })}
                   </TableCell>
-                  {/* <TableCell align="right">{row.price}</TableCell> */}
-                  <TableCell align="right">{row.amount}</TableCell>
-                  <TableCell align="right">{row.totalCost}</TableCell>
+                  <TableCell
+                    className={`${
+                      row.amount < 0 ? "text-red-800 " : "text-green-800 "
+                    }
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: "1rem",
+                      border: "none",
+                      fontWeight: "500",
+                    }}
+                    align="center"
+                  >
+                    {row.totalCost < 0 ? "-" : ""}$
+                    {
+                      row.totalCost
+                        .toFixed(2)
+                        .split(/[-.]/)
+                        .filter((s) => s)[0]
+                    }
+                    <span className="text-[0.625rem] align-top">
+                      {row.totalCost.toFixed(2).split(".")[1]}
+                    </span>
+                  </TableCell>
+                  <TableCell
+                    className={`${
+                      row.amount < 0 ? "text-red-800 " : "text-green-800 "
+                    }
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: "1rem",
+                      border: "none",
+                      fontWeight: "500",
+                    }}
+                    align="right"
+                  >
+                    {row.amount}
+                  </TableCell>
                 </TableRow>
               );
             })}

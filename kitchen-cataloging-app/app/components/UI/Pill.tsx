@@ -18,7 +18,7 @@ const Pill = ({text, borderColor='black', bgColor='transparent', textColor='blac
   
   return (
     <Stack
-      className='border px-3 py-1 rounded-[1rem] justify-center'
+      className='border px-3 py-1 rounded-[0.5rem] justify-center'
       sx={{
         backgroundColor: bgColor,
         borderColor: borderColor,

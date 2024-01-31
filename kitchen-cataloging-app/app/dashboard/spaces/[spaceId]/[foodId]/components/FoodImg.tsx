@@ -11,7 +11,7 @@ const FoodImg = ({imgUrl, description}: FoodImg) => {
 
   return (
     <Box
-      className='w-full aspect-[4/3] object-cover object-center max-w-[30rem] max-h-full mx-auto rounded-[1rem]'
+      className='w-full aspect-[4/3] object-cover object-center max-w-[34rem] max-h-full mx-auto rounded-[1rem]'
       component="img"
       sx={{
         
