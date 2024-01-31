@@ -8,9 +8,12 @@ export default authMiddleware({
   publicRoutes: ["/", "/auth/sign-in(.*)", "/auth/sign-up(.*)"],
   afterAuth(auth, req, evt) {
     if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      const url = new URL(req.url);
+      const redirectUrl = url.searchParams.get("redirect_url");
+      return redirectToSignIn({
+        returnBackUrl: redirectUrl ? redirectUrl : req.url,
+      });
     }
-    console.log(auth.userId, auth.isPublicRoute, auth);
     //if a user is logged in and is going back to the home page, re-direct to dashboard
     if (auth.userId && req.nextUrl.pathname === "/") {
       const dashboardUrl = new URL("/dashboard", req.url);
