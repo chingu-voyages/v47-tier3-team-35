@@ -93,7 +93,7 @@ const Food = ({ params }: Food) => {
           </Box>
           <Box
             className={
-              "h-[35vh] min-h-[18rem] w-full max-w-[34rem] p-3 mx-auto"
+              "h-[35vh] min-h-[18rem] w-full max-w-[34rem] py-2 px-4 mx-auto"
             }
             sx={{ gridArea: "info" }}
           >
@@ -114,7 +114,7 @@ const Food = ({ params }: Food) => {
           <Box
             //
             className={
-              "h-[32vh] min-h-[20rem] max-w-[72rem] w-full p-3 mx-auto"
+              "h-[32vh] min-h-[20rem] max-w-[70rem] w-full pt-0 px-0 pb-6 -mt-3 mx-auto"
             }
             sx={{ gridArea: "inventory" }}
           >

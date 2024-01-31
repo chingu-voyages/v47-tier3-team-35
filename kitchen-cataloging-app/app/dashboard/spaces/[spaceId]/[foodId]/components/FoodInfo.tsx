@@ -32,7 +32,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
   // editable
   return (
     <>
-      <Stack direction={"row"} className="justify-between items-start pb-3">
+      <Stack direction={"row"} className="justify-between items-start pb-2">
         {/* title/space */}
         <Stack direction={"column"} className="items-start">
           <Typography
@@ -72,7 +72,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
       {/* Icons + add/subtract buttons */}
       <Stack
         direction={"row"}
-        className={"w-full justify-between mt-3 px-1 pb-3"}
+        className={"w-full justify-between mt-3 px-1 pb-2"}
       >
         <Stack direction={"row"} className={"gap-2"}>
           <AddShoppingCartOutlinedIcon
@@ -120,7 +120,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
       {/*  */}
       <Typography
         variant={"body1"}
-        className="text-default-ref-neutral-neutral30 mt-5"
+        className="text-default-ref-neutral-neutral30 mt-5 ps-1"
       >
         {description}
       </Typography>

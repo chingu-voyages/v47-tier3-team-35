@@ -61,8 +61,9 @@ interface FoodInventory {
 
 const FoodInventory = ({ foodData }: FoodInventory) => {
 
+  const tablePadding = 6;
   const totalProductAmount = foodData.map((data) => data.amount).reduce((a, c) => a + c);
-  const totalProductValue = foodData
+  const totalProductValue: number = foodData
     .map((data) => data.price * data.amount)
     .reduce((a, c) => a + c);
 
@@ -191,19 +192,12 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
           {headCells.map((headCell, i) => (
             <TableCell
               key={headCell.id}
-              align={
-                i === 0
-                  ? "left"
-                  : i === headCells.length - 1
-                  ? "right"
-                  : "center"
-              }
+              align={i === 0 ? "left" : "center"}
               padding={"none"}
               sortDirection={orderBy === headCell.id ? order : false}
               className="text-default-ref-neutral-neutral60 px-4 pb-2"
               sx={{
                 fontSize: "1rem",
-                minWidth: i === 0 ? "9rem" : undefined,
               }}
             >
               <TableSortLabel
@@ -211,6 +205,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
                 className="text-default-ref-neutral-neutral60"
+                sx={{transform: `${i > 0 ? "translateX(12px)" : ''}`}}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
@@ -236,7 +231,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
         }}
-        className="py-4 ps-2"
+        className={`py-6 px-${tablePadding} gap-6`}
       >
         {/* {numSelected > 0 ? (
         <Typography
@@ -252,62 +247,50 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
           variant="subtitle1"
           id="tableTitle"
           component="h3"
-          className="text-default-ref-neutral-neutral40"
+          className="text-default-ref-neutral-neutral40 flex-grow"
         >
           Inventory
         </Typography>
-        <Stack direction="row">
+        <Stack direction="row" className="items-center gap-3">
           <Typography
             variant="h3"
             id="tableTitle"
             component="h3"
-            className="text-default-ref-neutral-neutral40"
+            className="text-default-sys-light-tertiary relative"
           >
-            ${totalProductValue}
+            ${totalProductValue.toString().split(".")[0]}
+            <span className="text-[1.25rem] pt-1 align-top inline-block">
+              {totalProductValue.toString().split(".")[1]}
+            </span>
           </Typography>
           <Typography
             variant="body2"
             id="tableTitle"
             component="p"
-            className="text-default-ref-neutral-neutral40 py-4 ps-2"
+            className="text-default-sys-light-tertiary w-[6rem]"
           >
             of {foodData[0].title} in {foodData[0].roomTitle}
           </Typography>
         </Stack>
-        <Stack direction="row">
+        <Stack direction="row" className="items-center gap-3">
           <Typography
-            sx={{ flex: "1 1 100%" }}
             variant="h3"
             id="tableTitle"
             component="h3"
-            className="text-default-ref-neutral-neutral40"
+            className="text-default-sys-light-primary"
           >
-            ${totalProductAmount}
+            {totalProductAmount}
           </Typography>
           <Typography
-            sx={{ flex: "1 1 100%" }}
             variant="body2"
             id="tableTitle"
             component="p"
-            className="text-default-ref-neutral-neutral40 py-4 ps-2"
+            className="text-default-sys-light-primary w-[6rem]"
           >
-            {foodData[0].title} in {foodData[0].roomTitle}
+            {foodData[0].title}
+            {totalProductAmount !== 1 ? "s" : ""} in {foodData[0].roomTitle}
           </Typography>
         </Stack>
-        {/* )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )} */}
       </Toolbar>
     );
   }
@@ -388,7 +371,13 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
   );
 
   return (
-    <Box sx={{ width: "100%", height: "100%" }}>
+    <Box
+      sx={{
+        width: `calc(100% - ${2 * tablePadding})`,
+        height: "100%",
+        boxSizing: "border-box",
+      }}
+    >
       <Paper
         sx={{
           width: "100%",
@@ -399,9 +388,14 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
         }}
       >
         <EnhancedTableToolbar />
-        <TableContainer sx={{ flexGrow: 1 }}>
+        <TableContainer
+          sx={{
+            flexGrow: 1,
+          }}
+        >
           <Table
-            // sx={{ minWidth: 750 }}
+            className={`px-${tablePadding} mx-${tablePadding}`}
+            sx={{ boxSizing: "border-box", width: `calc(100% - ${2 * 0.25 * tablePadding}rem)` }}
             aria-labelledby="tableTitle"
             // size={dense ? "small" : "medium"}
           >
@@ -439,7 +433,6 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                     `}
                       sx={{
                         fontSize: "1rem",
-                        border: "none",
                       }}
                       id={labelId}
                       scope="row"
@@ -459,8 +452,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                       }
                     `}
                       sx={{
-                        fontSize: "1rem",
-                        border: "none",
+                        fontSize: "1rem", 
                         fontWeight: "500",
                       }}
                       align="center"
@@ -477,19 +469,18 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                     `}
                       sx={{
                         fontSize: "1rem",
-                        border: "none",
                         fontWeight: "500",
                       }}
-                      align="right"
+                      align="center"
                     >
                       {row.amount}
                     </TableCell>
-                    <TableCell>
-                      <IconButton>
-                        <AddIcon />
+                    <TableCell className="flex gap-6 justify-end">
+                      <IconButton className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90 w-7 h-7">
+                        <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>
-                      <IconButton>
-                        <RemoveIcon />
+                      <IconButton className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90 w-7 h-7">
+                        <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>
                     </TableCell>
                   </TableRow>

@@ -405,7 +405,7 @@ return (
                         .split(/[-.]/)
                         .filter((s) => s)[0]
                     }
-                    <span className="text-[0.625rem] align-top">
+                    <span className="text-[0.625rem] align-top inline-block pt-[1px]">
                       {row.totalCost.toFixed(2).split(".")[1]}
                     </span>
                   </TableCell>
