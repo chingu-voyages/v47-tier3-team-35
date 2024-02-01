@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { getSingleRoom } from "../actions";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
-import SpaceHeader from "./SpaceHeader";
+import SpaceHeader from "./components/header/SpaceHeader";
 import { paginateFoodItems } from "./actions";
 import InventoryList from "./components/inventoryList/InventoryList";
 const navigationDepthArr = ({

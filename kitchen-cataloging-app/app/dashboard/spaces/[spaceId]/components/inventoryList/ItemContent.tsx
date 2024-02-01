@@ -31,7 +31,7 @@ const ItemStockInfoAndBtns = ({
             textTransform: "none",
           }}
         >
-          {item.amount}00.0k in stock
+          {item.amount} in stock
         </Typography>
       </Box>
       <Box className="flex space-x-2 xs:space-x-2.5 sm:space-x-3 ml-1.5 xs:ml-2">
@@ -83,7 +83,7 @@ const ItemDescription = ({
   return (
     <Box className="flex flex-col w-full min-h-0 space-y-1 flex-grow">
       <Typography
-        className="font-medium text-3xl sm:text-5xl leading-5 sm:leading-6 text-default-ref-neutral-neutral30"
+        className="font-medium text-3xl sm:text-4xl leading-5 sm:leading-6 text-default-ref-neutral-neutral30"
         variant={"subtitle2"}
         noWrap={!mediumWidth}
         sx={mediumWidth ? desktopOverflow : undefined}
@@ -144,7 +144,7 @@ const ItemContent = ({
   smallWidth: boolean;
 }) => {
   return (
-    <Box className="flex flex-col w-full space-y-4 xs:space-y-4.5 md:space-y-5 p-1.5 sm:p-2.5 md:p-3 lg:p-3.5 rounded-t-29xl rounded-b-23xl xs:rounded-t-32xl xs:rounded-b-26xl md:rounded-t-34xl md:rounded-b-28xl bg-default-sys-light-surface-container-lowest">
+    <Box className="flex flex-col w-full space-y-4 xs:space-y-4.5 md:space-y-5 p-2 sm:p-2.5 md:p-3 lg:p-3.5 rounded-t-29xl rounded-b-23xl xs:rounded-t-32xl xs:rounded-b-26xl md:rounded-t-34xl md:rounded-b-28xl bg-default-sys-light-surface-container-lowest">
       <Box className="flex flex-col w-full space-y-3 xs:space-y-3.5 md:space-y-4 flex-grow">
         <ItemStockInfoAndBtns
           item={item}
