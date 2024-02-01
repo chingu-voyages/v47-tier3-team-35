@@ -1,8 +1,10 @@
 import { Container, Grid, Typography } from "@mui/material";
 import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
-import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
+import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import { auth } from "@clerk/nextjs";
 const DashboardGreeting = async () => {
-  const user = await getUserInfo();
+  const { userId } = auth();
+  const user = await getUserInfoServer({ userId });
   return (
     <Container className="flex flex-row items-center p-0">
       <Typography

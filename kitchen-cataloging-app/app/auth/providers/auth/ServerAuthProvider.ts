@@ -1,8 +1,7 @@
-import { auth } from "@clerk/nextjs";
+"use server";
 import prisma from "@/prisma/client";
-const getUserInfo = async () => {
+const getUserInfoServer = async ({ userId }: { userId?: string | null }) => {
   try {
-    const { userId } = auth();
     if (!userId) return null;
     const thisUser = await prisma.user.findUnique({
       where: {
@@ -15,4 +14,4 @@ const getUserInfo = async () => {
     return null;
   }
 };
-export default getUserInfo;
+export default getUserInfoServer;

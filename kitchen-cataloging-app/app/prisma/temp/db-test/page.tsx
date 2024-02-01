@@ -1,9 +1,10 @@
-import { currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 import prisma from "../../client";
 import UserData from "./UserData";
-import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
+import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 const DbTest = async () => {
-  const user = await getUserInfo()
+  const { userId } = auth();
+  const user = await getUserInfoServer({ userId });
   const users = await prisma.user.findMany();
 
   return (

@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
+import { User } from "@clerk/backend";
 import prisma from "../../prisma/client";
 import LoadingPage from "@/components/utils/LoadingPage";
 // Function to create a new user
-const createNewUser = async () => {
+const createNewUser = async ({ user }: { user: User | null }) => {
   // Get the current user
-  const user = await currentUser();
   if (!user) return redirect("/auth/sign-up");
   // Try to find a user in the database with the same Clerk ID
   const match = await prisma.user.findUnique({
@@ -30,7 +30,8 @@ const createNewUser = async () => {
 // The main component
 const NewUser = async () => {
   // Create the new user
-  createNewUser()
+  const user = await currentUser();
+  createNewUser({ user })
     //redirect according to status
     .then(() => {
       redirect("/dashboard");

@@ -1,12 +1,14 @@
 "use server";
-import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
+import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 import { Food } from "@prisma/client";
 import prisma from "@/prisma/client";
+import { auth } from "@clerk/nextjs";
 type PaginationProps = {
   cursor?: string | null;
   take: number;
   spaceId?: string | null;
 };
+
 export const paginateFoodItems = async ({
   cursor,
   take,
@@ -14,8 +16,9 @@ export const paginateFoodItems = async ({
 }: PaginationProps): Promise<Food[] | null> => {
   try {
     //ensure user only grabs rooms belonging to them
-    const userInfo = await getUserInfo();
-    if (!userInfo?.id) return null;
+    const { userId } = auth();
+    const user = await getUserInfoServer({ userId });
+    if (!user?.id) return null;
     //query
     const optionalParams = {
       roomId: spaceId ? spaceId : undefined,
@@ -29,7 +32,7 @@ export const paginateFoodItems = async ({
           }
         : undefined,
       where: {
-        userId: userInfo.id,
+        userId: user.id,
         ...optionalParams,
       },
       orderBy: {
