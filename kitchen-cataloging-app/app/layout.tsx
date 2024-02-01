@@ -4,8 +4,8 @@ import LoadingPage from "@/components/utils/LoadingPage";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 //styles
 import { StyledEngineProvider } from "@mui/material";
-import ThemeProviderWrapper from "@/muiTheme/theme";
-import "./globals.css";
+import ThemeProviderWrapper from "@/theme/muiTheme/theme";
+import "@/theme/tailwindTheme/globals.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";

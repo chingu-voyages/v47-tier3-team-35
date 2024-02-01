@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { unstable_batchedUpdates } from "react-dom";
 export type IdRequiredObj<T> = {
@@ -80,14 +80,17 @@ function PaginationWrapper<T>({
     threshold: threshold,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useRef(true);
   const loadMore = async () => {
     //don't get any new data if loading is false
-    if (isLoading) return;
+    if (isLoading || !isMounted.current) return;
     setIsLoading(true);
     const newItems = await paginate({
       cursor: cursor ? cursor : undefined,
       take,
     });
+    //prevent state updates if component is unmounted
+    if (!isMounted.current) return;
     if (!newItems) {
       return unstable_batchedUpdates(() => {
         setIsLoading(false);
@@ -110,16 +113,27 @@ function PaginationWrapper<T>({
       setCursor(newCursor);
     });
   };
+  const saveLoadedData = useCallback(loadMore, [
+    cursor,
+    isLoading,
+    paginate,
+    take
+  ]);
   useEffect(() => {
-    if (inView) {
-      loadMore();
+    isMounted.current = true;
+    //means we can load more. If cursor is null, it means we reached the end
+    if (inView && cursor) {
+      saveLoadedData();
     }
-  }, [inView, loadMore]);
+    return () => {
+      isMounted.current = false;
+    };
+  }, [inView, cursor, saveLoadedData]);
   return (
     <>
       {children({
         data,
-        loadMore,
+        loadMore: saveLoadedData,
         isLoading,
       })}
       {cursor && loadingComponent && loadingComponent(ref)}

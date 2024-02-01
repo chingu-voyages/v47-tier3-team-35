@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { UserType, FoodType, isErrorType } from "../../mock/mockData";
 import { fetchData, seedUser } from "./actions";
 import { unstable_batchedUpdates } from "react-dom";
@@ -24,7 +24,7 @@ const UserData = ({ userId }: UserDataT) => {
       }
     }
   };
-
+  const savedGetUserData = useCallback(getUserData, [userId]);
   const seedUserData = async () => {
     if (userId) {
       const foundData: any = await seedUser(userId);
@@ -38,8 +38,8 @@ const UserData = ({ userId }: UserDataT) => {
   };
 
   useEffect(() => {
-    getUserData();
-  }, []);
+    savedGetUserData();
+  }, [savedGetUserData]);
 
   if (!userId) {
     return (

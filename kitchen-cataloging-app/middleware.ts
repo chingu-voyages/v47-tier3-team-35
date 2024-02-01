@@ -5,14 +5,14 @@ import { NextResponse } from "next/server";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
   //these are the routes we are not protecting
-  publicRoutes: [
-    "/",
-    "/auth/sign-in",
-    "/auth/sign-up",
-  ],
+  publicRoutes: ["/", "/auth/sign-in(.*)", "/auth/sign-up(.*)"],
   afterAuth(auth, req, evt) {
     if (!auth.userId && !auth.isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: req.url });
+      const url = new URL(req.url);
+      const redirectUrl = url.searchParams.get("redirect_url");
+      return redirectToSignIn({
+        returnBackUrl: redirectUrl ? redirectUrl : req.url,
+      });
     }
     //if a user is logged in and is going back to the home page, re-direct to dashboard
     if (auth.userId && req.nextUrl.pathname === "/") {
@@ -27,7 +27,6 @@ export default authMiddleware({
     return NextResponse.next();
   },
 });
-
 
 export const config = {
   matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],

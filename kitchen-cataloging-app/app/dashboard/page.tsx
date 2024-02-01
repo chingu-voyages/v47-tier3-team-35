@@ -2,7 +2,7 @@ import { Container, Grid, Typography, Button } from "@mui/material";
 import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
 import getUserInfo from "@/auth/providers/auth/ServerAuthProvider";
 import Link from "next/link";
-export const DashboardGreeting = async () => {
+const DashboardGreeting = async () => {
   const user = await getUserInfo();
   return (
     <Container className="flex flex-row items-center p-0">
@@ -19,7 +19,7 @@ export const DashboardGreeting = async () => {
     </Container>
   );
 };
-export const DashboardContent = () => {
+const DashboardContent = () => {
   return (
     <Grid container rowSpacing={2} columnSpacing={1}>
       <Grid item xs={12} sm={6} md={8}></Grid>

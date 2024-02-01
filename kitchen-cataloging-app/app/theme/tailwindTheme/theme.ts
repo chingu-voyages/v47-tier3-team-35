@@ -488,7 +488,10 @@ const theme = {
     "17xl": "6rem",
     "18xl": "8rem",
   },
-  fontFamily: { roboto: "Roboto", inter: "Inter" },
+  fontFamily: {
+    sans: ["Roboto", "sans-serif"],
+    mono: ["Roboto Mono", "monospace"],
+  }, //roboto: "Roboto", inter: "Inter" },
   boxShadow: {
     "shadow-sm": "0px 1px 2px 0px rgba(0,0,0,0.05)",
     "shadow-base":
@@ -582,6 +585,7 @@ const theme = {
     full: "9999px",
   },
   screens: {
+    xs: "400px",
     sm: "640px",
     md: "768px",
     lg: "1024px",

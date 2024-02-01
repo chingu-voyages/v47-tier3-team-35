@@ -29,7 +29,7 @@ const NavigationLink = ({
   title: string;
   showSplit: boolean;
   }) => {
-  const largeWidth = useWindowWidth(1024);
+  const largeWidth = useWindowWidth(1280);
   return (
     <>
       <Link key={path} href={path}>

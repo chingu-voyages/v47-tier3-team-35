@@ -15,6 +15,7 @@ const InventoryList = ({
 }) => {
   const mediumWidth = useWindowWidth(640);
   const largeWidth = useWindowWidth(1024);
+  const smallWidth = useWindowWidth(400);
   return (
     <PaginationWrapper
       paginate={async ({ cursor, take }) =>
@@ -39,12 +40,14 @@ const InventoryList = ({
         <Grid
           container
           rowSpacing={{
+            xxs: 1.2,
             xs: 1.5,
             sm: 3,
             md: 3,
             lg: 4,
           }}
           columnSpacing={{
+            xxs: 1.2,
             xs: 1.5,
             sm: 3,
             md: 3,
@@ -52,12 +55,16 @@ const InventoryList = ({
           }}
         >
           {props.data.map((item) => (
-            <Grid key={item.id} item xs={6} md={4} lg={3} xl={2.4}>
+            <Grid key={item.id} item xxs={6} md={4} lg={3} xl={2.4}>
               <Link
                 className="flex w-full h-full"
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
               >
-                <ItemContent item={item} mediumWidth={mediumWidth} />
+                <ItemContent
+                  item={item}
+                  mediumWidth={mediumWidth}
+                  smallWidth={smallWidth}
+                />
               </Link>
             </Grid>
           ))}

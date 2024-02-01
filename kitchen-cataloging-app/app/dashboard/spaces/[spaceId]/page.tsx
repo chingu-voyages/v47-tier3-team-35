@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { getSingleRoom } from "../actions";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
-import SpaceHeader from "./SpaceHeader";
+import SpaceHeader from "./components/header/SpaceHeader";
 import { paginateFoodItems } from "./actions";
 import InventoryList from "./components/inventoryList/InventoryList";
 const navigationDepthArr = ({
@@ -24,7 +24,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   //guard clause in case no data is returned
   if (!roomData) return <></>;
   return (
-    <Box className="flex flex-col">
+    <Box className="flex flex-col pb-6 sm:pb-7 lg:pb-12">
       <NavigationDepthBar
         items={navigationDepthArr({
           spaceId: roomData?.id,
