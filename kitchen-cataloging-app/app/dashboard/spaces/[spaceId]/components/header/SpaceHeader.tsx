@@ -6,15 +6,23 @@ import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { SearchBar } from "./SearchBar";
 const AddItemBtn = () => {
   return (
     <Button
       variant="contained"
-      className="font-medium rounded-full flex items-center"
+      size="large"
+      className="font-medium rounded-full flex items-center space-x-1.5 py-2.5 pl-4 pr-6 sm:space-x-2 sm:py-2.5 sm:pl-5 sm:pr-7 md:py-3 lg:space-x-2.5 lg:py-4 lg:pl-6 lg:pr-8"
+      sx={{
+        minHeight: "0",
+        height: "fit-content",
+      }}
     >
-      <AddIcon fontSize="medium" />
+      <AddIcon className="text-6xl sm:text-8xl" />
       <Typography
-        variant="button"
+        noWrap
+        variant={"button"}
+        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal tracking-wide leading-4 sm:leading-5 md:leading-6 lg:leading-8"
         sx={{
           textTransform: "none",
         }}
@@ -24,35 +32,31 @@ const AddItemBtn = () => {
     </Button>
   );
 };
-const SearchBar = ({ mediumWidth }: { mediumWidth: boolean }) => {
-  return <Box className="flex w-full">{!mediumWidth && <AddItemBtn />}</Box>;
-};
-const SpaceActionBtns = ({ mediumWidth }: { mediumWidth: boolean }) => {
+const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box className="w-full flex flex-row mt-1.5 md:w-auto md:mt-0">
+    <Box className="w-full flex flex-row items-center mt-3 md:w-auto md:mt-0">
       <Box className="flex flex-grow">
         <IconButton>
           <EditOutlinedIcon
             fontSize={"inherit"}
-            className="text-9xl text-default-sys-light-tertiary "
+            className="text-10xl sm:text-11xl lg:text-12xl text-default-sys-light-tertiary "
           />
         </IconButton>
         <IconButton>
           <DeleteOutlineOutlinedIcon
             fontSize={"inherit"}
-            className="text-9xl text-red-800"
+            className="text-10xl sm:text-11xl lg:text-12xl text-red-800"
           />
         </IconButton>
       </Box>
-      {!mediumWidth && <AddItemBtn />}
+      {children}
     </Box>
   );
 };
 const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
   const [roomData, setRoomData] = useState<Partial<Room>>(defaultData || {});
-  const largeWidth = useWindowWidth(1280);
+  const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(768);
-  const smallWidth = useWindowWidth(480);
   return (
     <Box className="flex flex-col w-full min-h-0 min-w-0">
       <Typography
@@ -63,7 +67,7 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
           textTransform: "none",
         }}
       >{`${roomData.itemCount} items in stock`}</Typography>
-      <Box className="flex flex-col md:flex-row mb-6 sm:mb-6 lg:mb-9 min-h-0 min-w-0">
+      <Box className="flex flex-col md:flex-row mb-6 sm:mb-6 lg:mb-7 min-h-0 min-w-0">
         <Typography
           noWrap
           className="font-normal leading-snug xl:leading-normal text-default-ref-neutral-neutral30 md:flex-grow"
@@ -72,7 +76,13 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
           {roomData.title} fwefiefjwe ifiweof we iwef owefewiofweof weiofwef
           iowejfo
         </Typography>
-        <SpaceActionBtns mediumWidth={mediumWidth} />
+        <SpaceActionBtns>
+          <>{!mediumWidth && <AddItemBtn />}</>
+        </SpaceActionBtns>
+      </Box>
+      <Box className="flex items-center w-full mb-7 sm:mb-9 lg:mb-11 space-x-12">
+        <SearchBar />
+        {mediumWidth && <AddItemBtn />}
       </Box>
     </Box>
   );

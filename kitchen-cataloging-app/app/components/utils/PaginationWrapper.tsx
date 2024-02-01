@@ -80,14 +80,17 @@ function PaginationWrapper<T>({
     threshold: threshold,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const isMounted = useRef(true);
   const loadMore = async () => {
     //don't get any new data if loading is false
-    if (isLoading) return;
+    if (isLoading || !isMounted.current) return;
     setIsLoading(true);
     const newItems = await paginate({
       cursor: cursor ? cursor : undefined,
       take,
     });
+    //prevent state updates if component is unmounted
+    if (!isMounted.current) return;
     if (!newItems) {
       return unstable_batchedUpdates(() => {
         setIsLoading(false);
@@ -111,10 +114,15 @@ function PaginationWrapper<T>({
     });
   };
   useEffect(() => {
-    if (inView) {
+    isMounted.current = true;
+    //means we can load more. If cursor is null, it means we reached the end
+    if (inView && cursor) {
       loadMore();
     }
-  }, [inView, loadMore]);
+    return () => {
+      isMounted.current = false;
+    };
+  }, [inView, cursor, loadMore]);
   return (
     <>
       {children({

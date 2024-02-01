@@ -24,7 +24,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   //guard clause in case no data is returned
   if (!roomData) return <></>;
   return (
-    <Box className="flex flex-col">
+    <Box className="flex flex-col pb-6 sm:pb-7 lg:pb-12">
       <NavigationDepthBar
         items={navigationDepthArr({
           spaceId: roomData?.id,
