@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { unstable_batchedUpdates } from "react-dom";
 export type IdRequiredObj<T> = {
@@ -113,21 +113,27 @@ function PaginationWrapper<T>({
       setCursor(newCursor);
     });
   };
+  const saveLoadedData = useCallback(loadMore, [
+    cursor,
+    isMounted.current,
+    isLoading,
+    paginate,
+  ]);
   useEffect(() => {
     isMounted.current = true;
     //means we can load more. If cursor is null, it means we reached the end
     if (inView && cursor) {
-      loadMore();
+      saveLoadedData();
     }
     return () => {
       isMounted.current = false;
     };
-  }, [inView, cursor, loadMore]);
+  }, [inView, cursor, saveLoadedData]);
   return (
     <>
       {children({
         data,
-        loadMore,
+        loadMore: saveLoadedData,
         isLoading,
       })}
       {cursor && loadingComponent && loadingComponent(ref)}
