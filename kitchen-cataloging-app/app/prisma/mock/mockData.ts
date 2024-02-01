@@ -1,4 +1,4 @@
-import { Food, Room, Log, User } from "@prisma/client";
+import { Food, Room, Log, User} from "@prisma/client";
 export function isErrorType(e: any): e is ErrorType {
   return !!e.error;
 }
@@ -38,28 +38,31 @@ const rooms = [
 ];
 const foods = [
   {
-    description: "Beer",
+    title: "Beer",
     price: 10.99,
     amount: 10,
-    category: "Beverage",
+    labels: ["Beverage"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
-    labels: ["It's beer"],
+    description: "It's beer",
+    roomTitle: "Kitchen",
   },
   {
-    description: "Donuts",
+    title: "Donuts",
     price: 6.5,
     amount: 12,
-    category: "Pastry",
+    labels: ["Pastry"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), //10 days from now
-    labels: ["Original glazed"],
+    description: "Original glazed",
+    roomTitle: "My Secret Snack Stash",
   },
   {
-    description: "5-Gallon bucket of Cheese Puffs",
+    title: "5-Gallon bucket of Cheese Puffs",
     price: 8.0,
     amount: 1,
-    category: "Snack",
+    labels: ["Snack"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 50), //50 days from now
-    labels: ["Don't ask"],
+    description: "Don't ask",
+    roomTitle: "My Secret Snack Stash",
   },
 ].map((food) => ({
   ...food,
