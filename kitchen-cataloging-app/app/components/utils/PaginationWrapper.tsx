@@ -115,9 +115,9 @@ function PaginationWrapper<T>({
   };
   const saveLoadedData = useCallback(loadMore, [
     cursor,
-    isMounted.current,
     isLoading,
     paginate,
+    take
   ]);
   useEffect(() => {
     isMounted.current = true;
