@@ -65,25 +65,24 @@ const Food = ({ params }: Food) => {
           ]}
         />
         <Box
-          className="w-full max-w-[72rem] mx-auto mt-3"
+          className="w-full max-w-[72rem] mx-auto md:mt-3"
           sx={{
             display: "grid",
             gridTemplateColumns: { xs: "100%", md: "repeat(2, 50%)" },
-            gap: "1rem",
-            gridTemplateRows: { xs: "repeat(4, 1fr)", md: "repeat(3, 1fr)" },
+            gap: { md: "1rem" },
+            gridTemplateRows: { xs: "repeat(14, 7rem)", md: "repeat(3, 1fr)" },
             gridTemplateAreas: {
-              xs: `"img" "info" "inventory" "activity"`,
+              xs: `"img" "img" "img" "img" "info" "info" "info" "inventory" "inventory" "inventory" "activity" "activity" "activity"`,
               md: `"img activity" "info activity" "inventory inventory"`,
             },
             justifyContent: "space-between",
           }}
         >
           <Box
-            className={
-              "h-[35vh] min-h-[20rem] w-full max-w-[34rem] p-3 mx-auto"
-            }
+            className={" w-full max-w-[34rem] mx-auto md:p-3 md:min-h-[20rem]"}
             sx={{
               BoxArea: "img",
+              height: { xs: "28rem", md: "35vh" },
             }}
           >
             <FoodImg
@@ -93,10 +92,20 @@ const Food = ({ params }: Food) => {
           </Box>
           <Box
             className={
-              "h-[35vh] min-h-[18rem] w-full max-w-[34rem] py-2 px-4 mx-auto"
+              "w-full max-w-[34rem] py-2 px-4 mx-auto md: min-h-[18rem] "
             }
-            sx={{ gridArea: "info" }}
+            sx={{
+              gridArea: "info",
+              height: { md: "35vh" },
+            }}
           >
+            <Box
+              className="h-[4rem] w-full -mt-[2rem] -ms-[2rem] bg-default-sys-light-surface-container md:hidden"
+              sx={{
+                minWidth: "calc(100% + 4rem)",
+                borderRadius: "2rem 2rem 0 0"
+              }}
+            ></Box>
             <FoodInfo
               space={food.roomTitle}
               title={food.title}
@@ -106,21 +115,26 @@ const Food = ({ params }: Food) => {
             />
           </Box>
           <Box
-            className={"h-[39rem] p-3 w-full max-w-[34rem] mx-auto"}
-            sx={{ gridArea: "activity" }}
+            className={"w-full max-w-[34rem] mx-auto md:p-3"}
+            sx={{
+              gridArea: "activity",
+              height: { xs: "40vh", md: "39rem" },
+              mt: {xs: '1rem', md: '0'},
+            }}
           >
             <FoodActivity foodLogs={food.logs} />
           </Box>
           <Box
             //
             className={
-              "h-[32vh] min-h-[20rem] max-w-[70rem] w-full pt-0 px-0 pb-6 -mt-3 mx-auto"
+              "max-w-[70rem] w-full px-0 pb-6 -mt-3 mx-auto md: min-h-[20rem]"
             }
-            sx={{ gridArea: "inventory" }}
+            sx={{
+              gridArea: "inventory",
+              height: { xs: "40vh", md: "35vh" },
+            }}
           >
-            <FoodInventory 
-              foodData={tempFoodData}
-            />
+            <FoodInventory foodData={tempFoodData} />
           </Box>
         </Box>
       </>

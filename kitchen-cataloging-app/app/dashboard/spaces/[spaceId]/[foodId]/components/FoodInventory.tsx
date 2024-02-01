@@ -227,11 +227,13 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
   function EnhancedTableToolbar() {
     return (
       <Toolbar
+        className={`py-4 px-${tablePadding}`}
         sx={{
           pl: { sm: 2 },
           pr: { xs: 1, sm: 1 },
+          gap: { xs: "0.5rem", md: "1rem" },
+          flexWrap: { xs: "wrap", md: "" },
         }}
-        className={`py-6 px-${tablePadding} gap-6`}
       >
         {/* {numSelected > 0 ? (
         <Typography
@@ -248,6 +250,9 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
           id="tableTitle"
           component="h3"
           className="text-default-ref-neutral-neutral40 flex-grow"
+          sx={{
+            width: { xs: "100%", md: "" },
+          }}
         >
           Inventory
         </Typography>
@@ -374,7 +379,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
     <Box
       sx={{
         width: `calc(100% - ${2 * tablePadding})`,
-        height: "100%",
+        height: "calc(100% - 2rem)",
         boxSizing: "border-box",
       }}
     >
@@ -389,13 +394,20 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
       >
         <EnhancedTableToolbar />
         <TableContainer
+          className="pb-4"
           sx={{
-            flexGrow: 1,
+            flexGrow: { xs: 0, md: 1 },
           }}
         >
           <Table
             className={`px-${tablePadding} mx-${tablePadding}`}
-            sx={{ boxSizing: "border-box", width: `calc(100% - ${2 * 0.25 * tablePadding}rem)` }}
+            sx={{
+              boxSizing: "border-box",
+              // width: `calc(100% - ${2 * 0.25 * tablePadding}rem)`,
+              maxWidth: "100%",
+              overflow: "hidden",
+              mt: {xs: '1rem', md: '0'}
+            }}
             aria-labelledby="tableTitle"
             // size={dense ? "small" : "medium"}
           >
@@ -406,7 +418,13 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            <TableBody>
+            <TableBody
+              sx={{
+                width: "100%",
+                maxWidth: "100%",
+                overflow: "hidden",
+              }}
+            >
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.id);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -420,7 +438,12 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                     tabIndex={-1}
                     key={row.id}
                     selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
+                    sx={{
+                      cursor: "pointer",
+                      width: "100%",
+                      maxWidth: "100%",
+                      overflow: "hidden",
+                    }}
                   >
                     <TableCell
                       component="th"
@@ -452,7 +475,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                       }
                     `}
                       sx={{
-                        fontSize: "1rem", 
+                        fontSize: "1rem",
                         fontWeight: "500",
                       }}
                       align="center"
@@ -475,13 +498,34 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
                     >
                       {row.amount}
                     </TableCell>
-                    <TableCell className="flex gap-6 justify-end">
-                      <IconButton className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90 w-7 h-7">
-                        <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                      </IconButton>
-                      <IconButton className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90 w-7 h-7">
-                        <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                      </IconButton>
+                    <TableCell padding="none" align="center">
+                      <Box
+                        className="flex pe-2"
+                        sx={{
+                          gap: { xs: "0.75rem", md: "1rem" },
+                          justifyContent: { xs: "start", md: "center" },
+                          alignItems: "stretch",
+                        }}
+                      >
+                        <IconButton
+                          className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
+                          sx={{
+                            width: { xs: "1.25rem", md: "1.5rem" },
+                            height: { xs: "1.25rem", md: "1.5rem" },
+                          }}
+                        >
+                          <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
+                        </IconButton>
+                        <IconButton
+                          className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
+                          sx={{
+                            width: { xs: "1.25rem", md: "1.5rem" },
+                            height: { xs: "1.25rem", md: "1.5rem" },
+                          }}
+                        >
+                          <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
+                        </IconButton>
+                      </Box>
                     </TableCell>
                   </TableRow>
                 );
@@ -498,7 +542,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={rows.length}
@@ -506,7 +550,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        /> */}
       </Paper>
     </Box>
   );

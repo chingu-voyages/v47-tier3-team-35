@@ -31,7 +31,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
   // room name, food name, price, description, tags
   // editable
   return (
-    <>
+    <Box className="-mt-[1.5rem] md:mt-0">
       <Stack direction={"row"} className="justify-between items-start pb-2">
         {/* title/space */}
         <Stack direction={"column"} className="items-start">
@@ -124,7 +124,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
       >
         {description}
       </Typography>
-    </>
+    </Box>
   );
 }
 
