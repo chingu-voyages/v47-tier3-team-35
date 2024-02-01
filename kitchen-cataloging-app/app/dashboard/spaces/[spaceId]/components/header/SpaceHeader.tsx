@@ -73,8 +73,7 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
           className="font-normal leading-snug xl:leading-normal text-default-ref-neutral-neutral30 md:flex-grow"
           variant={largeWidth ? "h1" : mediumWidth ? "h2" : "h3"}
         >
-          {roomData.title} fwefiefjwe ifiweof we iwef owefewiofweof weiofwef
-          iowejfo
+          {roomData.title}
         </Typography>
         <SpaceActionBtns>
           <>{!mediumWidth && <AddItemBtn />}</>
