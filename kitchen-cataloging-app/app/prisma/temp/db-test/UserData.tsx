@@ -24,7 +24,7 @@ const UserData = ({ userId }: UserDataT) => {
       }
     }
   };
-  const savedGetUserData = useCallback(getUserData, [fetchData, userId]);
+  const savedGetUserData = useCallback(getUserData, [userId]);
   const seedUserData = async () => {
     if (userId) {
       const foundData: any = await seedUser(userId);
