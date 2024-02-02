@@ -19,7 +19,7 @@ const navigationDepthArr = ({
 const Room = async ({ params }: { params: { spaceId: string } }) => {
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
   const spaceId = params.spaceId;
-  const roomData = await getSingleRoom(spaceId);
+  const roomData = await getSingleRoom({id: spaceId});
   const itemData = await paginateFoodItems({ spaceId: spaceId, take: 20 });
   //guard clause in case no data is returned
   if (!roomData) return <></>;
