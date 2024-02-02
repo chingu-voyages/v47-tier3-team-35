@@ -5,34 +5,59 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Food, Room } from "@prisma/client";
+import { Food } from "@prisma/client";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Link from "next/link";
-export function SearchBar() {
+import { searchFoodItems } from "../../actions";
+import { unstable_batchedUpdates } from "react-dom";
+export function SearchBar({ spaceId }: { spaceId?: string }) {
+  const [value, setValue] = useState<Partial<Food> | null>(null);
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState<readonly Food[]>([]);
+  const [options, setOptions] = useState<readonly Partial<Food>[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const loadingRef = useRef(false);
+  const mounted = useRef(true);
   const mediumWidth = useWindowWidth(768);
   const largeWidth = useWindowWidth(1080);
-  const loading = open && options.length === 0;
   useEffect(() => {
-    let active = true;
-
-    if (!loading) return;
-
-    // (async () => {
-    //   await sleep(1e3); // For demo purposes.
-
-    //   if (active) {
-    //     setOptions([...topFilms]);
-    //   }
-    // })();
-
+    mounted.current = true;
     return () => {
-      active = false;
+      mounted.current = false;
     };
-  }, [loading]);
+  }, []);
+  useEffect(() => {
+    //we use ref because state updates are sync and take too much time
+    //ref updates are synchronous however
+    const setLoadingState = (val: boolean) => {
+      mounted.current = val;
+      setLoading(val);
+    };
+    const searchItems = async () => {
+      if (!open) return;
+      if (!spaceId) return setLoadingState(false);
+      if (inputValue.trim().length < 4) return setLoadingState(false);
+      if (loadingRef.current) return;
+      else setLoadingState(true);
+      const results = await searchFoodItems({
+        take: 20,
+        spaceId: spaceId,
+        text: inputValue,
+      });
+      if (!mounted.current) return;
+      unstable_batchedUpdates(() => {
+        if (!mounted.current) return;
+        setLoadingState(false);
+        setOptions((prev) => {
+          if (results) return results;
+          else return prev;
+        });
+      });
+    };
+    searchItems();
+  }, [open, inputValue, spaceId]);
 
   useEffect(() => {
     if (!open) {
@@ -43,12 +68,6 @@ export function SearchBar() {
     <Autocomplete
       className="flex items-center flex-grow"
       open={open}
-      //   onFocus={() => {
-      //     setOnFocus(true);
-      //   }}
-      //   onBlur={() => {
-      //     setOnFocus(false);
-      //   }}
       onOpen={() => {
         setOpen(true);
       }}
@@ -60,6 +79,20 @@ export function SearchBar() {
       filterOptions={(x) => x}
       options={options}
       loading={loading}
+      value={value}
+      onChange={(event, newValue) => {
+        unstable_batchedUpdates(() => {
+          setOptions(
+            newValue
+              ? [newValue, ...options.filter((e) => e.id !== e.id)]
+              : options
+          );
+          setValue(newValue);
+        });
+      }}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
       noOptionsText="No matching items found in inventory"
       renderOption={(props, option) => {
         return (

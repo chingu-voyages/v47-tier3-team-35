@@ -54,7 +54,7 @@ const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   );
 };
 const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
-  const [roomData, setRoomData] = useState<Partial<Room>>(defaultData || {});
+  const [spaceData, setspaceData] = useState<Partial<Room>>(defaultData || {});
   const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(768);
   return (
@@ -66,21 +66,21 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
         sx={{
           textTransform: "none",
         }}
-      >{`${roomData.itemCount} items in stock`}</Typography>
+      >{`${spaceData.itemCount} items in stock`}</Typography>
       <Box className="flex flex-col md:flex-row mb-6 sm:mb-6 lg:mb-7 min-h-0 min-w-0">
         <Typography
           noWrap
           className="font-normal leading-snug xl:leading-normal text-default-ref-neutral-neutral30 md:flex-grow"
           variant={largeWidth ? "h1" : mediumWidth ? "h2" : "h3"}
         >
-          {roomData.title}
+          {spaceData.title}
         </Typography>
         <SpaceActionBtns>
           <>{!mediumWidth && <AddItemBtn />}</>
         </SpaceActionBtns>
       </Box>
       <Box className="flex items-center w-full mb-7 sm:mb-9 lg:mb-11 space-x-12">
-        <SearchBar />
+        <SearchBar spaceId={spaceData.id} />
         {mediumWidth && <AddItemBtn />}
       </Box>
     </Box>

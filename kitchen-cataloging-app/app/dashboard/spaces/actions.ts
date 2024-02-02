@@ -53,8 +53,8 @@ export const getSingleRoom = async ({ id }: { id: string }) => {
       id: id,
     },
     include: {
-      foods: true
-    }
+      foods: true,
+    },
   });
   return doc;
 };
@@ -127,7 +127,9 @@ export const deleteRoom = async (
           id: id,
         },
       });
-      console.log(`Deleted rooms: ${deletedRoom}`)
+      return {
+        deletedRoom,
+      };
     } catch (error) {
       console.error("Error deleting room:", error);
     }
@@ -169,10 +171,9 @@ export const editRoom = async (formData: FormData, userId: string) => {
         },
         data: {
           roomTitle: roomName as string,
-        }
-      })
-      console.log(`Edited room: ${editedRoom} \n Edited Foods: ${editedFoods}`)
-
+        },
+      });
+      console.log(`Edited room: ${editedRoom} \n Edited Foods: ${editedFoods}`);
     } catch (error) {
       console.error("Error updating room:", error);
     }

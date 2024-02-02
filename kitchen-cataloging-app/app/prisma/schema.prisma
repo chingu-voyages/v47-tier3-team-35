@@ -38,8 +38,8 @@ model Food {
   createdAt DateTime @default(now()) //purchase date
   updatedAt DateTime @updatedAt 
   title String //limit to max 30 chars
-  description String? //limit to 400 chars  
-  labels String[] //limit to 20 items
+  description String? @default("") //limit to 400 chars  
+  labels String[] @default([]) //limit to 20 items
   price Float //limit to 2 decimal places
   amount Int
   threshold Int?
