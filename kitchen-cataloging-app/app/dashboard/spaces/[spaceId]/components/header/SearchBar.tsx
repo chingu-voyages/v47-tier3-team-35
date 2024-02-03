@@ -6,12 +6,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Food } from "@prisma/client";
-import useWindowWidth from "@/hooks/useWindowWidth";
 import { useEffect, useRef, useState } from "react";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import Link from "next/link";
 import { searchFoodItems } from "../../actions";
 import { unstable_batchedUpdates } from "react-dom";
+import useWindowWidth from "@/hooks/useWindowWidth";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import Link from "next/link";
 export function SearchBar({ spaceId }: { spaceId?: string }) {
   const [value, setValue] = useState<Partial<Food> | null>(null);
   const [open, setOpen] = useState(false);

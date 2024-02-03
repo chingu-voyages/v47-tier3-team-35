@@ -11,7 +11,7 @@ export default authMiddleware({
       const url = new URL(req.url);
       const redirectUrl = url.searchParams.get("redirect_url");
       return redirectToSignIn({
-        returnBackUrl: redirectUrl ? redirectUrl : req.url,
+        returnBackUrl: redirectUrl || req.url,
       });
     }
     //if a user is logged in and is going back to the home page, re-direct to dashboard

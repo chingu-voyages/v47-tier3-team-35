@@ -1,5 +1,4 @@
 "use client";
-import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Button, Typography } from "@mui/material";
@@ -17,7 +16,7 @@ const SpacesListHeader = () => {
           fontSize={"large"}
         />
         <Typography
-          variant={largeWidth ? "subtitle1" : mediumWidth ? "body1" : "body2"}
+          variant={largeWidth ? "subtitle2" : mediumWidth ? "body1" : "body2"}
           className="font-medium"
           sx={{
             textTransform: "none",

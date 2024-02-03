@@ -6,7 +6,6 @@ const DbTest = async () => {
   const { userId } = auth();
   const user = await getUserInfoServer({ userId });
   const users = await prisma.user.findMany();
-
   return (
     <>
       <h1>All Users:</h1>

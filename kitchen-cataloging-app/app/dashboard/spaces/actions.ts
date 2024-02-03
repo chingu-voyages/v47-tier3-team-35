@@ -5,39 +5,16 @@ import { RoomSchema } from "./utils/schema";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 import { Room } from "@prisma/client";
 import { auth } from "@clerk/nextjs";
-type PaginationProps = {
-  cursor?: string | null;
-  take: number;
-};
+import { PaginationProps, paginateSpaces } from "./utils/paginateSpaces";
+import { getRoom } from "./utils/getSingleRoom";
+
 // PAGINATE ROOMS -----------
-export async function paginateRooms({
-  cursor,
-  take,
-}: PaginationProps): Promise<Room[] | null> {
+export async function paginateRooms(
+  props: PaginationProps
+): Promise<Room[] | null> {
   try {
-    //ensure user only grabs rooms belonging to them
     const { userId } = auth();
-    const user = await getUserInfoServer({ userId });
-    if (!user?.id) return null;
-    //query
-    const nextRooms = await prisma.room.findMany({
-      take: take,
-      skip: cursor ? 1 : 0, // Skip the cursor
-      cursor: cursor
-        ? {
-            id: cursor,
-          }
-        : undefined,
-      where: {
-        userId: user.id,
-      },
-      orderBy: {
-        id: "desc",
-      },
-    });
-    //return array if rooms exist, else return null
-    if (nextRooms.length > 0) return nextRooms;
-    else return null;
+    return await paginateSpaces({ ...props, userId });
   } catch (error: any) {
     console.error("Error paginating rooms:", error);
     return null;
@@ -45,18 +22,7 @@ export async function paginateRooms({
 }
 export const getSingleRoom = async ({ id }: { id: string }) => {
   const { userId } = auth();
-  const user = await getUserInfoServer({ userId });
-  if (!user?.id) return null;
-  const doc = await prisma.room.findFirst({
-    where: {
-      userId: user.id,
-      id: id,
-    },
-    include: {
-      foods: true,
-    },
-  });
-  return doc;
+  return await getRoom({ id, userId });
 };
 
 // ADD ROOM ----------
