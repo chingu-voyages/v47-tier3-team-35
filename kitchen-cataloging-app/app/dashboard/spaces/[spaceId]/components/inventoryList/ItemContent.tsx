@@ -24,7 +24,7 @@ const ItemStockInfoAndBtns = ({
           />
         )}
         <Typography
-          className="font-medium leading-4 xs:leading-5 px-0.5 xs:px-1 break-all sm:pl-0.5 sm:pr-1 text-default-sys-light-on-tertiary-container"
+          className="font-medium leading-5 sm:leading-6 px-0.5 xs:px-1 break-all sm:pl-0.5 sm:pr-1 text-default-sys-light-on-tertiary-container"
           noWrap
           variant={smallWidth ? "caption" : "overline"}
           sx={{
@@ -38,7 +38,7 @@ const ItemStockInfoAndBtns = ({
         <Button
           aria-label={`add-${item.title}-item`}
           variant="contained"
-          className="rounded-full aspect-square p-0 xs:p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
+          className="rounded-full aspect-square p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
           sx={{
             minHeight: "unset",
             boxShadow: "unset",
@@ -50,7 +50,7 @@ const ItemStockInfoAndBtns = ({
         <Button
           aria-label={`delete-${item.title}-item`}
           variant="contained"
-          className="rounded-full aspect-square p-0 xs:p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
+          className="rounded-full aspect-square p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
           sx={{
             minHeight: "unset",
             boxShadow: "unset",
