@@ -28,6 +28,7 @@
     "axios": "^1.6.7",
     "bson-objectid": "^2.0.4",
     "dotenv-cli": "^7.3.0",
+    "jimp": "^0.22.10",
     "lodash": "^4.17.21",
     "mongodb": "6.3",
     "mongoose": "^8.1.1",
