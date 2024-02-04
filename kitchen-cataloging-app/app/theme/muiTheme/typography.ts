@@ -23,7 +23,7 @@ const typography = {
     fontSize: "1.75rem",
   },
   h6: {
-    fontSize: "1.75rem",
+    fontSize: "1.625rem",
   },
   subtitle1: {
     fontSize: "1.5rem",

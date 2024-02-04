@@ -38,26 +38,26 @@ const ItemStockInfoAndBtns = ({
         <Button
           aria-label={`add-${item.title}-item`}
           variant="contained"
-          className="rounded-36xl aspect-square p-0 xs:p-0.5 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
+          className="rounded-full aspect-square p-0 xs:p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
           sx={{
             minHeight: "unset",
             boxShadow: "unset",
             minWidth: "unset",
           }}
         >
-          <AddIcon fontSize="small" className="p-[0.15rem]" />
+          <AddIcon fontSize="small" className="p-[0.15rem] sm:p-[0.05rem]" />
         </Button>
         <Button
           aria-label={`delete-${item.title}-item`}
           variant="contained"
-          className="rounded-36xl aspect-square p-0 xs:p-0.5 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
+          className="rounded-full aspect-square p-0 xs:p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
           sx={{
             minHeight: "unset",
             boxShadow: "unset",
             minWidth: "unset",
           }}
         >
-          <RemoveIcon fontSize="small" className="p-[0.15rem]" />
+          <RemoveIcon fontSize="small" className="p-[0.15rem] sm:p-[0.05rem]" />
         </Button>
       </Box>
     </Box>
@@ -112,7 +112,7 @@ const AddToGroceriesBtn = ({ mediumWidth }: { mediumWidth: boolean }) => {
   return (
     <Button
       variant="contained"
-      className="rounded-32xl space-x-0.5 sm:space-x-1 min-h-0 py-1.25 sm:py-1.5 bg-default-sys-light-primary"
+      className="rounded-full space-x-0.5 sm:space-x-1 min-h-0 py-2 sm:py-2 lg:py-2.5 bg-default-sys-light-primary"
       sx={{
         boxShadow: "none",
       }}
@@ -124,7 +124,7 @@ const AddToGroceriesBtn = ({ mediumWidth }: { mediumWidth: boolean }) => {
       <Typography
         noWrap
         variant={mediumWidth ? "button" : "caption"}
-        className="font-normal tracking-wide text-default-sys-light-on-primary"
+        className="lg:text-3xl font-normal tracking-wide text-default-sys-light-on-primary"
         sx={{
           textTransform: "none",
         }}
