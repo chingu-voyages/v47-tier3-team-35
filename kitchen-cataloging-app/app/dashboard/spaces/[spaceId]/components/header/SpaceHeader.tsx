@@ -54,7 +54,7 @@ const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   );
 };
 const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
-  const [spaceData, setspaceData] = useState<Partial<Room>>(defaultData || {});
+  const [spaceData, setSpaceData] = useState<Partial<Room>>(defaultData || {});
   const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(768);
   return (

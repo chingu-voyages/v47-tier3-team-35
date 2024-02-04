@@ -1,5 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: process.env.CLOUDFRONT_DOMAIN,
+        port: "",
+        pathname: "**",
+      },
+    ],
+  },
   experimental: {
     esmExternals: "loose", // <-- add this
     serverComponentsExternalPackages: ["mongoose"], // <-- and this
@@ -10,4 +20,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig
+module.exports = nextConfig;
