@@ -46,6 +46,7 @@ const seedData = async () => {
               data: data.foods.map((food) => ({
                 ...food,
                 userId: userId,
+                roomTitle: room.title,
               })),
             },
           },

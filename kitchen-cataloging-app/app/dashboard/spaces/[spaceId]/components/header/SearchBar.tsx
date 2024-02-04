@@ -1,27 +1,32 @@
 "use client";
-import {
-  Autocomplete,
-  CircularProgress,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { Food } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
 import { searchFoodItems } from "../../actions";
 import { unstable_batchedUpdates } from "react-dom";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import Link from "next/link";
+import { v4 as uuidv4 } from "uuid";
+import useDebouncedInput from "@/hooks/useDebouncedInput";
+import { SearchBarListItem } from "./SearchBarListItem";
+export const SearchIconLoading = () => {
+  const mediumWidth = useWindowWidth(768);
+  const largeWidth = useWindowWidth(1080);
+  return (
+    <CircularProgress
+      size={largeWidth ? "1.75rem" : mediumWidth ? "1.5rem" : "1.375rem"}
+      className="text-default-sys-light-on-surface-variant"
+    />
+  );
+};
 export function SearchBar({ spaceId }: { spaceId?: string }) {
   const [value, setValue] = useState<Partial<Food> | null>(null);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<readonly Partial<Food>[]>([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, debouncedValue, setNewInputValue] = useDebouncedInput(350);
   const [loading, setLoading] = useState(false);
   const loadingRef = useRef(false);
   const mounted = useRef(true);
-  const mediumWidth = useWindowWidth(768);
-  const largeWidth = useWindowWidth(1080);
   useEffect(() => {
     mounted.current = true;
     return () => {
@@ -29,22 +34,26 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
     };
   }, []);
   useEffect(() => {
+    //we update this so we dont have stale data
+    if (debouncedValue.trim().length < 4) return setOptions([]);
+  }, [debouncedValue]);
+  useEffect(() => {
     //we use ref because state updates are sync and take too much time
-    //ref updates are synchronous however
+    //however, ref updates are synchronous
     const setLoadingState = (val: boolean) => {
-      mounted.current = val;
+      loadingRef.current = val;
       setLoading(val);
     };
-    const searchItems = async () => {
-      if (!open) return;
+    //perform our search actions
+    (async () => {
       if (!spaceId) return setLoadingState(false);
-      if (inputValue.trim().length < 4) return setLoadingState(false);
+      if (debouncedValue.trim().length < 4) return setLoadingState(false);
       if (loadingRef.current) return;
       else setLoadingState(true);
       const results = await searchFoodItems({
         take: 20,
         spaceId: spaceId,
-        text: inputValue,
+        text: debouncedValue,
       });
       if (!mounted.current) return;
       unstable_batchedUpdates(() => {
@@ -55,15 +64,8 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
           else return prev;
         });
       });
-    };
-    searchItems();
-  }, [open, inputValue, spaceId]);
-
-  useEffect(() => {
-    if (!open) {
-      setOptions([]);
-    }
-  }, [open]);
+    })();
+  }, [debouncedValue, spaceId]);
   return (
     <Autocomplete
       className="flex items-center flex-grow"
@@ -75,11 +77,12 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
         setOpen(false);
       }}
       autoComplete
-      getOptionLabel={(option) => `${option.title} in ${option.roomTitle}`}
+      getOptionLabel={(option) => option.id || uuidv4()}
       filterOptions={(x) => x}
       options={options}
       loading={loading}
       value={value}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       onChange={(event, newValue) => {
         unstable_batchedUpdates(() => {
           setOptions(
@@ -90,15 +93,16 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
           setValue(newValue);
         });
       }}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
+      onInputChange={(event, newInputValue, reason) => {
+        if (reason === "reset") return;
+        setNewInputValue(newInputValue);
       }}
       noOptionsText="No matching items found in inventory"
       renderOption={(props, option) => {
         return (
-          <Link href={`dashboard/spaces/${option.roomId}/${option.id}`}>
-            <Typography>{option.title}</Typography>
-          </Link>
+          <li {...props} key={option.id}>
+            <SearchBarListItem option={option} />
+          </li>
         );
       }}
       renderInput={(params) => (
@@ -106,6 +110,7 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
           {...params}
           inputProps={{
             ...params.inputProps,
+            value: inputValue,
             className:
               "py-0 pl-0 pr-1.5 lg:pr-2 text-default-sys-light-on-surface-variant",
           }}
@@ -122,16 +127,7 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
             endAdornment: (
               <>
                 {loading ? (
-                  <CircularProgress
-                    size={
-                      largeWidth
-                        ? "1.75rem"
-                        : mediumWidth
-                        ? "1.5rem"
-                        : "1.375rem"
-                    }
-                    className="text-default-sys-light-on-surface-variant"
-                  />
+                  <SearchIconLoading />
                 ) : (
                   <SearchOutlinedIcon className="text-6xl md:text-7xl lg:text-8xl text-default-sys-light-on-surface-variant" />
                 )}
@@ -141,7 +137,7 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
           sx={{
             fieldset: { border: "none" },
           }}
-          label={params.inputProps.value === "" ? "Search your inventory" : ""}
+          label={inputValue === "" ? "Search your inventory" : ""}
           fullWidth
         />
       )}

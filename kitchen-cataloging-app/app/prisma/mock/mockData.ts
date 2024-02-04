@@ -1,4 +1,4 @@
-import { Food, Room, Log, User} from "@prisma/client";
+import { Food, Room, Log, User } from "@prisma/client";
 export function isErrorType(e: any): e is ErrorType {
   return !!e.error;
 }
@@ -20,9 +20,9 @@ export type ErrorType = {
   };
 };
 type SeedDataResult = {
-  logs: Omit<LogType, "userId" | "id">[];
+  logs: Omit<LogType, "userId" | "id" | "userId" | "foodId">[];
   rooms: Omit<RoomType, "userId" | "id">[];
-  foods: Omit<FoodType, "userId" | "id">[];
+  foods: Omit<FoodType, "userId" | "id" | "roomTitle" | "roomId">[];
 };
 const rooms = [
   {
@@ -44,7 +44,6 @@ const foods = [
     labels: ["Beverage"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
     description: "It's beer",
-    roomTitle: "Kitchen",
   },
   {
     title: "Donuts",
@@ -53,7 +52,6 @@ const foods = [
     labels: ["Pastry"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), //10 days from now
     description: "Original glazed",
-    roomTitle: "My Secret Snack Stash",
   },
   {
     title: "5-Gallon bucket of Cheese Puffs",
@@ -62,7 +60,6 @@ const foods = [
     labels: ["Snack"],
     expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 50), //50 days from now
     description: "Don't ask",
-    roomTitle: "My Secret Snack Stash",
   },
 ].map((food) => ({
   ...food,
@@ -86,7 +83,7 @@ const logs = [
     amount: 10,
     totalCost: 19.9, //limit to 2 decimal places
   },
-]
+];
 export const mockData = (): SeedDataResult => {
   const newFoods = Array(10)
     .fill(foods)
