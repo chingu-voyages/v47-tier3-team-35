@@ -4,12 +4,16 @@ import {
   FileToBeUploadedProps,
   presignS3BucketPutCommand,
 } from "./utils/presignS3BucketPutCommand";
-export const getCloudfrontSignedUrl = async ({ key }: { key: string }) => {
+export const getCloudfrontSignedUrl = async ({
+  s3ObjectKeys,
+}: {
+  s3ObjectKeys: string[];
+}) => {
   const { userId } = auth();
   if (!userId) return null;
   return presignCloudfrontObjectUrl({
     userId,
-    s3ObjectKey: key,
+    s3ObjectKeys: s3ObjectKeys,
   });
 };
 export const getS3BucketPutSignedUrl = async ({
