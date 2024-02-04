@@ -491,7 +491,7 @@ const theme = {
   fontFamily: {
     sans: ["Roboto", "sans-serif"],
     mono: ["Roboto Mono", "monospace"],
-  }, //roboto: "Roboto", inter: "Inter" },
+  },
   boxShadow: {
     "shadow-sm": "0px 1px 2px 0px rgba(0,0,0,0.05)",
     "shadow-base":
