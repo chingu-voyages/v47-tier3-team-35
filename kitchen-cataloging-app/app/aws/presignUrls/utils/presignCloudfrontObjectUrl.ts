@@ -22,7 +22,10 @@ export const presignCloudfrontObjectUrl = async ({
       dateLessThan,
       privateKey,
     });
-    return signedUrl;
+    return {
+      url: signedUrl,
+      objkey: objKey,
+    };
   });
   return signedUrls;
 };
