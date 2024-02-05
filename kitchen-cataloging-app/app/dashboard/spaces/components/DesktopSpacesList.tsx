@@ -81,7 +81,7 @@ export const DesktopSpacesList = ({
           },
         });
         return (
-          <Grid item key={item.id} sm={6} lg={4}>
+          <Grid item key={item.id} sm={6} md={4} xl={3}>
             <Link
               className={`flex w-full h-full sm:py-4 sm:px-3.5 lg:py-5.5 lg:px-4.5 rounded-26xl ${
                 largeWidth ? largeCurrColor : mediumCurrColor
@@ -95,16 +95,16 @@ export const DesktopSpacesList = ({
                     largeWidth ? largeTitleColor : mediumTitleColor
                   }`}
                 />
-                <Box className="flex flex-col w-full space-y-0.5 min-w-0">
+                <Box className="flex flex-col w-full space-y-0.5 min-w-0 ">
                   <Typography
                     noWrap
-                    className={`font-medium ${
+                    className={`font-medium text-4xl leading-5 lg:text-5xl lg:leading-7 xl:text-6xl xl:leading-7 ${
                       largeWidth ? largeTitleColor : mediumTitleColor
                     }`}
                     sx={{
                       lineHeight: largeWidth ? "1.7rem" : "1.5rem",
                     }}
-                    variant={largeWidth ? "subtitle2" : "body1"}
+                    // variant={largeWidth ? "subtitle2" : "body1"}
                   >
                     {item.title}
                   </Typography>

@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@clerk/nextjs";
 import { presignCloudfrontObjectUrls } from "./utils/presignCloudfrontObjectUrls";
 import {
