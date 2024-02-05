@@ -3,9 +3,16 @@ type ImgProps = {
   mimeType?: string | null;
   fileBuffer?: Buffer | null;
 };
-const createPlaceholder = ({ jimpImg }: { jimpImg: Jimp }) => {
+const createPlaceholder = ({
+  jimpImg,
+  sideSize,
+}: {
+  jimpImg: Jimp;
+  sideSize: number;
+}) => {
   const img = jimpImg.clone();
-  const scaledDownWidth = img.bitmap.width < 200 ? img.bitmap.width : 200;
+  const scaledDownWidth =
+    img.bitmap.width < sideSize ? img.bitmap.width : sideSize;
   const scaledDownImg = img.resize(scaledDownWidth, Jimp.AUTO);
   return scaledDownImg;
 };
@@ -28,11 +35,16 @@ export const resizeImgToSquare = async ({
   mimeType,
   fileBuffer,
   sideSize,
-}: ImgProps & { sideSize: number }) => {
+  placeholderSideSize,
+  
+}: ImgProps & { sideSize: number; placeholderSideSize: number }) => {
   const squareImg = await resizeImgToSquareRatio({ mimeType, fileBuffer });
   if (!squareImg) return null;
   const scaledImg = squareImg.scaleToFit(sideSize, sideSize);
-  const placeholder = createPlaceholder({ jimpImg: scaledImg });
+  const placeholder = createPlaceholder({
+    jimpImg: scaledImg,
+    sideSize: placeholderSideSize,
+  });
   return {
     scaledImg,
     placeholder,

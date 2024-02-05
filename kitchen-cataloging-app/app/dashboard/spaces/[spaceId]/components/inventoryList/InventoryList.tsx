@@ -6,6 +6,21 @@ import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
+import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
+const paginateInventoryList =
+  (spaceId: string) =>
+  async ({ cursor, take }: { cursor?: string | null; take: number }) => {
+    const nextItems = await paginateFoodItems({
+      cursor: cursor,
+      spaceId: spaceId,
+      take: take,
+    });
+    if (!nextItems) return nextItems;
+    const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
+      items: nextItems,
+    });
+    return nextItemsWithUrls;
+  };
 const InventoryList = ({
   spaceId,
   defaultItems,
@@ -18,13 +33,7 @@ const InventoryList = ({
   const smallWidth = useWindowWidth(400);
   return (
     <PaginationWrapper
-      paginate={async ({ cursor, take }) =>
-        await paginateFoodItems({
-          cursor: cursor,
-          spaceId: spaceId,
-          take: take,
-        })
-      }
+      paginate={paginateInventoryList(spaceId)}
       take={20}
       defaultItems={defaultItems}
       loadingComponent={(ref) => (
@@ -60,6 +69,7 @@ const InventoryList = ({
                 className="flex w-full h-full"
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
               >
+                <Box></Box>
                 <ItemContent
                   item={item}
                   mediumWidth={mediumWidth}

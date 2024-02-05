@@ -1,5 +1,5 @@
 import { auth } from "@clerk/nextjs";
-import { presignCloudfrontObjectUrl } from "./utils/presignCloudfrontObjectUrl";
+import { presignCloudfrontObjectUrls } from "./utils/presignCloudfrontObjectUrls";
 import {
   FileToBeUploadedProps,
   presignS3BucketPutCommand,
@@ -11,7 +11,7 @@ export const getCloudfrontSignedUrls = async ({
 }) => {
   const { userId } = auth();
   if (!userId) return null;
-  return await presignCloudfrontObjectUrl({
+  return await presignCloudfrontObjectUrls({
     userId,
     s3ObjectKeys: s3ObjectKeys,
   });

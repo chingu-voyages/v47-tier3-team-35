@@ -144,8 +144,8 @@ const ItemContent = ({
   smallWidth: boolean;
 }) => {
   return (
-    <Box className="flex flex-col w-full space-y-4 xs:space-y-4.5 md:space-y-5 p-2 sm:p-2.5 md:p-3 lg:p-3.5 rounded-t-29xl rounded-b-23xl xs:rounded-t-32xl xs:rounded-b-26xl md:rounded-t-34xl md:rounded-b-28xl bg-default-sys-light-surface-container-lowest">
-      <Box className="flex flex-col w-full space-y-3 xs:space-y-3.5 md:space-y-4 flex-grow">
+    <Box className="flex flex-col w-full space-y-3.5 xs:space-y-4 md:space-y-4.5 p-2 sm:p-2.5 md:p-3 lg:p-3.5 rounded-t-29xl rounded-b-23xl xs:rounded-t-32xl xs:rounded-b-26xl md:rounded-t-34xl md:rounded-b-28xl bg-default-sys-light-surface-container-lowest">
+      <Box className="flex flex-col w-full space-y-2.5 xs:space-y-3 md:space-y-3.5 flex-grow">
         <ItemStockInfoAndBtns
           item={item}
           mediumWidth={mediumWidth}
