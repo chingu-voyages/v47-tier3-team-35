@@ -18,16 +18,16 @@ const constructFileUploadPaths = async ({
 }) => {
   const fileNameArr = file.name.split(".");
   const extension = fileNameArr[fileNameArr.length - 1];
-  const key = `${replaceSpacesWithDash(userId)}/${uuidv4()}.${extension}`;
+  const s3ObjKey = `${replaceSpacesWithDash(userId)}/${uuidv4()}.${extension}`;
   const payload = {
     Bucket: process.env.AMAZON_RECORD_BUCKET_NAME,
-    Key: key,
+    Key: s3ObjKey,
     ContentType: file.type,
   };
   const command = new PutObjectCommand(payload);
   const signedUrl = await getSignedUrl(client, command);
   return {
-    key: key,
+    s3ObjKey: s3ObjKey,
     name: file.name,
     contentType: file.type,
     bucket: payload.Bucket,

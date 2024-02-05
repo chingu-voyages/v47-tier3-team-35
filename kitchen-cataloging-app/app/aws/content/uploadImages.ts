@@ -2,7 +2,8 @@ import { getS3BucketPutSignedUrl } from "../presignUrls/actions";
 import { FileToBeUploadedProps } from "../presignUrls/utils/presignS3BucketPutCommand";
 import axios from "axios";
 export type FileMediaType = {
-  objKey: string;
+  objKey?: string;
+  name?: string;
 };
 const uploadImages = async ({
   files,
@@ -39,11 +40,11 @@ const uploadImages = async ({
       response.every((r, idx) => {
         if (r.status === 200)
           uploadedKeys.push({
-            objKey: signedUrls[idx].key,
+            objKey: signedUrls[idx].s3ObjKey,
           });
         else
           failedKeys.push({
-            objKey: signedUrls[idx].name,
+            name: signedUrls[idx].name,
           });
         return r.status === 200;
       })
