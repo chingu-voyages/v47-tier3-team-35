@@ -3,6 +3,7 @@ import SpacesList from "./components/SpacesList";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { paginateSpaces } from "./utils/paginateSpaces";
 import { auth } from "@clerk/nextjs";
+import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 const SpacesPage = async () => {
   const { userId } = auth();
   //grab initial room data
@@ -11,7 +12,7 @@ const SpacesPage = async () => {
     take: 10,
   });
   return (
-    <>
+    <ResponsivePaddingWrapper>
       <NavigationDepthBar
         items={[
           {
@@ -25,7 +26,7 @@ const SpacesPage = async () => {
         <SpacesHeader />
         <SpacesList defaultItems={defaultRooms} />
       </main>
-    </>
+    </ResponsivePaddingWrapper>
   );
 };
 

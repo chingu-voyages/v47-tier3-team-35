@@ -5,6 +5,7 @@ import InventoryList from "./components/inventoryList/InventoryList";
 import { auth } from "@clerk/nextjs";
 import { getRoom } from "../utils/getSingleRoom";
 import { paginateFoods } from "./utils/paginateFoods";
+import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 const navigationDepthArr = ({
   spaceId,
   spaceName,
@@ -31,16 +32,18 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   //guard clause in case no data is returned
   if (!roomData) return <></>;
   return (
-    <Box className="flex flex-col pb-6 sm:pb-7 lg:pb-12">
-      <NavigationDepthBar
-        items={navigationDepthArr({
-          spaceId: roomData?.id,
-          spaceName: roomData?.title,
-        })}
-      />
-      <SpaceHeader defaultData={roomData} />
-      <InventoryList spaceId={roomData.id} defaultItems={itemData} />
-    </Box>
+    <ResponsivePaddingWrapper>
+      <Box className="flex flex-col pb-6 sm:pb-7 lg:pb-12">
+        <NavigationDepthBar
+          items={navigationDepthArr({
+            spaceId: roomData?.id,
+            spaceName: roomData?.title,
+          })}
+        />
+        <SpaceHeader defaultData={roomData} />
+        <InventoryList spaceId={roomData.id} defaultItems={itemData} />
+      </Box>
+    </ResponsivePaddingWrapper>
   );
 };
 

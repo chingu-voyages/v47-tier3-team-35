@@ -7,6 +7,7 @@ import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
 import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
+import { InventoryImage } from "./InventoryImage";
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
@@ -19,8 +20,11 @@ const paginateInventoryList =
     const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
       items: nextItems,
     });
-    return nextItemsWithUrls;
+    //we do this in case presigning url fails. This way we can still read content data,
+    //though we can't load the url
+    return nextItemsWithUrls || nextItems;
   };
+
 const InventoryList = ({
   spaceId,
   defaultItems,
@@ -28,9 +32,9 @@ const InventoryList = ({
   defaultItems: Food[] | null;
   spaceId: string;
 }) => {
+  const smallWidth = useWindowWidth(400);
   const mediumWidth = useWindowWidth(640);
   const largeWidth = useWindowWidth(1024);
-  const smallWidth = useWindowWidth(400);
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
@@ -69,7 +73,7 @@ const InventoryList = ({
                 className="flex w-full h-full"
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
               >
-                <Box></Box>
+                <InventoryImage image={item.image} />
                 <ItemContent
                   item={item}
                   mediumWidth={mediumWidth}

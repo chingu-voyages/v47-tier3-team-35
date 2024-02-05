@@ -104,7 +104,6 @@ export const DesktopSpacesList = ({
                     sx={{
                       lineHeight: largeWidth ? "1.7rem" : "1.5rem",
                     }}
-                    // variant={largeWidth ? "subtitle2" : "body1"}
                   >
                     {item.title}
                   </Typography>
