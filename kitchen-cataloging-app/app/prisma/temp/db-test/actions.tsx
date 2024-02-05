@@ -1,5 +1,5 @@
 "use server";
-import prisma from "../../client";
+import prisma from "@/prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import {
   mockData,

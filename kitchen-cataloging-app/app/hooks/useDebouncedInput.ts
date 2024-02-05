@@ -13,7 +13,7 @@ function useDebouncedInput(delay: number) {
       setInputValue(value);
       onDebounceChange(value);
     },
-    [delay]
+    [delay, onDebounceChange]
   );
 
   useEffect(() => {
