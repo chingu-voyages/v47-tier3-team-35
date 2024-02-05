@@ -42,7 +42,7 @@ const InventoryList = ({
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
-      take={20}
+      take={10}
       defaultItems={defaultItems}
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >

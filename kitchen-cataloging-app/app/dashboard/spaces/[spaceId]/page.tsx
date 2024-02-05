@@ -23,7 +23,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
   const spaceId = params.spaceId;
   const roomDataPromise = getRoom({ id: spaceId, userId: userId });
-  const itemDataPromise = paginateFoods({ spaceId: spaceId, take: 20, userId });
+  const itemDataPromise = paginateFoods({ spaceId: spaceId, take: 10, userId });
   //data
   const [roomData, itemData] = await Promise.all([
     roomDataPromise,

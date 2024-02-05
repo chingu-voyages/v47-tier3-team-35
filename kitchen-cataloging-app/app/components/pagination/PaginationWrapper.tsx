@@ -71,34 +71,48 @@ function PaginationWrapper<T>({
   const [data, setData] = useState<IdRequiredObj<T>[]>(
     defaultItems ? defaultItems : []
   );
-  const [cursor, setCursor] = useState<string | null>(
+  //we use ref because its a synchronous update, and good for internal component use,
+  //as they are variables that will prevent expensive api call from re-running
+  const cursorRef = useRef<string | null>(
     defaultItems && defaultItems.length > 0
       ? defaultItems[defaultItems.length - 1].id
       : null
   );
+  const [cursor, setCursor] = useState(cursorRef.current);
   const [ref, inView] = useInView({
     threshold: threshold,
   });
   const [isLoading, setIsLoading] = useState(false);
+  //we use ref because its synchronous updates and good for internal component use,
+  //as they are variables that will prevent expensive api call from re-running
+  const isLoadingRef = useRef(isLoading);
   const isMounted = useRef(true);
   const loadMore = async () => {
-    //don't get any new data if loading is false
-    if (isLoading || !isMounted.current) return;
+    //if no cursor, we're already at the end of the list
+    if (!cursorRef.current) return;
+    //don't get any new data if loading is false.
+    if (isLoadingRef.current || !isMounted.current) return;
+    isLoadingRef.current = true;
     setIsLoading(true);
     const newItems = await paginate({
-      cursor: cursor ? cursor : undefined,
+      cursor: cursorRef.current || undefined,
       take,
     });
     //prevent state updates if component is unmounted
     if (!isMounted.current) return;
     if (!newItems) {
+      cursorRef.current = null;
+      isLoadingRef.current = false;
       return unstable_batchedUpdates(() => {
-        setIsLoading(false);
         setCursor(null);
+        setIsLoading(false);
       });
     }
     const newCursor = newItems[newItems.length - 1].id;
+    isLoadingRef.current = false;
+    cursorRef.current = newCursor;
     unstable_batchedUpdates(() => {
+      setCursor(newCursor);
       setIsLoading(false);
       //filter out data to improve stability, since
       //sometimes duplicate keys might arise when stressing system
@@ -110,25 +124,17 @@ function PaginationWrapper<T>({
         const newItemsFilter = newItems.filter((a) => !(a.id in map));
         return [...prev, ...newItemsFilter];
       });
-      setCursor(newCursor);
     });
   };
-  const saveLoadedData = useCallback(loadMore, [
-    cursor,
-    isLoading,
-    paginate,
-    take
-  ]);
+  const saveLoadedData = useCallback(loadMore, [paginate, take]);
   useEffect(() => {
     isMounted.current = true;
     //means we can load more. If cursor is null, it means we reached the end
-    if (inView && cursor) {
-      saveLoadedData();
-    }
+    if (inView) saveLoadedData();
     return () => {
       isMounted.current = false;
     };
-  }, [inView, cursor, saveLoadedData]);
+  }, [inView, saveLoadedData]);
   return (
     <>
       {children({
