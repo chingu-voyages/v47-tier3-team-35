@@ -1,13 +1,14 @@
 "use client";
 import PaginationWrapper from "@/components/utils/PaginationWrapper";
-import useWindowWidth from "@/hooks/useWindowWidth";
-import { Box, CircularProgress, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
 import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
 import { InventoryImage } from "./InventoryImage";
+import LoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
+import useWindowWidth from "@/hooks/useWindowWidth";
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
@@ -34,20 +35,12 @@ const InventoryList = ({
 }) => {
   const smallWidth = useWindowWidth(400);
   const mediumWidth = useWindowWidth(640);
-  const largeWidth = useWindowWidth(1024);
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
       take={20}
       defaultItems={defaultItems}
-      loadingComponent={(ref) => (
-        <Box className="flex justify-center w-full p-6 sm:p-10 lg:p-14">
-          <CircularProgress
-            size={largeWidth ? "3.5rem" : mediumWidth ? "3rem" : "2.5rem"}
-            ref={ref}
-          />
-        </Box>
-      )}
+      loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >
       {(props) => (
         <Grid
