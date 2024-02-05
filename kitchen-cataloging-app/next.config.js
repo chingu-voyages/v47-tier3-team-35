@@ -5,7 +5,11 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: process.env.CLOUDFRONT_DOMAIN,
-        port: "",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
         pathname: "**",
       },
     ],

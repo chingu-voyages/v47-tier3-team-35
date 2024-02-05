@@ -1,3 +1,3 @@
-import LoadingPage from "@/components/utils/LoadingPage";
+import LoadingPage from "@/components/loading/LoadingPage";
 export const Loading = LoadingPage;
 export default Loading;

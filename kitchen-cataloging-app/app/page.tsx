@@ -1,5 +1,5 @@
 import { auth } from '@clerk/nextjs';
-import HomePageButtons from './components/HomePageButtons';
+import HomePageButtons from './home/HomePageButtons';
 export default async function Home() {
   //check to see if the user has been autheticated
   const { userId } = auth();

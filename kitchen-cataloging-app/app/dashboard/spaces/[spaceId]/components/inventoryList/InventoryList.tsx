@@ -1,5 +1,5 @@
 "use client";
-import PaginationWrapper from "@/components/utils/PaginationWrapper";
+import PaginationWrapper from "@/components/pagination/PaginationWrapper";
 import { Grid } from "@mui/material";
 import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
@@ -35,6 +35,10 @@ const InventoryList = ({
 }) => {
   const smallWidth = useWindowWidth(400);
   const mediumWidth = useWindowWidth(640);
+  const cardTopBorderRadius =
+    "rounded-t-23xl xs:rounded-t-26xl md:rounded-t-28xl";
+  const cardBottomBorderRadius =
+    "rounded-b-23xl xs:rounded-b-26xl md:rounded-b-28xl";
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
@@ -63,12 +67,21 @@ const InventoryList = ({
           {props.data.map((item) => (
             <Grid key={item.id} item xxs={6} md={4} lg={3} xl={2.4}>
               <Link
-                className="flex w-full h-full"
+                className={`flex flex-col w-full h-full ${cardTopBorderRadius} ${cardBottomBorderRadius}`}
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
               >
-                <InventoryImage image={item.image} />
+                <InventoryImage
+                  image={item.image}
+                  itemName={item.title}
+                  borderRadius={cardTopBorderRadius}
+                />
                 <ItemContent
                   item={item}
+                  bottomBorderRadius={cardBottomBorderRadius}
+                  //note that these are passed here, because if used inside the content component,
+                  // we would have ~1000+ listeners attached
+                  //this would cause significant performance issues,
+                  //so we pass them here instead, since we only need one listener.
                   mediumWidth={mediumWidth}
                   smallWidth={smallWidth}
                 />

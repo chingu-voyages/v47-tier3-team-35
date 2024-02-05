@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LoadingPage from "@/components/utils/LoadingPage";
+import LoadingPage from "@/components/loading/LoadingPage";
 //clerck auth
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 //styles
