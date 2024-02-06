@@ -6,7 +6,7 @@ const navDepthItems = [
     title: "Home",
   },
   {
-    routePath: "/groceries",
+    routePath: "groceries",
     title: "Groceries",
   },
 ];

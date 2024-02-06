@@ -18,7 +18,7 @@ type DataResult =
 // Seed User
 export async function seedUser(clerkId: string): Promise<DataResult> {
   try {
-    const seedData = mockData();
+    const seedData:any = mockData();
     const seededUser = await prisma.user.update({
       where: {
         clerkId: clerkId,

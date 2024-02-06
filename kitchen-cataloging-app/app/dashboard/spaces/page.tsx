@@ -1,9 +1,16 @@
-import SpacesHeader from "./components/SpacesListHeader";
-import SpacesList from "./components/SpacesList";
+import SpacesHeader from "./components/spacesHeader/SpacesListHeader";
+import SpacesList from "./components/spacesList/SpacesList";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { paginateSpaces } from "./utils/paginateSpaces";
 import { auth } from "@clerk/nextjs";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
+const navItems = [
+  {
+    routePath: "dashboard",
+    title: "Home",
+  },
+  { routePath: "spaces", title: "Spaces" },
+];
 const SpacesPage = async () => {
   const { userId } = auth();
   //grab initial room data
@@ -13,15 +20,7 @@ const SpacesPage = async () => {
   });
   return (
     <ResponsivePaddingWrapper>
-      <NavigationDepthBar
-        items={[
-          {
-            routePath: "dashboard",
-            title: "Home",
-          },
-          { routePath: "spaces", title: "Spaces" },
-        ]}
-      />
+      <NavigationDepthBar items={navItems} />
       <main className="flex flex-col w-full h-full">
         <SpacesHeader />
         <SpacesList defaultItems={defaultRooms} />
