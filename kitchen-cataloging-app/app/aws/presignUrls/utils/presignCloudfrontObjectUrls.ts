@@ -1,8 +1,8 @@
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 import { getSignedUrl } from "@aws-sdk/cloudfront-signer"; // ESM
 const cloudfrontDistributionDomain = process.env.CLOUDFRONT_DOMAIN_URL;
-const privateKey = process.env.AWS_CLIENT_SECRET_KEY;
-const keyPairId = process.env.AWS_CLIENT_ID;
+const privateKey = process.env.AWS_CLOUDFRONT_KEY_SECRET;
+const keyPairId = process.env.AWS_CLOUDFRONT_KEY_ID;
 export const presignCloudfrontObjectUrls = async ({
   userId,
   s3ObjectKeys,

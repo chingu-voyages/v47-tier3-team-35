@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { replaceSpacesWithDash } from "./replaceSpacesWithDashed";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 export type FileToBeUploadedProps = { name: string; type: string };
-const region = process.env["AMAZON_BUCKET_REGION"];
-const clientId = process.env["AWS_CLIENT_ID"];
-const clientSecret = process.env["AWS_CLIENT_SECRET_KEY"];
+const region = process.env["AWS_S3_BUCKET_REGION"];
+const clientId = process.env["AWS_S3_BUCKET_CLIENT_ID"];
+const clientSecret = process.env["AWS_S3_BUCKET_CLIENT_SECRET_KEY"];
 const constructFileUploadPaths = async ({
   client,
   file,
