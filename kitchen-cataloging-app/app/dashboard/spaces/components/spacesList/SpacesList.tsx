@@ -1,11 +1,11 @@
 "use client";
 import { Room } from "@prisma/client";
-import { paginateRooms } from "../actions";
+import { paginateRooms } from "../../actions";
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { DesktopSpacesList } from "./DesktopSpacesList";
 import { MobileSpacesList } from "./MobileSpacesList";
-import FullPagePaginationLoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
+import FullPagePaginationLoadingComponent from "@/components/pagination/FullPagePaginationLoadingComponent";
 const SpaceList = ({ defaultItems }: { defaultItems: Room[] | null }) => {
   const mediumWidth = useWindowWidth(640);
   const largeWidth = useWindowWidth(1024);

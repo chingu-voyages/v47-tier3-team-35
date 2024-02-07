@@ -6,7 +6,9 @@ export default function Navbar() {
   return (
     <AppBar
       position="static"
-      className="bg-default-sys-light-surface-container-lowest text-default-sys-light-on-surface-variant"
+      className="
+      h-14 sm:h-16 px-2 sm:px-4
+      bg-default-sys-light-surface-container-lowest text-default-sys-light-on-surface-variant"
     >
       <Toolbar>
         <IconButton

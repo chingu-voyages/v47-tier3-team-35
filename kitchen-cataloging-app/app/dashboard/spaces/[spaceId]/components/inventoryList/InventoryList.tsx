@@ -5,32 +5,25 @@ import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
-import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
 import { InventoryImage } from "./InventoryImage";
-import LoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
+import LoadingComponent from "@/components/pagination/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
-    const nextItems = await paginateFoodItems({
+    const results = await paginateFoodItems({
       cursor: cursor,
       spaceId: spaceId,
       take: take,
     });
-    if (!nextItems) return nextItems;
-    const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
-      items: nextItems,
-    });
-    //we do this in case presigning url fails. This way we can still read content data,
-    //though we can't load the url
-    return nextItemsWithUrls || nextItems;
+    return results;
   };
 
 const InventoryList = ({
   spaceId,
   defaultItems,
 }: {
-  defaultItems: Food[] | null;
+  defaultItems?: Food[] | null;
   spaceId: string;
 }) => {
   const smallWidth = useWindowWidth(400);

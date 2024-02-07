@@ -55,7 +55,7 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
   const theme = useTheme();
 
   const rows = foodLogs.map((row, i) =>
-      createData(i, row.timestamp.getTime(), row.price, row.amount, row.totalCost)
+      createData(i, row.timestamp.getTime(), row.price, row.amount, (row.price * row.amount))
   );
 
 

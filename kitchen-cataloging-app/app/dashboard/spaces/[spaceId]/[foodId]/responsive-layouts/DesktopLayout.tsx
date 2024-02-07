@@ -18,7 +18,7 @@ const DesktopLayout = ({ foodData }: { foodData: FoodDataType[] }) => {
             {/* Food Img */}
                 <FoodImg
                 description={food.description ? food.description : ""}
-                imgUrl={food.image ? food.image : ""}
+                imgUrl={food.image?.url ? food.image.url : ""}
                 />
             </Box>
 

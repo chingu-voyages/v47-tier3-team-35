@@ -69,7 +69,6 @@ export const addRoom = async (formData: FormData, userId: string) => {
 };
 
 // DELETE ROOM ----------
-
 export const deleteRoom = async (
   roomId: string,
   id: string,
@@ -83,6 +82,7 @@ export const deleteRoom = async (
           roomId: roomId,
         },
       });
+      
       if (foodinRoom.length > 0) {
         throw new Error("You cannot delete a room with food in it.");
       }

@@ -13,7 +13,9 @@ export const paginateFoodItems = async (
   try {
     //ensure user only grabs rooms belonging to them
     const { userId } = auth();
-    return await paginateFoods({ ...props, userId });
+    const items = await paginateFoods({ ...props, userId });
+    if (!items) return null;
+    return items;
   } catch (error: any) {
     console.error("Error paginating rooms:", error);
     return null;

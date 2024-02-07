@@ -4,9 +4,9 @@ import { v4 as uuidv4 } from "uuid";
 import { replaceSpacesWithDash } from "./replaceSpacesWithDashed";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 export type FileToBeUploadedProps = { name: string; type: string };
-const region = process.env["AMAZON_BUCKET_REGION"];
-const clientId = process.env["AWS_CLIENT_ID"];
-const clientSecret = process.env["AWS_CLIENT_SECRET_KEY"];
+const region = process.env.AWS_S3_BUCKET_REGION;
+const clientId = process.env.AWS_S3_BUCKET_CLIENT_ID;
+const clientSecret = process.env.AWS_S3_BUCKET_CLIENT_SECRET_KEY;
 const constructFileUploadPaths = async ({
   client,
   file,
@@ -18,16 +18,20 @@ const constructFileUploadPaths = async ({
 }) => {
   const fileNameArr = file.name.split(".");
   const extension = fileNameArr[fileNameArr.length - 1];
-  const s3ObjKey = `${replaceSpacesWithDash(userId)}/${uuidv4()}.${extension}`;
+  const s3ObjKey = `${uuidv4()}.${extension}`;
+  //secure by default since we only allow a user to upload
+  //to a key with their own userId
+  const fullS3ObjKey = `${replaceSpacesWithDash(userId)}/${s3ObjKey}`;
   const payload = {
-    Bucket: process.env.AMAZON_RECORD_BUCKET_NAME,
-    Key: s3ObjKey,
+    Bucket: process.env.AWS_S3_DYNAMIC_MEDIA_BUCKET_NAME,
+    Key: fullS3ObjKey,
     ContentType: file.type,
   };
   const command = new PutObjectCommand(payload);
   const signedUrl = await getSignedUrl(client, command);
   return {
     s3ObjKey: s3ObjKey,
+    fullS3ObjKey: fullS3ObjKey,
     name: file.name,
     contentType: file.type,
     bucket: payload.Bucket,
