@@ -6,3 +6,4 @@ const SpacesListSkeleton = () => {
         </div>
     )
 }
+export default SpacesListSkeleton;

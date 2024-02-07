@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs";
 import { User } from "@clerk/backend";
 import prisma from "../../prisma/client";
-import LoadingPage from "@/components/loading/LoadingPage";
+import LoadingPage from "@/auth/loading/LoadingPage";
 // Function to create a new user
 const createNewUser = async ({ user }: { user: User | null }) => {
   // Get the current user

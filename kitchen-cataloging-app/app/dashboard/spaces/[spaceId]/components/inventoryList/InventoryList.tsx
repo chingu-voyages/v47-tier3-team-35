@@ -6,9 +6,8 @@ import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
 import { InventoryImage } from "./InventoryImage";
-import LoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
+import LoadingComponent from "@/components/pagination/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
-
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
