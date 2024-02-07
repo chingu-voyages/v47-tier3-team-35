@@ -11,10 +11,10 @@ export const InventoryImage = ({
   itemName: Food["title"];
   borderRadius?: string;
 }) => {
-  const src = image?.s3ObjKey ? image?.s3ObjKey : "";
+  const src = image?.url ? image?.url : "";
   const [fileName, extension] = removeExtension(src);
   const placeholderSrc = fileName ? `${fileName}-placeholder.${extension}` : "";
-  console.log(src);
+  // console.log(src);
   return (
     <Box className="flex w-full max-h-48 aspect-[16/10] xs:aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/10]">
       <Box className={`relative w-full h-full ${borderRadius}`}>

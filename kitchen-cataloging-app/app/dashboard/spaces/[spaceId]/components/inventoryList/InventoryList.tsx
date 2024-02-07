@@ -5,29 +5,10 @@ import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
-import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
 import { InventoryImage } from "./InventoryImage";
 import LoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { useEffect, useState } from "react";
-const extractSignedUrls = async (nextItems?: Food[]) => {
-  if (!nextItems) return nextItems;
-  const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
-    items: nextItems,
-  });
-  //we do this in case presigning url fails. This way we can still read content data,
-  //though we can't load the url
-  return (
-    nextItemsWithUrls ||
-    nextItems.map((item) => ({
-      ...item,
-      image: {
-        s3ObjKey: null,
-        url: "",
-      },
-    }))
-  );
-};
+
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
@@ -36,47 +17,27 @@ const paginateInventoryList =
       spaceId: spaceId,
       take: take,
     });
-    if (!results) return results;
-    return extractSignedUrls(results);
+    return results;
   };
 
 const InventoryList = ({
   spaceId,
   defaultItems,
 }: {
-  defaultItems: Food[] | null;
+  defaultItems?: Food[] | null;
   spaceId: string;
 }) => {
-  const [items, setItems] = useState<Food[] | undefined>(
-    defaultItems?.map((item) => ({
-      ...item,
-      image: {
-        s3ObjKey: null,
-        url: "",
-      },
-    }))
-  );
   const smallWidth = useWindowWidth(400);
   const mediumWidth = useWindowWidth(640);
   const cardTopBorderRadius =
     "rounded-t-23xl xs:rounded-t-26xl md:rounded-t-28xl";
   const cardBottomBorderRadius =
     "rounded-b-23xl xs:rounded-b-26xl md:rounded-b-28xl";
-  useEffect(() => {
-    if (!defaultItems) return;
-    extractSignedUrls(defaultItems)
-      .then((signedItems) => {
-        setItems(signedItems);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, [defaultItems]);
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
       take={10}
-      defaultItems={items}
+      defaultItems={defaultItems}
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >
       {(props) => (

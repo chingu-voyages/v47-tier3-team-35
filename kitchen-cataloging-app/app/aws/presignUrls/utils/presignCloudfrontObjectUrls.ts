@@ -14,7 +14,7 @@ export const presignCloudfrontObjectUrls = async ({
   if (!cloudfrontDistributionDomain || !privateKey || !keyPairId) return null;
   const user = await getUserInfoServer({ userId });
   if (!user) return null;
-  console.log(privateKey)
+  // console.log(privateKey)
   const signedUrls = s3ObjectKeys.map((objKey) => {
     //this is secure by default because the user can only access content they themselves have uploaded
     const url = `${cloudfrontDistributionDomain}/${user.id}/${encodeURI(
