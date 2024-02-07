@@ -22,15 +22,17 @@ export default function RootLayout({
     <html lang="en">
       <body id={"__next"}>
         <ClerkProvider>
-          <ClerkLoading>
-            <LoadingPage />
-          </ClerkLoading>
-          <ClerkLoaded>
-            {/* <LoadingPage /> */}
-            <StyledEngineProvider injectFirst>
-              <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
-            </StyledEngineProvider>
-          </ClerkLoaded>
+          <StyledEngineProvider injectFirst>
+            <ThemeProviderWrapper>
+              <ClerkLoading>
+                <LoadingPage />
+              </ClerkLoading>
+              <ClerkLoaded>
+                <LoadingPage />
+                {children}
+              </ClerkLoaded>
+            </ThemeProviderWrapper>
+          </StyledEngineProvider>
         </ClerkProvider>
       </body>
     </html>

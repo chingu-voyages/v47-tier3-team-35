@@ -83,7 +83,7 @@ export const DesktopSpacesList = ({
         return (
           <Grid item key={item.id} sm={6} md={4} xl={3}>
             <Link
-              className={`flex w-full h-full sm:py-4 sm:px-3.5 lg:py-5.5 lg:px-4.5 rounded-26xl ${
+              className={`flex w-full h-full sm:py-4 lg:py-5.5 sm:px-3.5 lg:px-4.5 rounded-26xl ${
                 largeWidth ? largeCurrColor : mediumCurrColor
               }`}
               href={`/dashboard/spaces/${item.id}`}

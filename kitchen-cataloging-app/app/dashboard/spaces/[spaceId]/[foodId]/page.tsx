@@ -32,13 +32,11 @@ const tempFoodData: FoodDataType[] = [
       {
         price: 10.99,
         amount: 10,
-        totalCost: 109.9,
         timestamp: new Date(Date.now()),
       },
       {
         price: 10.99,
         amount: -1,
-        totalCost: -10.99,
         timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
       },
     ],

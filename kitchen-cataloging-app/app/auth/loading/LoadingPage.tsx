@@ -1,9 +1,8 @@
 import GroceriesLoading from "@/dashboard/groceries/loading";
 import DashboardLoading from "@/dashboard/loading";
 import FoodLoading from "@/dashboard/spaces/[spaceId]/[foodId]/loading";
-import SpaceLoading from "@/dashboard/spaces/[spaceId]/loading";
-import SpacesHeaderSkeleton from "@/dashboard/spaces/components/spacesHeader/SpacesHeaderSkeleton";
 import SpacesLoading from "@/dashboard/spaces/loading";
+import SpaceLoading from "@/dashboard/spaces/[spaceId]/loading";
 import { get } from "lodash";
 import { headers } from "next/headers";
 const LoadingNavbar = () => {
@@ -31,11 +30,9 @@ const skeletonLayouts = ({
     spaces: {
       layout: <SpacesLoading />,
       [spaceId]: {
-        // layout: <SpaceLoading />,
-        layout: "hello",
+        layout: <SpaceLoading />,
         [foodId]: {
-          layout: "hello",
-          // layout: <FoodLoading />,
+          layout: <FoodLoading />,
         },
       },
     },
