@@ -60,6 +60,13 @@ export type PaginationWrapperProps<T> = {
 </PaginationWrapper>
  * ```
  */
+const determineDefaultCursor = <T,>(
+  defaultItems: IdRequiredObj<T>[] | null | undefined
+) => {
+  return defaultItems && defaultItems.length > 0
+    ? defaultItems[defaultItems.length - 1].id
+    : null;
+};
 function PaginationWrapper<T>({
   take,
   defaultItems,
@@ -68,16 +75,10 @@ function PaginationWrapper<T>({
   threshold,
   loadingComponent,
 }: PaginationWrapperProps<T>) {
-  const [data, setData] = useState<IdRequiredObj<T>[]>(
-    defaultItems ? defaultItems : []
-  );
+  const [data, setData] = useState<IdRequiredObj<T>[]>(defaultItems || []);
   //we use ref because its a synchronous update, and good for internal component use,
   //as they are variables that will prevent expensive api call from re-running
-  const cursorRef = useRef<string | null>(
-    defaultItems && defaultItems.length > 0
-      ? defaultItems[defaultItems.length - 1].id
-      : null
-  );
+  const cursorRef = useRef<string | null>(determineDefaultCursor(defaultItems));
   const [cursor, setCursor] = useState(cursorRef.current);
   const [ref, inView] = useInView({
     threshold: threshold,
@@ -127,19 +128,31 @@ function PaginationWrapper<T>({
     });
   };
   const saveLoadedData = useCallback(loadMore, [paginate, take]);
-  useEffect(() => {
-    if (!defaultItems) return;
-    setData(defaultItems)
-  }, [defaultItems])
-  //trigger new data when loading component is seen
+  //set mounted value, to ensure we aren't leaking any
+  //memory by performing state updates when no component
+  //exists
   useEffect(() => {
     isMounted.current = true;
-    //means we can load more. If cursor is null, it means we reached the end
-    if (inView) saveLoadedData();
     return () => {
       isMounted.current = false;
     };
+  }, []);
+  useEffect(() => {
+    if (!defaultItems) return;
+    if (!isMounted.current) return;
+    unstable_batchedUpdates(() => {
+      if (!isMounted.current) return;
+      setData(defaultItems);
+      setCursor(determineDefaultCursor(defaultItems));
+      cursorRef.current = determineDefaultCursor(defaultItems);
+    });
+  }, [defaultItems]);
+  //trigger new data when loading component is seen
+  useEffect(() => {
+    //means we can load more. If cursor is null, it means we reached the end
+    if (inView) saveLoadedData();
   }, [inView, saveLoadedData]);
+
   return (
     <>
       {children({

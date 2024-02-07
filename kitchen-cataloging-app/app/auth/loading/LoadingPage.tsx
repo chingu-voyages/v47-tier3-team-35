@@ -42,7 +42,7 @@ const skeletonLayouts = ({
   },
 });
 export default function LoadingPage() {
-  //grad url
+  //grab url
   const currHeaders = headers();
   const referer = currHeaders.get("referer");
   try {
