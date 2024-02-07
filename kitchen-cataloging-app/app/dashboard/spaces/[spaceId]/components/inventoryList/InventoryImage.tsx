@@ -18,8 +18,7 @@ export const InventoryImage = ({
   return (
     <Box className="flex w-full max-h-48 aspect-[16/10] xs:aspect-[16/9] sm:aspect-[16/8] md:aspect-[16/10]">
       <Box className={`relative w-full h-full ${borderRadius}`}>
-        <img src={src} />
-        {/* <Image
+        <Image
           alt={`Image showing ${itemName}`}
           className={`object-cover object-center ${borderRadius || ""}`}
           placeholder={"blur"}
@@ -31,7 +30,7 @@ export const InventoryImage = ({
           src={src || `https://source.unsplash.com/random/300x300?${itemName}`}
           loading="lazy"
           fill={true}
-        /> */}
+        />
       </Box>
     </Box>
   );
