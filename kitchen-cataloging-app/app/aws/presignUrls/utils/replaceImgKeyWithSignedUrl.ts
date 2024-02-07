@@ -1,11 +1,12 @@
+import { Image } from "@prisma/client";
 import { getCloudfrontSignedUrls } from "../actions";
 export const replaceImgKeyWithSignedUrls = async <T>({
   items,
 }: {
-  items: (T & { image?: string | null })[];
+  items: (T & { image?: Image | null })[];
 }) => {
   const imgKeys = items
-    .map((items) => items.image)
+    .map((items) => items.image?.s3ObjKey)
     .filter((img) => img) as string[];
   const signedUrls = await getCloudfrontSignedUrls({
     s3ObjectKeys: imgKeys,

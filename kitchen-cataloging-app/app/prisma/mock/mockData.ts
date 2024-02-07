@@ -64,7 +64,10 @@ const foods = [
 ].map((food) => ({
   ...food,
   threshold: 0,
-  image: "",
+  image: {
+    s3ObjKey: "donuts.jpg",
+    url: "",
+  },
 }));
 
 const logs = [

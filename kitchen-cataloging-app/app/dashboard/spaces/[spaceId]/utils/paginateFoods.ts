@@ -1,4 +1,5 @@
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgKeyWithSignedUrl";
 import prisma from "@/prisma/client";
 export type PaginationProps = {
   cursor?: string | null;
@@ -34,6 +35,15 @@ export const paginateFoods = async ({
     },
   });
   //return array if rooms exist, else return null
-  if (nextItems.length > 0) return nextItems;
-  else return null;
+  if (!nextItems) return nextItems;
+  if (nextItems.length <= 0) return null;
+  return nextItems;
+  // const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
+  //   items: nextItems,
+  // });
+  // //we do this in case presigning url fails. This way we can still read content data,
+  // //though we can't load the url
+  // const result =
+  //   nextItemsWithUrls || nextItems.map((item) => ({ ...item, image: "" }));
+  // return result;
 };

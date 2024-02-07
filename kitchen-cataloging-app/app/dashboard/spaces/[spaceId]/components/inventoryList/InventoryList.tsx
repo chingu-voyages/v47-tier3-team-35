@@ -9,21 +9,35 @@ import { replaceImgKeyWithSignedUrls } from "@/aws/presignUrls/utils/replaceImgK
 import { InventoryImage } from "./InventoryImage";
 import LoadingComponent from "@/components/loading/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import { useEffect, useState } from "react";
+const extractSignedUrls = async (nextItems?: Food[]) => {
+  if (!nextItems) return nextItems;
+  const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
+    items: nextItems,
+  });
+  //we do this in case presigning url fails. This way we can still read content data,
+  //though we can't load the url
+  return (
+    nextItemsWithUrls ||
+    nextItems.map((item) => ({
+      ...item,
+      image: {
+        s3ObjKey: null,
+        url: "",
+      },
+    }))
+  );
+};
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
-    const nextItems = await paginateFoodItems({
+    const results = await paginateFoodItems({
       cursor: cursor,
       spaceId: spaceId,
       take: take,
     });
-    if (!nextItems) return nextItems;
-    const nextItemsWithUrls = await replaceImgKeyWithSignedUrls({
-      items: nextItems,
-    });
-    //we do this in case presigning url fails. This way we can still read content data,
-    //though we can't load the url
-    return nextItemsWithUrls || nextItems;
+    if (!results) return results;
+    return extractSignedUrls(results);
   };
 
 const InventoryList = ({
@@ -33,17 +47,36 @@ const InventoryList = ({
   defaultItems: Food[] | null;
   spaceId: string;
 }) => {
+  const [items, setItems] = useState<Food[] | undefined>(
+    defaultItems?.map((item) => ({
+      ...item,
+      image: {
+        s3ObjKey: null,
+        url: "",
+      },
+    }))
+  );
   const smallWidth = useWindowWidth(400);
   const mediumWidth = useWindowWidth(640);
   const cardTopBorderRadius =
     "rounded-t-23xl xs:rounded-t-26xl md:rounded-t-28xl";
   const cardBottomBorderRadius =
     "rounded-b-23xl xs:rounded-b-26xl md:rounded-b-28xl";
+  useEffect(() => {
+    if (!defaultItems) return;
+    extractSignedUrls(defaultItems)
+      .then((signedItems) => {
+        setItems(signedItems);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [defaultItems]);
   return (
     <PaginationWrapper
       paginate={paginateInventoryList(spaceId)}
       take={10}
-      defaultItems={defaultItems}
+      defaultItems={items}
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >
       {(props) => (

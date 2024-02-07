@@ -128,6 +128,11 @@ function PaginationWrapper<T>({
   };
   const saveLoadedData = useCallback(loadMore, [paginate, take]);
   useEffect(() => {
+    if (!defaultItems) return;
+    setData(defaultItems)
+  }, [defaultItems])
+  //trigger new data when loading component is seen
+  useEffect(() => {
     isMounted.current = true;
     //means we can load more. If cursor is null, it means we reached the end
     if (inView) saveLoadedData();
