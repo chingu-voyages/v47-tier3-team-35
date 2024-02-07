@@ -26,6 +26,7 @@ export default function RootLayout({
             <LoadingPage />
           </ClerkLoading>
           <ClerkLoaded>
+            {/* <LoadingPage /> */}
             <StyledEngineProvider injectFirst>
               <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
             </StyledEngineProvider>

@@ -74,11 +74,12 @@ model GroceryItem {
 model Log {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   price Float //limit to 2 decimal places
+  // quantity
   amount Int
-  totalCost Float //limit to 2 decimal places
   timestamp DateTime @default(now())
-  food Food? @relation(fields: [foodId], references: [id])
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String? @db.ObjectId
   foodId String? @db.ObjectId
+  // totalCost Float //limit to 2 decimal places
+  food Food? @relation(fields: [foodId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

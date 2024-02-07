@@ -1,4 +1,11 @@
+import SpacesHeaderSkeleton from "./components/spacesHeader/SpacesHeaderSkeleton";
+import SpacesListSkeleton from "./components/spacesList/SpacesListSkeleton";
 const SpacesLoading = () => {
-    return <></>
-}   
+  return (
+    <>
+      <SpacesHeaderSkeleton />
+      <SpacesListSkeleton />
+    </>
+  );
+};
 export default SpacesLoading;
