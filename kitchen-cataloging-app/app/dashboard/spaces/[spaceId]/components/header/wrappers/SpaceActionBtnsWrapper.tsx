@@ -1,12 +1,13 @@
 import { Box } from "@mui/material";
 import React from "react";
-export default function SpaceHeaderBox({
+
+export default function SpaceActionBtnsWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <Box className="flex flex-col w-full min-h-0 min-w-0 mt-7 sm:mt-5 lg:mt-8">
+    <Box className="w-full flex flex-row items-center mt-3 md:w-auto md:mt-0">
       {children}
     </Box>
   );

@@ -33,7 +33,6 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   if (!roomData) return <></>;
   return (
     <ResponsivePaddingWrapper>
-      <Box className="flex flex-col pb-6 sm:pb-7 lg:pb-12">
         <NavigationDepthBar
           items={navigationDepthArr({
             spaceId: roomData?.id,
@@ -42,7 +41,6 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
         />
         <SpaceHeader defaultData={roomData} />
         <InventoryList spaceId={roomData.id} defaultItems={itemData} />
-      </Box>
     </ResponsivePaddingWrapper>
   );
 };

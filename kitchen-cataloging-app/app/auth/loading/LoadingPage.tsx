@@ -5,6 +5,7 @@ import SpacesLoading from "@/dashboard/spaces/loading";
 import SpaceLoading from "@/dashboard/spaces/[spaceId]/loading";
 import { get } from "lodash";
 import { headers } from "next/headers";
+import { Box } from "@mui/material";
 const LoadingNavbar = () => {
   return (
     <div className="flex flex-row w-full justify-end items-center h-14 sm:h-16 px-6 sm:px-8">
@@ -64,10 +65,13 @@ export default function LoadingPage() {
     //in recursive tree
     const layout = get(searchMap, dotNotationSearchStr, null);
     return (
-      <>
-        <LoadingNavbar />
-        {layout}
-      </>
+      <Box className="bg-default-sys-light-surface-container min-h-screen">
+        <>
+          {" "}
+          <LoadingNavbar />
+          {layout}
+        </>
+      </Box>
     );
   } catch (err) {
     return (

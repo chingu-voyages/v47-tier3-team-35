@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 export function InventoryListItemGridWrapper({
   children,
@@ -18,24 +18,26 @@ export default function InventoryListGridWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <Grid
-      container
-      rowSpacing={{
-        xxs: 1.2,
-        xs: 1.5,
-        sm: 3,
-        md: 3,
-        lg: 4,
-      }}
-      columnSpacing={{
-        xxs: 1.2,
-        xs: 1.5,
-        sm: 3,
-        md: 3,
-        lg: 4,
-      }}
-    >
-      {children}
-    </Grid>
+    <Box className="flex w-full pb-6 sm:pb-7 lg:pb-12">
+      <Grid
+        container
+        rowSpacing={{
+          xxs: 1.2,
+          xs: 1.5,
+          sm: 3,
+          md: 3,
+          lg: 4,
+        }}
+        columnSpacing={{
+          xxs: 1.2,
+          xs: 1.5,
+          sm: 3,
+          md: 3,
+          lg: 4,
+        }}
+      >
+        {children}
+      </Grid>
+    </Box>
   );
 }

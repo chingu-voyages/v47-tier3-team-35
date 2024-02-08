@@ -10,6 +10,7 @@ import { SearchBar } from "./SearchBar";
 import SpaceHeaderBottomBox from "./wrappers/SpaceHeaderBottomBox";
 import SpaceHeaderTopmostBox from "./wrappers/SpaceHeaderTopmostBox";
 import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
+import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
 const AddItemBtn = () => {
   return (
     <Button
@@ -37,7 +38,7 @@ const AddItemBtn = () => {
 };
 const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box className="w-full flex flex-row items-center mt-3 md:w-auto md:mt-0">
+    <SpaceActionBtnsWrapper>
       <Box className="flex flex-grow">
         <IconButton>
           <EditOutlinedIcon
@@ -53,7 +54,7 @@ const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
         </IconButton>
       </Box>
       {children}
-    </Box>
+    </SpaceActionBtnsWrapper>
   );
 };
 const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
@@ -63,7 +64,7 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
   return (
     <SpaceHeaderBox>
       <Typography
-        className="font-medium leading-4 md:leading-5 xl:leading-6 mt-7 sm:mt-5 lg:mt-8 text-default-ref-neutral-neutral50"
+        className="font-medium leading-4 md:leading-5 xl:leading-6 text-default-ref-neutral-neutral50"
         noWrap
         variant={largeWidth ? "body1" : mediumWidth ? "body2" : "button"}
         sx={{

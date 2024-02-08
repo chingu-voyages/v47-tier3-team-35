@@ -1,32 +1,23 @@
 import { Grid, Box, Skeleton } from "@mui/material";
+import GridLayoutWrapper, {
+  GridItemLayoutWrapper,
+} from "./wrappers/GridLayoutWrapper";
 const SpacesListItemSkeleton = () => {
   return (
-    <Grid item xxs={12} sm={6} md={4} xl={3}>
-      <Box className="flex flex-col w-full h-full sm:py-2.5 lg:py-5 my-2.5 sm:my-0">
-        <Skeleton variant="text" className="w-3/6 sm:w-full"/>
-        <Skeleton variant="text" className="w-3/6 sm:w-full"/>
+    <GridItemLayoutWrapper>
+      <Box className="flex flex-col w-full h-full sm:py-4 lg:py-5.5 sm:my-0">
+        <Skeleton variant="text" className="w-3/6 sm:w-full h-6 lg:h-7" />
+        <Skeleton variant="text" className="w-3/6 sm:w-full h-4 lg:h-5"/>
       </Box>
-    </Grid>
+    </GridItemLayoutWrapper>
   );
 };
 const SpacesListSkeleton = () => {
   return (
-    <Grid
-      container
-      rowSpacing={{
-        sm: 2,
-        md: 3,
-        lg: 4,
-      }}
-      columnSpacing={{
-        sm: 2,
-        md: 3,
-        lg: 4,
-      }}
-    >
+    <GridLayoutWrapper>
       <SpacesListItemSkeleton />
       <SpacesListItemSkeleton />
-    </Grid>
+    </GridLayoutWrapper>
   );
 };
 export default SpacesListSkeleton;
