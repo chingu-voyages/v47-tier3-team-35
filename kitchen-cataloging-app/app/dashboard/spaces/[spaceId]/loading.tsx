@@ -1,12 +1,13 @@
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
-// import SpacesListSkeleton from "../components/spacesList/SpacesListSkeleton";
-// import SpacesHeaderSkeleton from "../components/spacesHeader/SpacesHeaderSkeleton";
+import { NavigationDepthBarSkeleton } from "@/components/navigation/navigationDepthBar/NavigationDepthBarSkeleton";
+import SpaceHeaderSkeleton from "./components/header/SpaceHeaderSkeleton";
+import InventoryListSkeleton from "./components/inventoryList/InventoryListSkeleton";
 const SpaceLoading = () => {
   return (
     <ResponsivePaddingWrapper>
-      <></>
-      {/* <SpacesHeaderSkeleton />
-      <SpacesListSkeleton /> */}
+      <NavigationDepthBarSkeleton />
+      <SpaceHeaderSkeleton />
+      <InventoryListSkeleton />
     </ResponsivePaddingWrapper>
   );
 };
