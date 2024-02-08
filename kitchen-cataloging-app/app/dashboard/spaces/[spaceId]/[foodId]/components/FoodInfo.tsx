@@ -8,6 +8,7 @@ import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CreateEditForm from "@/components/form/CreateEditForm";
 
 interface FoodInfo {
   space: string;
@@ -33,7 +34,6 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
   return (
     <Box className="">
       <Stack direction={"row"} className="justify-between items-start pt-6">
-        
         {/* title/space */}
 
         <Stack direction={"column"} className="items-start">
@@ -50,9 +50,9 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
             {title}
           </Typography>
         </Stack>
-        
+
         {/* Price */}
-        
+
         <Stack direction={"column"} className="items-end">
           <Typography variant="body2" className={"text-slate-500"}>
             Price
@@ -76,19 +76,18 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
 
       {/* Icons + add/subtract buttons */}
 
-      <Stack
-        direction={"row"}
-        className={"w-full justify-between my-3.5 px-1"}
-      >
+      <Stack direction={"row"} className={"w-full justify-between my-3.5 px-1"}>
         <Stack direction={"row"} className={"gap-2"}>
           <AddShoppingCartOutlinedIcon
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <EditOutlinedIcon
-            color={"secondary"}
-            className={`${iconClassList}`}
-          />
+          <CreateEditForm type={'edit'}>
+            <EditOutlinedIcon
+              color={"secondary"}
+              className={`${iconClassList}`}
+            />
+          </CreateEditForm>
           <DeleteForeverOutlinedIcon
             color={"error"}
             className={`${iconClassList}`}
