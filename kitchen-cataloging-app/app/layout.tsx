@@ -28,7 +28,7 @@ export default function RootLayout({
                 <LoadingPage />
               </ClerkLoading>
               <ClerkLoaded>
-                <LoadingPage />
+                {/* <LoadingPage /> */}
                 {children}
               </ClerkLoaded>
             </ThemeProviderWrapper>
