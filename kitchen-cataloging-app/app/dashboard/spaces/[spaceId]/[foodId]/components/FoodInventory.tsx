@@ -245,7 +245,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
             }}
           >
             ${totalProductValue.toString().split(".")[0]}
-            <span className="text-[1.5rem] md:text-[1.75rem] pt-1 align-top inline-block">
+            <span className="text-[1.5rem] md:text-[1.75rem] align-top inline-block">
               {totalProductValue.toString().split(".")[1]}
             </span>
           </Typography>
