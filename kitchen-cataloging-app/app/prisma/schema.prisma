@@ -23,6 +23,7 @@ model User {
   foods Food[]
   rooms Room[]
   logs Log[]
+  groceryItems GroceryItem[]
 }
 
 model Room {
@@ -66,6 +67,8 @@ model GroceryItem {
   labels String[] @default([])
   image Image?
   amount Int
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @db.ObjectId
   //grocery item specific keys
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId 

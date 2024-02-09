@@ -3,7 +3,7 @@ import NavigationDepthBar from "@/components/navigation/navigationDepthBar/Navig
 import SpaceHeader from "./components/header/SpaceHeader";
 import InventoryList from "./components/inventoryList/InventoryList";
 import { auth } from "@clerk/nextjs";
-import { getRoom } from "../utils/getSingleRoom";
+import { getRoom } from "../actions/crud/getSingleRoom";
 import { paginateFoods } from "./utils/paginateFoods";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 const navigationDepthArr = ({
@@ -33,14 +33,14 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   if (!roomData) return <></>;
   return (
     <ResponsivePaddingWrapper>
-        <NavigationDepthBar
-          items={navigationDepthArr({
-            spaceId: roomData?.id,
-            spaceName: roomData?.title,
-          })}
-        />
-        <SpaceHeader defaultData={roomData} />
-        <InventoryList spaceId={roomData.id} defaultItems={itemData} />
+      <NavigationDepthBar
+        items={navigationDepthArr({
+          spaceId: roomData?.id,
+          spaceName: roomData?.title,
+        })}
+      />
+      <SpaceHeader defaultData={roomData} />
+      <InventoryList spaceId={roomData.id} defaultItems={itemData} />
     </ResponsivePaddingWrapper>
   );
 };
