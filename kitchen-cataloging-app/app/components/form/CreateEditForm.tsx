@@ -12,7 +12,10 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { Box } from "@mui/material";
+import { Box, Select, InputLabel, FormControl, MenuItem } from "@mui/material";
+import { FoodType } from "@/prisma/mock/mockData";
+import FormInputs from "./create-edit-form-components/FormInputs";
+import useWindowWidth from "@/hooks/useWindowWidth";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -25,10 +28,13 @@ const Transition = React.forwardRef(function Transition(
 
 interface CreateEditForm {
     children: React.ReactNode;
-    type: 'create' | 'edit';
+  type: 'create' | 'edit';
+  spaces: string[];
+  itemData?: FoodType;
 }
 
-export default function CreateEditForm({children, type }: CreateEditForm) {
+export default function CreateEditForm({ children, type, spaces, itemData }: CreateEditForm) {
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -39,24 +45,36 @@ export default function CreateEditForm({children, type }: CreateEditForm) {
     setOpen(false);
   };
 
+  const handleForm = async(formData: FormData) => {
+    console.log(formData)
+  }
+
   return (
     <React.Fragment>
-      <Box className={'cursor-pointer'} onClick={handleClickOpen}>
+      <Box className={"cursor-pointer"} onClick={handleClickOpen}>
         {children}
       </Box>
       <Dialog
+        className="max-w-[900px] bg-default-sys-light-surface-container-low"
         fullScreen
         open={open}
         onClose={handleClose}
         TransitionComponent={Transition}
       >
         <IconButton
-            onClick={handleClose}
-            aria-label="close"
-              >
-                  <CloseIcon className="text-black"></CloseIcon>
+          className="absolute top-2 right-2"
+          onClick={handleClose}
+          aria-label="close"
+        >
+          <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
-              <Typography>{`${type.slice(0, 1).toUpperCase()}${type.slice(1)}`}</Typography>
+        <FormInputs
+          type={type}
+          spaces={spaces}
+          itemData={itemData}
+          onClose={handleClose}
+          handleForm={handleForm}
+        />
       </Dialog>
     </React.Fragment>
   );

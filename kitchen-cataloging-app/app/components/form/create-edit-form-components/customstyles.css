@@ -1,0 +1,84 @@
+#space-select {
+    -moz-appearance: none;
+        -webkit-appearance: none;
+        appearance: none;
+}
+
+.select {
+    cursor: pointer;
+}
+
+.select-arrow-up::before {
+    position: absolute;
+    content: '\25be';
+    color: black;
+    top: 50%;
+    transform: translateY(-75%);
+    right: 1rem;
+    width: 1rem;
+    height: 1rem; 
+    z-index: 2000;
+    pointer-events: none;
+}
+
+.select-arrow-down::before {
+    position: absolute;
+    content: '\25be';
+    color: black;
+    top: 50%;
+    transform: translateY(-25%) rotate(180deg);
+    right: 1rem;
+    width: 1rem;
+    height: 1rem;
+    z-index: 2000;
+    pointer-events: none;
+}
+    
+
+#space-label, .space-selected {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(1);
+    transition: top 0.4s, left 0.4s, transform 0.4s;
+}
+
+#space-label.open {
+    top: 0;
+    left: -1rem;
+    transform: translateX(0) translateY(-110%) scale(0.75);
+}
+
+.animate-label {
+    animation: animate-label 0.4s forwards;
+}
+
+.deanimate-label {
+    animation: animate-label-reverse 0.4s forwards;
+}
+
+@keyframes animate-label {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) scale(1);
+    }
+    to {
+        top: 0rem;
+        left: -1rem;
+        transform: translateX(0) translateY(-110%) scale(0.75);
+    }
+}
+
+@keyframes animate-label-reverse {
+    from {
+        top: 0;
+        left: -1rem;
+        transform: translateX(0) translateY(-110%) scale(0.75);
+    }
+
+    to {
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) scale(1);
+    }
+}

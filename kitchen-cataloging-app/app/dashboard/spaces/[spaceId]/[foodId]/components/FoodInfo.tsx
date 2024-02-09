@@ -10,6 +10,8 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CreateEditForm from "@/components/form/CreateEditForm";
 
+const tempSpaces = ['kitchen', 'my secret stash']
+
 interface FoodInfo {
   space: string;
   title: string;
@@ -82,7 +84,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <CreateEditForm type={'edit'}>
+          <CreateEditForm type={"edit"} spaces={tempSpaces}>
             <EditOutlinedIcon
               color={"secondary"}
               className={`${iconClassList}`}
