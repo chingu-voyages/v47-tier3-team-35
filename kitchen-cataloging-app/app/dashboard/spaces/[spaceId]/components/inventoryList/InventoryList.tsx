@@ -1,6 +1,5 @@
 "use client";
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
-import { Grid } from "@mui/material";
 import { Food } from "@prisma/client";
 import { paginateFoodItems } from "../../actions";
 import Link from "next/link";
@@ -8,6 +7,9 @@ import ItemContent from "./ItemContent";
 import { InventoryImage } from "./InventoryImage";
 import LoadingComponent from "@/components/pagination/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import InventoryListGridWrapper, {
+  InventoryListItemGridWrapper,
+} from "./wrappers/InventoryListGridWrapper";
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
@@ -40,25 +42,9 @@ const InventoryList = ({
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >
       {(props) => (
-        <Grid
-          container
-          rowSpacing={{
-            xxs: 1.2,
-            xs: 1.5,
-            sm: 3,
-            md: 3,
-            lg: 4,
-          }}
-          columnSpacing={{
-            xxs: 1.2,
-            xs: 1.5,
-            sm: 3,
-            md: 3,
-            lg: 4,
-          }}
-        >
+        <InventoryListGridWrapper>
           {props.data.map((item) => (
-            <Grid key={item.id} item xxs={6} md={4} lg={3} xl={2.4}>
+            <InventoryListItemGridWrapper key={item.id}>
               <Link
                 className={`flex flex-col w-full h-full ${cardTopBorderRadius} ${cardBottomBorderRadius}`}
                 href={`/dashboard/spaces/${spaceId}/${item.id}`}
@@ -72,16 +58,16 @@ const InventoryList = ({
                   item={item}
                   bottomBorderRadius={cardBottomBorderRadius}
                   //note that these are passed here, because if used inside the content component,
-                  // we would have ~1000+ listeners attached
+                  // we would have ~100+ listeners attached
                   //this would cause significant performance issues,
                   //so we pass them here instead, since we only need one listener.
                   mediumWidth={mediumWidth}
                   smallWidth={smallWidth}
                 />
               </Link>
-            </Grid>
+            </InventoryListItemGridWrapper>
           ))}
-        </Grid>
+        </InventoryListGridWrapper>
       )}
     </PaginationWrapper>
   );

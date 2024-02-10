@@ -7,6 +7,10 @@ import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { SearchBar } from "./SearchBar";
+import SpaceHeaderBottomBox from "./wrappers/SpaceHeaderBottomBox";
+import SpaceHeaderTopmostBox from "./wrappers/SpaceHeaderTopmostBox";
+import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
+import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
 const AddItemBtn = () => {
   return (
     <Button
@@ -34,7 +38,7 @@ const AddItemBtn = () => {
 };
 const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box className="w-full flex flex-row items-center mt-3 md:w-auto md:mt-0">
+    <SpaceActionBtnsWrapper>
       <Box className="flex flex-grow">
         <IconButton>
           <EditOutlinedIcon
@@ -50,7 +54,7 @@ const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
         </IconButton>
       </Box>
       {children}
-    </Box>
+    </SpaceActionBtnsWrapper>
   );
 };
 const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
@@ -58,16 +62,16 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
   const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(768);
   return (
-    <Box className="flex flex-col w-full min-h-0 min-w-0">
+    <SpaceHeaderBox>
       <Typography
-        className="font-medium leading-4 md:leading-5 xl:leading-6 mt-7 sm:mt-5 lg:mt-8 text-default-ref-neutral-neutral50"
+        className="font-medium leading-4 md:leading-5 xl:leading-6 text-default-ref-neutral-neutral50"
         noWrap
         variant={largeWidth ? "body1" : mediumWidth ? "body2" : "button"}
         sx={{
           textTransform: "none",
         }}
       >{`${spaceData.itemCount} items in stock`}</Typography>
-      <Box className="flex flex-col md:flex-row mb-6 sm:mb-6 lg:mb-7 min-h-0 min-w-0">
+      <SpaceHeaderTopmostBox>
         <Typography
           noWrap
           className="font-normal leading-snug xl:leading-normal text-default-ref-neutral-neutral30 md:flex-grow"
@@ -78,12 +82,12 @@ const SpaceHeader = ({ defaultData }: { defaultData?: Room }) => {
         <SpaceActionBtns>
           <>{!mediumWidth && <AddItemBtn />}</>
         </SpaceActionBtns>
-      </Box>
-      <Box className="flex items-center w-full mb-7 sm:mb-9 lg:mb-11 space-x-12">
+      </SpaceHeaderTopmostBox>
+      <SpaceHeaderBottomBox>
         <SearchBar spaceId={spaceData.id} />
         {mediumWidth && <AddItemBtn />}
-      </Box>
-    </Box>
+      </SpaceHeaderBottomBox>
+    </SpaceHeaderBox>
   );
 };
 export default SpaceHeader;

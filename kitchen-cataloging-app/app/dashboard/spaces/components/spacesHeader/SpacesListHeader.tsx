@@ -1,12 +1,13 @@
 "use client";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import AddIcon from "@mui/icons-material/Add";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import SpacesHeaderWrapper from "./wrappers/SpacesHeaderWrapper";
 const SpacesListHeader = () => {
   const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(640);
   return (
-    <Box className="flex flex-col w-full pb-4 mt-5 sm:pb-6 lg:pb-9 sm:mt-4 lg:mt-6 lg:mb-0">
+    <SpacesHeaderWrapper>
       <Button
         variant="text"
         className="space-x-1.5 sm:space-x-2.5 justify-start pl-0 w-fit"
@@ -25,7 +26,7 @@ const SpacesListHeader = () => {
           Add Space
         </Typography>
       </Button>
-    </Box>
+    </SpacesHeaderWrapper>
   );
 };
 export default SpacesListHeader;

@@ -1,7 +1,6 @@
 import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-
-export const getRoom = async ({
+export const getSingleRoom = async ({
   id,
   userId,
 }: {

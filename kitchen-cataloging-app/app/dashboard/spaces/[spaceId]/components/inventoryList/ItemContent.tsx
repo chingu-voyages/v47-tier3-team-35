@@ -5,6 +5,10 @@ import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutl
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { Food } from "@prisma/client";
+import ItemContentWrapper, {
+  ItemContentInnerWrapper,
+  ItemDescriptionWrapper,
+} from "./wrappers/ItemContentWrapper";
 const ItemStockInfoAndBtns = ({
   item,
   mediumWidth,
@@ -81,7 +85,7 @@ const ItemDescription = ({
     WebkitBoxOrient: "vertical",
   };
   return (
-    <Box className="flex flex-col w-full min-h-0 space-y-1 flex-grow">
+    <ItemDescriptionWrapper>
       <Typography
         className="font-medium text-3xl sm:text-4xl leading-5 sm:leading-6 text-default-ref-neutral-neutral30"
         variant={"subtitle2"}
@@ -105,7 +109,7 @@ const ItemDescription = ({
           day: "numeric",
         })}
       </Typography>
-    </Box>
+    </ItemDescriptionWrapper>
   );
 };
 const AddToGroceriesBtn = ({ mediumWidth }: { mediumWidth: boolean }) => {
@@ -145,14 +149,9 @@ const ItemContent = ({
   smallWidth: boolean;
   bottomBorderRadius?: string;
 }) => {
-  const spacing =
-    "-mt-5 xs:-mt-6 md:-mt-7 lg:-mt-8 space-y-3.5 xs:space-y-4 md:space-y-4.5 p-2 sm:p-2.5 md:p-3 lg:p-3.5";
-  const borderRadius = `rounded-t-29xl xs:rounded-t-32xl md:rounded-t-38xl ${bottomBorderRadius}`;
   return (
-    <Box
-      className={`relative z-10 flex flex-col w-full flex-grow bg-default-sys-light-surface-container-lowest ${spacing} ${borderRadius}`}
-    >
-      <Box className="flex flex-col w-full space-y-2.5 xs:space-y-3 md:space-y-3.5 flex-grow">
+    <ItemContentWrapper bottomBorderRadius={bottomBorderRadius}>
+      <ItemContentInnerWrapper>
         <ItemStockInfoAndBtns
           item={item}
           mediumWidth={mediumWidth}
@@ -163,9 +162,9 @@ const ItemContent = ({
           title={item.title}
           mediumWidth={mediumWidth}
         />
-      </Box>
+      </ItemContentInnerWrapper>
       <AddToGroceriesBtn mediumWidth={mediumWidth} />
-    </Box>
+    </ItemContentWrapper>
   );
 };
 export default ItemContent;

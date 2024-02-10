@@ -23,6 +23,7 @@ model User {
   foods Food[]
   rooms Room[]
   logs Log[]
+  groceryItems GroceryItem[]
 }
 
 model Room {
@@ -66,9 +67,12 @@ model GroceryItem {
   labels String[] @default([])
   image Image?
   amount Int
+  userId String @db.ObjectId
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   //grocery item specific keys
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId 
+  roomTitle String
 }
 // Food log model -- created upon every purchase of food. Stored as an array in Food
 model Log {

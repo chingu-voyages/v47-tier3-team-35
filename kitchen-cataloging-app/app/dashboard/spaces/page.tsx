@@ -1,7 +1,7 @@
 import SpacesHeader from "./components/spacesHeader/SpacesListHeader";
 import SpacesList from "./components/spacesList/SpacesList";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
-import { paginateSpaces } from "./utils/paginateSpaces";
+import { paginateSpaces } from "./actions/search/paginateSpaces";
 import { auth } from "@clerk/nextjs";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 const navItems = [

@@ -2,8 +2,10 @@
 import { Room } from "@prisma/client";
 import { Box, Typography } from "@mui/material";
 import Link from "next/link";
-import { Grid } from "@mui/material";
 import KitchenOutlinedIcon from "@mui/icons-material/KitchenOutlined";
+import GridLayoutWrapper, {
+  GridItemLayoutWrapper,
+} from "./wrappers/GridLayoutWrapper";
 type ColorPairType = {
   color1: string;
   color2: string;
@@ -44,19 +46,7 @@ export const DesktopSpacesList = ({
   largeWidth: boolean;
 }) => {
   return (
-    <Grid
-      container
-      rowSpacing={{
-        sm: 2,
-        md: 3,
-        lg: 4,
-      }}
-      columnSpacing={{
-        sm: 2,
-        md: 3,
-        lg: 4,
-      }}
-    >
+    <GridLayoutWrapper>
       {data.map((item, idx) => {
         const {
           largeCurrColor,
@@ -81,9 +71,9 @@ export const DesktopSpacesList = ({
           },
         });
         return (
-          <Grid item key={item.id} sm={6} md={4} xl={3}>
+          <GridItemLayoutWrapper key={item.id}>
             <Link
-              className={`flex w-full h-full sm:py-4 sm:px-3.5 lg:py-5.5 lg:px-4.5 rounded-26xl ${
+              className={`flex w-full h-full sm:py-4 lg:py-5.5 sm:px-3.5 lg:px-4.5 rounded-26xl ${
                 largeWidth ? largeCurrColor : mediumCurrColor
               }`}
               href={`/dashboard/spaces/${item.id}`}
@@ -119,9 +109,9 @@ export const DesktopSpacesList = ({
                 </Box>
               </Box>
             </Link>
-          </Grid>
+          </GridItemLayoutWrapper>
         );
       })}
-    </Grid>
+    </GridLayoutWrapper>
   );
 };
