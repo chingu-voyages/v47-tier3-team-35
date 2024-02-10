@@ -42,6 +42,11 @@
     transition: top 0.4s, left 0.4s, transform 0.4s;
 }
 
+.space-item:last-of-type {
+    border: none;
+    border-radius: 0 0 5px 5px;
+}
+
 #space-label.open {
     top: 0;
     left: -1rem;

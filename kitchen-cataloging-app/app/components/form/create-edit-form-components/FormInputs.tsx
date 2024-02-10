@@ -2,14 +2,14 @@
 import React, { useEffect } from "react";
 import { MouseEvent, useState, useRef } from "react";
 
-import { Box, Typography, InputLabel, FormControl, Select, TextField, MenuItem, Slider, InputAdornment, Button } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import { FocusEvent } from "react";
+import { Box, Typography, InputLabel, FormControl, Select, TextField, MenuItem, Slider, InputAdornment, Button, IconButton, Input } from "@mui/material";
+import CustomSelect from "./CustomSelect";
+import Close from "@mui/icons-material/Close";
 
 import { FoodType } from "@/prisma/mock/mockData";
 
 import './customstyles.css';
+import DragDrop from "../DragDrop";
 
 interface FormInputs {
   type: "create" | "edit";
@@ -21,31 +21,28 @@ interface FormInputs {
 
 const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs) => {
     
-    const [space, setSpace] = useState(itemData?.roomTitle ? itemData?.roomTitle : '')
-    const [animateLabelClass, setAnimateLabelClass] = useState(space ? 'open' : 'closed')
-    const [openSelect, setOpenSelect] = useState(false)
+  // Space
+  const [space, setSpace] = useState(itemData?.roomTitle ? itemData?.roomTitle : '')
+  const handleSpace = (val: string) => {
+    setSpace(val)
+  }
 
-    // const animateLabelClass = (space === '' && !openSelect) ? 'deanimate-label' : openSelect ? 'animate-label' : '';
+  // Image 
+  const [file, setFile] = useState<File | null>(null);
+  const handleImage = (file: File) => {
+    setFile(file);
+  }
 
-    useEffect(() => {
-        if (space === '' && !openSelect && animateLabelClass === 'open') {
-            console.log('1')
-            setAnimateLabelClass('deanimate-label');
-        }
-        else if (space === '' && !openSelect && animateLabelClass !== 'closed') {
-            console.log('2');
-            setAnimateLabelClass("deanimate-label");
-        } else if (openSelect && animateLabelClass !== 'open') {
-            console.log("3");
-            setAnimateLabelClass("animate-label");
-        }
-    }, [openSelect])
+  // Labels
+  const handleDeleteLabel = (val: string) => {
+    console.log(`delete ${val}`)
+  }
 
-    const marks = new Array(10).fill(0).map((val, i) => (
-        {
-            value: i + 1,
-        }
-    ))
+  const marks = new Array(10).fill(0).map((val, i) => (
+      {
+          value: i + 1,
+      }
+  ))
 
   return (
     <form
@@ -62,40 +59,11 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
           >
             {`${type.slice(0, 1).toUpperCase()}${type.slice(1)}`} Item
           </Typography>
-          <div
-            className={`${
-              openSelect ? "select-arrow-down" : "select-arrow-up"
-            } relative z-10`}
-          >
-            <div
-              className="relative select bg-default-sys-light-surface-container-lowest w-52 h-12 rounded-lg ps-4"
-              id="space-select"
-              onClick={() => setOpenSelect(!openSelect)}
-            ></div>
-            <select className="hidden" value={space} name="space" onChange={() => console.log('shut up react')}></select>
-            <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
-              {space}
-            </p>
-            <label
-              className={`${animateLabelClass} absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none`}
-              htmlFor="space-select"
-              id="space-label"
-            >
-              Choose Space
-            </label>
-            {openSelect && (
-              <ul className="absolute -bottom-0.5 left-0 translate-y-full w-full bg-white">
-                {spaces.map((spaceOption, i) => (
-                    <li key={i} onClick={() => {
-                        setSpace(spaceOption)
-                        setOpenSelect(false)
-                    }}>
-                    {spaceOption}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <CustomSelect
+            space={space}
+            spaces={spaces}
+            handleSpace={handleSpace}
+          />
         </Box>
       </section>
 
@@ -105,13 +73,30 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
         <Box className="h-full w-full flex flex-col gap-8 md:gap-0">
           <TextField
             className="h-14 mb-12"
-            id="standard-helperText"
+            id="outlined-start-adornment"
             label="Name"
-            defaultValue="Item Name"
+            defaultValue={itemData?.title}
             helperText=""
             variant="standard"
+            placeholder="Item Name"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start"></InputAdornment>
+              ),
+            }}
           />
-          <Box className="flex-grow border">Image placeholder</Box>
+          <Box className="flex-grow border">
+            <DragDrop handleImage={handleImage}/>
+            {/* <DragDrop></DragDrop> */}
+            <Input
+              className="hidden"
+              type="file"
+              name="image"
+              value={file}
+              onChange={() => console.log("file changed")}
+              inputProps={{ accept: "image/png, image/jpeg" }}
+            />
+          </Box>
           <Box className="hidden h-14 md:block"></Box>
         </Box>
 
@@ -119,17 +104,24 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
         <Box className="h-full w-full flex flex-col justify-between gap-8 md:gap-5">
           <TextField
             className="h-14"
-            id="standard-helperText"
+            id="outlined-start-adornment"
             label="Description"
-            defaultValue="Item Description"
+            placeholder="Item Description"
+            defaultValue={itemData?.description}
             helperText=""
             variant="standard"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start"></InputAdornment>
+              ),
+            }}
           />
           <TextField
             className="h-14"
             id="outlined-start-adornment"
             label="Price"
-            defaultValue="Item Price"
+            placeholder="Item Price"
+            defaultValue={itemData?.price}
             helperText=""
             variant="standard"
             InputProps={{
@@ -155,20 +147,43 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
             />
           </Box>
           <Box>
-            <Typography
-              variant="button"
-              sx={{ textTransform: "unset", fontWeight: "unset" }}
-              id="labels-input-label"
-              gutterBottom
-            >
-              Labels
-            </Typography>
+            <Box className="flex flex-row px-4 gap-4 w-full items-start">
+              <Typography
+                variant="button"
+                sx={{ textTransform: "unset", fontWeight: "unset" }}
+                id="labels-input-label"
+                gutterBottom
+              >
+                Labels
+              </Typography>
+              {["oo", "sss", "dsfdsf"].map((labelText, i) => (
+                <Box className="bg-default-sys-light-outline-variant rounded-full px-2 py-1 flex flex-row items-center">
+                  <IconButton className="p-0">
+                    <Close
+                      className="text-default-sys-light-on-surface text-xs"
+                      onClick={() => {
+                        handleDeleteLabel(labelText);
+                      }}
+                    />
+                  </IconButton>
+                  <Typography
+                    className="leading-none"
+                    variant="button"
+                    sx={{ textTransform: "unset", fontWeight: "unset" }}
+                  >
+                    {labelText}
+                  </Typography>
+                </Box>
+              ))}
+            </Box>
             <TextField
+              className="bg-default-sys-light-surface-bright"
               aria-labelledby="labels-input-label"
               fullWidth
               id="standard-helperText"
               label=""
-              defaultValue="Add Label"
+              placeholder="Add Label"
+              defaultValue={itemData?.labels}
               helperText=""
               hiddenLabel
             />
@@ -183,11 +198,12 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
               Expiration Date
             </Typography>
             <TextField
+              className="bg-default-sys-light-surface-bright"
               aria-labelledby="date-input-label"
               fullWidth
               id="standard-helperText"
               label=""
-              defaultValue="mm/dd/yyyy"
+              placeholder="mm/dd/yyyy"
               helperText=""
               type="date"
               hiddenLabel
