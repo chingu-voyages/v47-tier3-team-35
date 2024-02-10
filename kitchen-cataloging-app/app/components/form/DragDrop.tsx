@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 
-const fileTypes = ["JPG", "PNG", "GIF", "JPEG"];
+const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 
 interface DragDrop {
   // children: React.ReactNode;
