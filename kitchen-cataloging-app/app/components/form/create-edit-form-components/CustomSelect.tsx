@@ -53,6 +53,9 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
       <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
         {space}
       </p>
+      {(openSelect && space === '') && <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-outline-variant pointer-events-none">
+        Choose Space
+      </p>}
       <label
         className={`${animateLabelClass} absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none`}
         htmlFor="space-select"

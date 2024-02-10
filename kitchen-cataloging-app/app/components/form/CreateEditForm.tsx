@@ -68,13 +68,18 @@ export default function CreateEditForm({ children, type, spaces, itemData }: Cre
         >
           <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
-        <FormInputs
-          type={type}
-          spaces={spaces}
-          itemData={itemData}
-          onClose={handleClose}
-          handleForm={handleForm}
-        />
+        <form
+          action=""
+          className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
+        >
+          <FormInputs
+            type={type}
+            spaces={spaces}
+            itemData={itemData}
+            onClose={handleClose}
+            handleForm={handleForm}
+          />
+        </form>
       </Dialog>
     </React.Fragment>
   );
