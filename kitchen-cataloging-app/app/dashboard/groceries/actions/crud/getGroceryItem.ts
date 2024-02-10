@@ -1,6 +1,6 @@
-import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-export const getSingleRoom = async ({
+import prisma from "@/prisma/client";
+const getGroceryItem = async ({
   id,
   userId,
 }: {
@@ -9,14 +9,12 @@ export const getSingleRoom = async ({
 }) => {
   const user = await getUserInfoServer({ userId });
   if (!user?.id) return null;
-  const doc = await prisma.room.findFirst({
+  const doc = await prisma.groceryItem.findFirst({
     where: {
       userId: user.id,
       id: id,
-    },
-    include: {
-      foods: true,
-    },
+    }
   });
   return doc;
 };
+export default getGroceryItem;

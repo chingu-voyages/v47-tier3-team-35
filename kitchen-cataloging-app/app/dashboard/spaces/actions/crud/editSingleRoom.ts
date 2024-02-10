@@ -1,12 +1,13 @@
 import generateErrMessage from "@/utils/generateErrMessage";
 import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import { RoomSchema } from "@/zodTypes/RoomSchema";
 const editSingleRoom = async ({
   userId,
   roomId,
   roomName,
 }: {
-  userId: string | undefined;
+  userId: string | undefined | null;
   roomId: string | undefined;
   roomName: string | undefined;
 }) => {
@@ -15,12 +16,19 @@ const editSingleRoom = async ({
       statusCode: 403,
       message: "Unauthorized access",
     });
+  // Validate room name (between 3-30 characters)
+  const validation = RoomSchema.safeParse(roomName);
+  if (!validation.success)
+    return generateErrMessage({
+      statusCode: 400,
+      message: validation.error.issues.join().toString(),
+    });
   const user = await getUserInfoServer({ userId });
-    if (!user)
-      return generateErrMessage({
-        statusCode: 403,
-        message: "Unauthorized Access. Please login",
-      });
+  if (!user)
+    return generateErrMessage({
+      statusCode: 403,
+      message: "Unauthorized Access. Please login",
+    });
   // Update room name if all checks/validation passed
   try {
     const editedRoomPromise = prisma.room.update({
@@ -43,9 +51,19 @@ const editSingleRoom = async ({
         roomTitle: roomName as string,
       },
     });
-    const [editedRoom, _] = await Promise.all([
+    const editedGroceriesPromise = prisma.groceryItem.updateMany({
+      where: {
+        userId: user?.id,
+        roomId: roomId as string,
+      },
+      data: {
+        roomTitle: roomName as string,
+      },
+    });
+    const [editedRoom, foods, groceries] = await Promise.all([
       editedRoomPromise,
       editedFoodsPromise,
+      editedGroceriesPromise,
     ]);
     return editedRoom;
   } catch (error) {
