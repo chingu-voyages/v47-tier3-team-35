@@ -14,6 +14,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
+import { useTheme } from "@mui/material";
 
 import { LogDataType } from "../page";
 
@@ -51,8 +52,10 @@ interface FoodActivity {
 
 const FoodActivity = ({ foodLogs }: FoodActivity) => {
 
+  const theme = useTheme();
+
   const rows = foodLogs.map((row, i) =>
-      createData(i, row.timestamp.getTime(), row.price, row.amount, row.totalCost)
+      createData(i, row.timestamp.getTime(), row.price, row.amount, (row.price * row.amount))
   );
 
 
@@ -113,12 +116,7 @@ function stableSort<T>(
       disablePadding: false,
       label: "Date",
     },
-    // {
-    //   id: "price",
-    //   numeric: true,
-    //   disablePadding: false,
-    //   label: "Price",
-    // },
+
     {
       id: "totalCost",
       numeric: true,
@@ -134,9 +132,7 @@ function stableSort<T>(
   ];
 
   interface EnhancedTableProps {
-  // numSelected: number;
   onRequestSort: (event: React.MouseEvent<unknown>, property: keyof LogDataTypeMod) => void;
-  // onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
   rowCount: number;
@@ -144,10 +140,8 @@ function stableSort<T>(
 
 function EnhancedTableHead(props: EnhancedTableProps) {
   const {
-    // onSelectAllClick,
     order,
     orderBy,
-    // numSelected,
     rowCount,
     onRequestSort,
   } = props;
@@ -157,38 +151,28 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     };
   
   return (
-    <TableHead>
-      <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell> */}
+    <TableHead className="w-full">
+      <TableRow className="w-full">
         {headCells.map((headCell, i) => (
           <TableCell
             key={headCell.id}
             align={
               i === 0 ? "left" : i === headCells.length - 1 ? "right" : "center"
             }
-            padding={'none'}
+            padding={"none"}
             sortDirection={orderBy === headCell.id ? order : false}
-            className="text-default-ref-neutral-neutral60 px-4 pb-2"
+            className={`text-default-ref-neutral-neutral60 py-2 ${
+              i === 0 ? "ps-4" : i === headCells.length - 1 ? "pe-4" : ''
+            }`}
             sx={{
-              fontSize: "1rem",
-              minWidth: i === 0 ? '9rem' : undefined,
+              fontSize: { xs: "0.875rem", md: "1rem", lg: "1.125rem" },
             }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
-              className="text-default-ref-neutral-neutral60"
+              className="text-default-ref-neutral-neutral60 whitespace-nowrap"
             >
               {headCell.label}
               {orderBy === headCell.id ? (
@@ -215,39 +199,20 @@ function EnhancedTableToolbar() {
         pr: { xs: 1, sm: 1 },
       }}
     >
-      {/* {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : ( */}
       <Typography
-        sx={{ flex: "1 1 100%" }}
         variant="subtitle1"
         id="tableTitle"
-        component="div"
-        className="text-default-ref-neutral-neutral40 py-4 ps-2"
+        component="h1"
+        className="text-default-ref-neutral-neutral40 flex-grow w-full pt-5 pb-3 md:w-fit"
+        sx={{
+          width: { xs: "100%", md: "" },
+          [theme.breakpoints.up("md")]: {
+            variant: "h2",
+          },
+        }}
       >
         Your Activity
       </Typography>
-      {/* )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )} */}
     </Toolbar>
   );
 }
@@ -267,15 +232,6 @@ const handleRequestSort = (
   setOrder(isAsc ? "desc" : "asc");
   setOrderBy(property);
 };
-
-// const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-//   if (event.target.checked) {
-//     const newSelected = rows.map((n) => n.id);
-//     setSelected(newSelected);
-//     return;
-//   }
-//   setSelected([]);
-// };
 
 const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
   const selectedIndex = selected.indexOf(id);
@@ -307,13 +263,6 @@ const handleChangeRowsPerPage = (
   setPage(0);
 };
 
-// const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-//   setDense(event.target.checked);
-// };
-
-const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
-// Avoid a layout jump when reaching the last page with empty rows.
 const emptyRows =
   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -327,37 +276,28 @@ const visibleRows = React.useMemo(
 );
 
 return (
-  <Box sx={{ width: "100%", height: '100%' }}>
-    <Paper sx={{ width: "100%", height: '100%', mb: 2, display: 'flex', flexDirection: 'column'}}>
+    <Paper  className={'w-full h-full'}>
       <EnhancedTableToolbar  />
       <TableContainer sx={{flexGrow: 1}}>
-        <Table
-          // sx={{ minWidth: 750 }}
+      <Table
+        className="w-full"
           aria-labelledby="tableTitle"
-          // size={dense ? "small" : "medium"}
         >
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
-            // onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
           />
           <TableBody>
             {visibleRows.map((row, index) => {
-              const isItemSelected = isSelected(row.id);
               const labelId = `enhanced-table-checkbox-${index}`;
 
               return (
                 <TableRow
-                  hover
                   onClick={(event) => handleClick(event, row.id)}
-                  // role="checkbox"
-                  // aria-checked={isItemSelected}
                   tabIndex={-1}
                   key={row.id}
-                  selected={isItemSelected}
-                  sx={{ cursor: "pointer" }}
                 >
                   <TableCell
                     component="th"
@@ -369,7 +309,7 @@ return (
                       }
                     `}
                     sx={{
-                      fontSize: "1rem",
+                      fontSize: {xs: '0.875rem', md: '1rem', lg: '1.125rem'},
                       border: "none",
                     }}
                     id={labelId}
@@ -389,10 +329,10 @@ return (
                         index % 2 === 0
                           ? "transparent"
                           : "bg-default-ref-primary-primary98"
-                      }
+                      } 
                     `}
                     sx={{
-                      fontSize: "1rem",
+                      fontSize: {xs: '0.875rem', md: '1rem', lg: '1.125rem'},
                       border: "none",
                       fontWeight: "500",
                     }}
@@ -420,7 +360,7 @@ return (
                       }
                     `}
                     sx={{
-                      fontSize: "1rem",
+                      fontSize: {xs: '0.875rem', md: '1rem', lg: '1.125rem'},
                       border: "none",
                       fontWeight: "500",
                     }}
@@ -453,7 +393,6 @@ return (
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-  </Box>
 );
 };
 

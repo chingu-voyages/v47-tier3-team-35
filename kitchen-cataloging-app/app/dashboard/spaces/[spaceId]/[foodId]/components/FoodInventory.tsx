@@ -12,8 +12,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography"
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -24,6 +23,7 @@ import Switch from "@mui/material/Switch";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
+import { useTheme } from "@mui/material/styles";
 
 import { FoodDataType } from "../page";
 import { Stack } from "@mui/material";
@@ -60,6 +60,8 @@ interface FoodInventory {
 // COMPONENT STARTS HERE -- because I need the props
 
 const FoodInventory = ({ foodData }: FoodInventory) => {
+
+  const theme = useTheme();
 
   const tablePadding = 6;
   const totalProductAmount = foodData.map((data) => data.amount).reduce((a, c) => a + c);
@@ -178,17 +180,6 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
     return (
       <TableHead>
         <TableRow>
-          {/* <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell> */}
           {headCells.map((headCell, i) => (
             <TableCell
               key={headCell.id}
@@ -197,7 +188,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
               sortDirection={orderBy === headCell.id ? order : false}
               className="text-default-ref-neutral-neutral60 px-4 pb-2"
               sx={{
-                fontSize: "1rem",
+                fontSize: {xs: "0.875rem", md: "1.125rem"},
               }}
             >
               <TableSortLabel
@@ -226,71 +217,79 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
 
   function EnhancedTableToolbar() {
     return (
-      <Toolbar
-        className={`py-4 px-${tablePadding}`}
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          gap: { xs: "0.5rem", md: "1rem" },
-          flexWrap: { xs: "wrap", md: "" },
-        }}
-      >
-        {/* {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : ( */}
+      <Toolbar className="px-4 pb-6 flex flex-row items-start flex-wrap md:flex-row md:items-center md:flex-nowrap md:px-0 md:pb-12">
         <Typography
           variant="subtitle1"
           id="tableTitle"
-          component="h3"
-          className="text-default-ref-neutral-neutral40 flex-grow"
+          component="h1"
+          className="text-default-ref-neutral-neutral40 flex-grow w-full pb-3 md:w-fit"
           sx={{
             width: { xs: "100%", md: "" },
+            [theme.breakpoints.up("md")]: {
+              variant: "h2",
+            },
           }}
         >
           Inventory
         </Typography>
-        <Stack direction="row" className="items-center gap-3">
+        <Stack direction="row" className="items-center gap-3 w-1/2 md:w-fit">
           <Typography
             variant="h3"
             id="tableTitle"
-            component="h3"
-            className="text-default-sys-light-tertiary relative"
+            component="h2"
+            className="text-default-sys-light-tertiary relative whitespace-nowrap"
+            sx={{
+              [theme.breakpoints.up("md")]: {
+                variant: "h2",
+              },
+            }}
           >
             ${totalProductValue.toString().split(".")[0]}
-            <span className="text-[1.25rem] pt-1 align-top inline-block">
+            <span className="text-[1.5rem] md:text-[1.75rem] align-top inline-block">
               {totalProductValue.toString().split(".")[1]}
             </span>
           </Typography>
           <Typography
-            variant="body2"
+            variant="body3"
             id="tableTitle"
             component="p"
-            className="text-default-sys-light-tertiary w-[6rem]"
+            className="text-default-sys-light-tertiary md:w-20"
+            sx={{
+              [theme.breakpoints.up("md")]: {
+                variant: "body1",
+              },
+            }}
           >
             of {foodData[0].title} in {foodData[0].roomTitle}
           </Typography>
         </Stack>
-        <Stack direction="row" className="items-center gap-3">
+        <Stack
+          direction="row"
+          className="justify-end items-center gap-3 w-1/2 ps-4 md:w-fit"
+        >
           <Typography
             variant="h3"
             id="tableTitle"
             component="h3"
             className="text-default-sys-light-primary"
+            sx={{
+              [theme.breakpoints.up("md")]: {
+                variant: "h2",
+              },
+            }}
           >
             {totalProductAmount}
           </Typography>
           <Typography
-            variant="body2"
+            variant="body3"
             id="tableTitle"
             component="p"
-            className="text-default-sys-light-primary w-[6rem]"
+            className="text-default-sys-light-primary md:w-20"
+            sx={{
+              [theme.breakpoints.up("md")]: {
+                variant: "body1",
+              },
+            }}
           >
             {foodData[0].title}
             {totalProductAmount !== 1 ? "s" : ""} in {foodData[0].roomTitle}
@@ -317,14 +316,6 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
     setOrderBy(property);
   };
 
-  // const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (event.target.checked) {
-  //     const newSelected = rows.map((n) => n.id);
-  //     setSelected(newSelected);
-  //     return;
-  //   }
-  //   setSelected([]);
-  // };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
@@ -345,24 +336,10 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  // const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setDense(event.target.checked);
-  // };
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
+
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -376,183 +353,151 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
   );
 
   return (
-    <Box
-      sx={{
-        width: `calc(100% - ${2 * tablePadding})`,
-        height: "calc(100% - 2rem)",
-        boxSizing: "border-box",
-      }}
-    >
-      <Paper
+    <>
+      <EnhancedTableToolbar />
+      <TableContainer
+        className="pb-4"
         sx={{
-          width: "100%",
-          height: "100%",
-          mb: 2,
-          display: "flex",
-          flexDirection: "column",
+          flexGrow: { xs: 0, md: 1 },
         }}
       >
-        <EnhancedTableToolbar />
-        <TableContainer
-          className="pb-4"
+        <Table
+          className={`px-${tablePadding} mx-${tablePadding}`}
           sx={{
-            flexGrow: { xs: 0, md: 1 },
+            boxSizing: "border-box",
+            maxWidth: "100%",
+            overflow: "hidden",
+            mt: { xs: "1rem", md: "0" },
           }}
+          aria-labelledby="tableTitle"
+          // size={dense ? "small" : "medium"}
         >
-          <Table
-            className={`px-${tablePadding} mx-${tablePadding}`}
+          <EnhancedTableHead
+            order={order}
+            orderBy={orderBy}
+            // onSelectAllClick={handleSelectAllClick}
+            onRequestSort={handleRequestSort}
+            rowCount={rows.length}
+          />
+          <TableBody
             sx={{
-              boxSizing: "border-box",
-              // width: `calc(100% - ${2 * 0.25 * tablePadding}rem)`,
+              width: "100%",
               maxWidth: "100%",
               overflow: "hidden",
-              mt: {xs: '1rem', md: '0'}
             }}
-            aria-labelledby="tableTitle"
-            // size={dense ? "small" : "medium"}
           >
-            <EnhancedTableHead
-              order={order}
-              orderBy={orderBy}
-              // onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody
-              sx={{
-                width: "100%",
-                maxWidth: "100%",
-                overflow: "hidden",
-              }}
-            >
-              {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
+            {visibleRows.map((row, index) => {
+              const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    // role="checkbox"
-                    // aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                    sx={{
-                      cursor: "pointer",
-                      width: "100%",
-                      maxWidth: "100%",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <TableCell
-                      component="th"
-                      className={`text-default-ref-neutral-neutral40 
-                      ${
-                        index % 2 === 0
-                          ? "transparent"
-                          : "bg-default-ref-primary-primary98"
-                      }
-                    `}
-                      sx={{
-                        fontSize: "1rem",
-                      }}
-                      id={labelId}
-                      scope="row"
-                    >
-                      {new Date(row.expirationDate).toLocaleString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </TableCell>
-                    <TableCell
-                      className={`${"text-green-800 "}
-                      ${
-                        index % 2 === 0
-                          ? "transparent"
-                          : "bg-default-ref-primary-primary98"
-                      }
-                    `}
-                      sx={{
-                        fontSize: "1rem",
-                        fontWeight: "500",
-                      }}
-                      align="center"
-                    >
-                      {row.price}
-                    </TableCell>
-                    <TableCell
-                      className={`${"text-green-800 "}
-                      ${
-                        index % 2 === 0
-                          ? "transparent"
-                          : "bg-default-ref-primary-primary98"
-                      }
-                    `}
-                      sx={{
-                        fontSize: "1rem",
-                        fontWeight: "500",
-                      }}
-                      align="center"
-                    >
-                      {row.amount}
-                    </TableCell>
-                    <TableCell padding="none" align="center">
-                      <Box
-                        className="flex pe-2"
-                        sx={{
-                          gap: { xs: "0.75rem", md: "1rem" },
-                          justifyContent: { xs: "start", md: "center" },
-                          alignItems: "stretch",
-                        }}
-                      >
-                        <IconButton
-                          className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
-                          sx={{
-                            width: { xs: "1.25rem", md: "1.5rem" },
-                            height: { xs: "1.25rem", md: "1.5rem" },
-                          }}
-                        >
-                          <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                        </IconButton>
-                        <IconButton
-                          className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
-                          sx={{
-                            width: { xs: "1.25rem", md: "1.5rem" },
-                            height: { xs: "1.25rem", md: "1.5rem" },
-                          }}
-                        >
-                          <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
+              return (
                 <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                  onClick={(event) => handleClick(event, row.id)}
+                  tabIndex={-1}
+                  key={row.id}
+                  sx={{
+                    width: "100%",
+                    maxWidth: "100%",
+                    overflow: "hidden",
                   }}
                 >
-                  <TableCell colSpan={6} />
+                  <TableCell
+                    component="th"
+                    className={`text-default-ref-neutral-neutral40 
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                    }}
+                    id={labelId}
+                    scope="row"
+                  >
+                    {new Date(row.expirationDate).toLocaleString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </TableCell>
+                  <TableCell
+                    className={`${"text-green-800 "}
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                      fontWeight: "500",
+                    }}
+                    align="center"
+                  >
+                    {row.price}
+                  </TableCell>
+                  <TableCell
+                    className={`${"text-green-800 "}
+                      ${
+                        index % 2 === 0
+                          ? "transparent"
+                          : "bg-default-ref-primary-primary98"
+                      }
+                    `}
+                    sx={{
+                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                      fontWeight: "500",
+                    }}
+                    align="center"
+                  >
+                    {row.amount}
+                  </TableCell>
+                  <TableCell padding="none" align="center">
+                    <Box
+                      className="flex pe-2"
+                      sx={{
+                        gap: { xs: "0.875rem", md: "1rem" },
+                        justifyContent: { xs: "start", md: "center" },
+                        alignItems: "stretch",
+                      }}
+                    >
+                      <IconButton
+                        className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
+                        sx={{
+                          width: { xs: "1.25rem", md: "1.5rem" },
+                          height: { xs: "1.25rem", md: "1.5rem" },
+                        }}
+                      >
+                        <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
+                      </IconButton>
+                      <IconButton
+                        className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
+                        sx={{
+                          width: { xs: "1.25rem", md: "1.5rem" },
+                          height: { xs: "1.25rem", md: "1.5rem" },
+                        }}
+                      >
+                        <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
+                      </IconButton>
+                    </Box>
+                  </TableCell>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        {/* <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        /> */}
-      </Paper>
-    </Box>
+              );
+            })}
+            {emptyRows > 0 && (
+              <TableRow
+                style={{
+                  height: (dense ? 33 : 53) * emptyRows,
+                }}
+              >
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 
