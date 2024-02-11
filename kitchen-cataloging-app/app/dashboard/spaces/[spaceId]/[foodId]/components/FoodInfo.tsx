@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Stack, Typography, Box, IconButton } from "@mui/material";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
@@ -8,9 +8,9 @@ import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import CreateEditForm from "@/components/form/CreateEditForm";
+import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
 
-const tempSpaces = ['kitchen', 'my secret stash']
+const tempSpaces = ["kitchen", "my secret stash"];
 
 interface FoodInfo {
   space: string;
@@ -18,21 +18,19 @@ interface FoodInfo {
   description: string;
   price: number;
   labels: string[];
-  
 }
 
 const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
-  
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toString().split(".")[1];
 
-  const handleIncrement = (direction: '+' | '-') => {
-    console.log(direction)
-  }
+  const handleIncrement = (direction: "+" | "-") => {
+    console.log(direction);
+  };
 
-  const iconClassList = 'h-9 w-9';
+  const iconClassList = "h-9 w-9";
   // room name, food name, price, description, tags
-  
+
   return (
     <Box className="">
       <Stack direction={"row"} className="justify-between items-start pt-6">
@@ -135,6 +133,6 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
       </Typography>
     </Box>
   );
-}
+};
 
 export default FoodInfo;

@@ -14,8 +14,9 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box, Select, InputLabel, FormControl, MenuItem } from "@mui/material";
 import { FoodType } from "@/prisma/mock/mockData";
-import FormInputs from "./create-edit-form-components/FormInputs";
+import FormInputs from "./components/FormInputs";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import { handleForm } from "./actions/CreateEditServerAction";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -27,14 +28,18 @@ const Transition = React.forwardRef(function Transition(
 });
 
 interface CreateEditForm {
-    children: React.ReactNode;
-  type: 'create' | 'edit';
+  children: React.ReactNode;
+  type: "create" | "edit";
   spaces: string[];
   itemData?: FoodType;
 }
 
-export default function CreateEditForm({ children, type, spaces, itemData }: CreateEditForm) {
-
+export default function CreateEditForm({
+  children,
+  type,
+  spaces,
+  itemData,
+}: CreateEditForm) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -44,10 +49,6 @@ export default function CreateEditForm({ children, type, spaces, itemData }: Cre
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleForm = async(formData: FormData) => {
-    console.log(formData)
-  }
 
   return (
     <React.Fragment>
@@ -69,7 +70,8 @@ export default function CreateEditForm({ children, type, spaces, itemData }: Cre
           <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
         <form
-          action=""
+          action={handleForm}
+          onSubmit={() => handleClose()}
           className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
         >
           <FormInputs

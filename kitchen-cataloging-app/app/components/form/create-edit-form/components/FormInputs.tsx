@@ -1,8 +1,21 @@
-'use client'
+"use client";
 import React, { useEffect } from "react";
 import { MouseEvent, useState, useRef } from "react";
 
-import { Box, Typography, InputLabel, FormControl, Select, TextField, MenuItem, Slider, InputAdornment, Button, IconButton, Input } from "@mui/material";
+import {
+  Box,
+  Typography,
+  InputLabel,
+  FormControl,
+  Select,
+  TextField,
+  MenuItem,
+  Slider,
+  InputAdornment,
+  Button,
+  IconButton,
+  Input,
+} from "@mui/material";
 import CustomSelect from "./CustomSelect";
 import Close from "@mui/icons-material/Close";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -13,57 +26,77 @@ import { ChangeEvent } from "react";
 
 import { FoodType } from "@/prisma/mock/mockData";
 
-import './customstyles.css';
-import DragDrop from "../DragDrop";
+import "./customstyles.css";
+import DragDrop from "../../DragDrop";
 
 interface FormInputs {
   type: "create" | "edit";
-    spaces: string[];
-    handleForm: (formData: FormData) => void;
-    onClose: () => void;
+  spaces: string[];
+  handleForm: (formData: FormData) => void;
+  onClose: () => void;
   itemData?: FoodType;
 }
 
-const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs) => {
-    
+const FormInputs = ({
+  type,
+  spaces,
+  handleForm,
+  onClose,
+  itemData,
+}: FormInputs) => {
+
   // Space
-  const [space, setSpace] = useState(itemData?.roomTitle ? itemData?.roomTitle : '')
+  const [space, setSpace] = useState(
+    itemData?.roomTitle ? itemData?.roomTitle : ""
+  );
   const handleSpace = (val: string) => {
-    setSpace(val)
-  }
+    setSpace(val);
+  };
+
+  const [newTitle, setNewTitle] = useState('')
 
   // Image 
-  const [file, setFile] = useState<File | null>(null);
-  const handleImage = (file: File) => {
-    setFile(file);
+  const [image, setImage] = useState(itemData?.image?.url);
+  const handleGeneratedImage = () => {
+    if (newTitle) {
+      setImage(`https://source.unsplash.com/random/?${newTitle}`);
+    }
   }
-
-  const [hoverImage, setHoverImage] = useState(
-    "bg-default-sys-light-surface-container-high"
-  );
 
   // Labels
-  const [addingLabel, setAddingLabel] = useState(false)
+  const [labels, setLabels] = useState(itemData?.labels ? itemData.labels : []);
+  const [addingLabel, setAddingLabel] = useState(false);
+  const [newLabel, setNewLabel] = useState("");
 
-  const handleAddLabel = (
+  const handleNewLabel = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    if (e.target.value !== '') {
-      setAddingLabel(true)
-    }
-    else {
-      setAddingLabel(false)
+    if (e.target.value !== "") {
+      setNewLabel(e.target.value);
+      setAddingLabel(true);
+    } else {
+      setNewLabel(e.target.value);
+      setAddingLabel(false);
     }
   };
-  const handleDeleteLabel = (val: string) => {
-    console.log(`delete ${val}`)
-  }
 
-  const marks = new Array(10).fill(0).map((val, i) => (
-      {
-          value: i + 1,
-      }
-  ))
+  const handleDeleteLabel = (val: string) => {
+    setLabels(labels.filter((label) => label !== val));
+  };
+
+  const handleAddLabel = () => {
+    if (newLabel !== "") {
+      setLabels([...labels, newLabel]);
+      setNewLabel('')
+      setAddingLabel(false);
+    }
+  };
+
+  // Threshold
+
+  const marks = new Array(10).fill(0).map((val, i) => ({
+    value: i + 1,
+  }));
 
   return (
     <>
@@ -99,6 +132,7 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
             variant="standard"
             placeholder="Item Name"
             name="title"
+            onChange={(e) => setNewTitle(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start"></InputAdornment>
@@ -109,40 +143,32 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
           {/* Image  */}
 
           <Box className="flex-grow relative">
-            <Box className="absolute top-[12px] right-[12px] flex flex-row gap-5 z-50">
-              <IconButton className="p-2 rounded-full bg-default-sys-light-primary">
+            <DragDrop name={"image"} image={image ? image : ""} />
+            <Box className="absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
+              <IconButton className="p-2 rounded-full bg-default-sys-light-on-primary border border-default-sys-light-primary">
+                <FileUploadOutlinedIcon className="text-default-sys-light-primary" />
+              </IconButton>
+              <IconButton
+                className="p-2 rounded-full bg-default-sys-light-primary pointer-events-auto cursor-pointer"
+                onClick={() => handleGeneratedImage()}
+              >
                 <AutoAwesomeIcon className="text-default-sys-light-on-primary" />
               </IconButton>
             </Box>
-            <DragDrop handleImage={handleImage} name={"image"}>
-              <Box
-                className={`${hoverImage} flex-grow relative w-full h-full border-dashed border-default-sys-light-primary border-2 rounded-lg flex justify-center items-center p-10`}
-                onDragEnter={(e) => {
-                  e.stopPropagation();
-                  console.log("hello!");
-                  setHoverImage("bg-default-sys-light-outline-variant");
-                }}
-                onDragLeave={() =>
-                  setHoverImage("bg-default-sys-light-surface-container-high")
-                }
-              >
-                <Box className="absolute top-[10px] right-[20px] -translate-x-full flex flex-row gap-5">
-                  <IconButton className="p-2 rounded-full bg-default-sys-light-on-primary border border-default-sys-light-primary">
-                    <FileUploadOutlinedIcon className="text-default-sys-light-primary" />
-                  </IconButton>
-                </Box>
-                <Box className=" px-4 py-2 flex items-center gap-4">
-                  <AddPhotoAlternateIcon className="h-10 w-10" />
-                  <Box className="text-sm">
-                    Drag an image or click{" "}
-                    <FileUploadOutlinedIcon className="text-default-sys-light-primary rounded-full py-1 border border-default-sys-light-primary" />
-                    to upload, or click{" "}
-                    <AutoAwesomeIcon className="text-default-sys-light-primary rounded-full py-1 border border-default-sys-light-primary" />{" "}
-                    to generate an image.
-                  </Box>
+            <Box
+              className={`flex-grow relative w-full h-full border-dashed border-default-sys-light-primary border-2 rounded-lg flex justify-center items-center p-10`}
+            >
+              <Box className=" px-4 py-2 flex items-center gap-4 z-0">
+                <AddPhotoAlternateIcon className="h-10 w-10" />
+                <Box className="text-sm">
+                  Drag an image,{" "}
+                  <FileUploadOutlinedIcon className="text-default-sys-light-primary rounded-full py-1 border border-default-sys-light-primary" />{" "}
+                  upload, or{" "}
+                  <AutoAwesomeIcon className="text-default-sys-light-primary rounded-full py-1 border border-default-sys-light-primary" />{" "}
+                  generate an image.
                 </Box>
               </Box>
-            </DragDrop>
+            </Box>
           </Box>
           <Box className="hidden h-14 md:block"></Box>
         </Box>
@@ -199,6 +225,19 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
               marks
               valueLabelDisplay="on"
               name="threshold"
+              sx={{
+                "& .MuiSlider-valueLabel": {
+                  fontSize: "16px",
+                  color: "white",
+                  backgroundColor: "primary.main",
+                  borderRadius: "100%",
+                  maxWidth: "34px",
+                  aspectRatio: "1/1",
+                },
+                "& .MuiSlider-valueLabel::before": {
+                  bottom: "1px",
+                },
+              }}
             />
           </Box>
 
@@ -206,7 +245,7 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
           <Box>
             <Box className="flex flex-row px-4 gap-4 w-full items-end overflow-x-scroll">
               <Typography
-                className='w-fit'
+                className="w-fit"
                 variant="button"
                 sx={{ textTransform: "unset", fontWeight: "unset" }}
                 id="labels-input-label"
@@ -215,30 +254,28 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
                 Labels
               </Typography>
               <Box className="flex-grow flex flex-row flex-wrap gap-1 mb-1">
-                {["oo", "sss", "dsfdsf"].map(
-                  (labelText, i) => (
-                    <Box
-                      key={i}
-                      className="bg-default-sys-light-surface-container-high rounded-full px-2 me-2 py-1.5 flex flex-row items-center"
+                {labels.map((labelText, i) => (
+                  <Box
+                    key={i}
+                    className="bg-default-sys-light-surface-container-high rounded-full px-2 me-2 py-1.5 flex flex-row items-center"
+                  >
+                    <IconButton
+                      className="p-0"
+                      onClick={() => {
+                        handleDeleteLabel(labelText);
+                      }}
                     >
-                      <IconButton
-                        className="p-0"
-                        onClick={() => {
-                          handleDeleteLabel(labelText);
-                        }}
-                      >
-                        <Close className="text-default-sys-light-on-surface text-xs" />
-                      </IconButton>
-                      <Typography
-                        className="leading-none"
-                        variant="button"
-                        sx={{ textTransform: "unset", fontWeight: "unset" }}
-                      >
-                        {labelText}
-                      </Typography>
-                    </Box>
-                  )
-                )}
+                      <Close className="text-default-sys-light-on-surface text-xs" />
+                    </IconButton>
+                    <Typography
+                      className="leading-none"
+                      variant="button"
+                      sx={{ textTransform: "unset", fontWeight: "unset" }}
+                    >
+                      {labelText}
+                    </Typography>
+                  </Box>
+                ))}
               </Box>
             </Box>
             {/* Input to handle adding labels */}
@@ -251,10 +288,10 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
                 label=""
                 placeholder="Add Label"
                 // defaultValue={itemData?.labels}
+                value={newLabel}
                 helperText=""
                 hiddenLabel
-                name="labels"
-                onChange={(e) => handleAddLabel(e)}
+                onChange={(e) => handleNewLabel(e)}
               />
               <CheckCircleIcon
                 className={`absolute right-4 top-1/2 -translate-y-1/2 ${
@@ -262,13 +299,15 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
                     ? "text-default-sys-light-primary"
                     : "text-default-sys-light-surface-container-high"
                 }`}
+                onClick={() => handleAddLabel()}
               />
             </Box>
             {/* Input to store label data */}
             <input
               className="hidden"
-              value={itemData?.labels}
+              value={labels}
               name="labels"
+              readOnly
             ></input>
           </Box>
 
@@ -297,14 +336,18 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
           </Box>
           <Box className="flex flex-row justify-end gap-4">
             <Button
-              type='button'
+              type="button"
               className="rounded-full"
               variant="outlined"
               onClick={() => onClose()}
             >
               Cancel
             </Button>
-            <Button type='submit' className="rounded-full" variant="contained">
+            <Button
+              type="submit"
+              className="rounded-full"
+              variant="contained"
+            >
               Save
             </Button>
           </Box>
@@ -312,6 +355,6 @@ const FormInputs = ({ type, spaces, handleForm, onClose, itemData }: FormInputs)
       </section>
     </>
   );
-}
+};
 
-export default FormInputs
+export default FormInputs;

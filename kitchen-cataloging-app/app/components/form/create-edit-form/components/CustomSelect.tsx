@@ -17,17 +17,14 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
 
      useEffect(() => {
        if (space === "" && !openSelect && animateLabelClass === "open") {
-         console.log("1");
          setAnimateLabelClass("deanimate-label");
        } else if (
          space === "" &&
          !openSelect &&
          animateLabelClass !== "closed"
-       ) {
-         console.log("2");
+       ) { 
          setAnimateLabelClass("deanimate-label");
        } else if (openSelect && animateLabelClass !== "open") {
-         console.log("3");
          setAnimateLabelClass("animate-label");
        }
      }, [openSelect]);
@@ -44,12 +41,12 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
         id="space-select"
         onClick={() => setOpenSelect(!openSelect)}
       ></div>
-      <select
-        className="hidden"
+      <input
+        className="absolute h-0 w-0 opacity-0"
         value={space}
         name="space"
-        onChange={() => console.log("shut up react")}
-      ></select>
+        readOnly
+      ></input>
       <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
         {space}
       </p>
