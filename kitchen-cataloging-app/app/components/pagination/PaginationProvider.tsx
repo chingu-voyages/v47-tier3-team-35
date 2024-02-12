@@ -104,8 +104,6 @@ const PaginationProvider = <T,>({
     unstable_batchedUpdates(() => {
       setCursor(result.newCursor);
       setIsLoading(false);
-      //filter out data to improve stability, since
-      //sometimes duplicate keys might arise when stressing system
       setData(result.newItems);
     });
   };
@@ -166,7 +164,6 @@ const PaginationProvider = <T,>({
     }),
     [data, savedLoadMoreData, savedLoadNewData, isLoading, cursor]
   );
-  console.log(savedProps.props())
   return (
     <PaginationContext.Provider value={savedProps}>
       {children}
