@@ -1,10 +1,11 @@
 import { Box, Stack } from "@mui/material";
-
+import { auth } from "@clerk/nextjs";
 import DesktopLayout from "./responsive-layouts/DesktopLayout"
 import MobileLayout from "./responsive-layouts/MobileLayout";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { FoodType, LogType } from "@/prisma/mock/mockData";
 import Paper from "@mui/material/Paper";
+import { getSingleFood } from "./actions/crud/getSingleFood";
 // import { useParams } from "next/navigation";
 // Types for data
 export type LogDataType = Omit<LogType, "id" | "userId" | "foodId">;
@@ -44,14 +45,21 @@ const tempFoodData: FoodDataType[] = [
   },
 ];
 
+
+
 interface Food {
   params: { spaceId: string; foodId: string };
 }
 
-const Food = ({ params }: Food) => {
-  const food: FoodDataType = tempFoodData[0];
+const Food = async({ params }: Food) => {
+  // const food: FoodDataType = tempFoodData[0];
 
   const { spaceId, foodId } = params;
+  const { userId } = auth();
+  // Uses room name to find room based on the user id. Also includes foods that matches that room name
+  const foodData = await getSingleFood({ foodId: foodId, userId: userId });
+  //guard clause in case no data is returned
+  if (!foodData) return <>No data found for this item</>;
 
     return (
       <Box className="max-w-[1536px] w-full mx-auto md:px-12">
@@ -61,21 +69,21 @@ const Food = ({ params }: Food) => {
             { routePath: "spaces", title: "Spaces" },
             {
               routePath: `${spaceId}`,
-              title: `${food.roomTitle}`,
+              title: `${foodData.roomTitle}`,
             },
             {
               routePath: `${foodId}`,
-              title: `${food.title}`,
+              title: `${foodData.title}`,
             },
           ]}
         />
         {/* Desktop Layout */}
         <Box className="desktop-layout hidden md:block pt-9">
-          <DesktopLayout foodData={tempFoodData} />
+          <DesktopLayout foodData={foodData} />
         </Box>
         {/* Mobile Layout */}
         <Box className="mobile-layout md:hidden">
-          <MobileLayout foodData={tempFoodData} />
+          <MobileLayout foodData={foodData} />
         </Box>
       </Box>
     );

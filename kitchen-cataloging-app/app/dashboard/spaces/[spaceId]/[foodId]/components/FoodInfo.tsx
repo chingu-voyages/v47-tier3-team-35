@@ -22,7 +22,7 @@ interface FoodInfo {
 
 const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
   const priceDollars = price.toString().split(".")[0];
-  const priceCents = price.toString().split(".")[1];
+  const priceCents = price.toFixed(2).toString().split(".")[1];
 
   const handleIncrement = (direction: "+" | "-") => {
     console.log(direction);

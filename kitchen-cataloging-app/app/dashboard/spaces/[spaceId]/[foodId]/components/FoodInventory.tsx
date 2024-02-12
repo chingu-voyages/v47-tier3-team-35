@@ -54,12 +54,15 @@ function createData(
 }
 
 interface FoodInventory {
-  foodData: FoodDataType[];
+  foodDataSingle: FoodDataType;
 }
 
 // COMPONENT STARTS HERE -- because I need the props
 
-const FoodInventory = ({ foodData }: FoodInventory) => {
+const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
+
+  // REFACTOR: at the moment, only one food is being passed in. (So it's put in an array for now) Do we want to find ALL foods of a certain title?
+  const foodData = [foodDataSingle];
 
   const theme = useTheme();
 
@@ -292,7 +295,7 @@ const FoodInventory = ({ foodData }: FoodInventory) => {
             }}
           >
             {foodData[0].title}
-            {totalProductAmount !== 1 ? "s" : ""} in {foodData[0].roomTitle}
+            {(totalProductAmount !== 1 && foodData[0].title[foodData[0].title.length - 1] !== "s") ? "s" : ""} in {foodData[0].roomTitle}
           </Typography>
         </Stack>
       </Toolbar>

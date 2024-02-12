@@ -6,9 +6,9 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 
-const DesktopLayout = ({ foodData }: { foodData: FoodDataType[] }) => {
+const DesktopLayout = ({ foodData }: { foodData: FoodDataType }) => {
     
-    const food = foodData[0];
+    const food = foodData;
 
     return (
       <>
@@ -42,7 +42,7 @@ const DesktopLayout = ({ foodData }: { foodData: FoodDataType[] }) => {
         {/* Food Inventory */}
 
         <Paper className="w-full flex flex-col pt-12 pb-8 md:min-h-[18rem] md:box-content md:-ms-12 md:px-12">
-          <FoodInventory foodData={foodData} />{" "}
+          <FoodInventory foodDataSingle={foodData} />{" "}
         </Paper>
       </>
     );
