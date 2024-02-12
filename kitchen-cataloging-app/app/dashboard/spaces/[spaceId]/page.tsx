@@ -5,6 +5,9 @@ import { auth } from "@clerk/nextjs";
 import { getSingleRoom } from "../actions/crud/getSingleRoom";
 import { paginateFoods } from "./actions/search/paginateFoods";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
+import PaginationProvider from "@/components/pagination/PaginationProvider";
+import { searchFoodItems } from "./actions/actions";
+import { SearchResultFood } from "./actions/types/types";
 const navigationDepthArr = ({
   spaceId,
   spaceName,
@@ -32,14 +35,23 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   if (!roomData) return <></>;
   return (
     <ResponsivePaddingWrapper>
-      <NavigationDepthBar
-        items={navigationDepthArr({
-          spaceId: roomData?.id,
-          spaceName: roomData?.title,
-        })}
-      />
-      <SpaceHeader defaultData={roomData} />
-      <InventoryList spaceId={roomData.id} defaultItems={itemData} />
+      <PaginationProvider
+        defaultParams={{
+          spaceId: roomData.id,
+        }}
+        paginate={searchFoodItems}
+        defaultItems={itemData as SearchResultFood[]}
+        take={10}
+      >
+        <NavigationDepthBar
+          items={navigationDepthArr({
+            spaceId: roomData?.id,
+            spaceName: roomData?.title,
+          })}
+        />
+        <SpaceHeader defaultData={roomData} />
+        <InventoryList spaceId={roomData.id} />
+      </PaginationProvider>
     </ResponsivePaddingWrapper>
   );
 };

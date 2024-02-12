@@ -28,6 +28,7 @@ const PaginationProvider = <T,>({
   take,
   defaultItems,
   children,
+  defaultParams,
 }: PaginationProviderProps<T> & {
   children: React.ReactNode;
 }) => {
@@ -40,7 +41,7 @@ const PaginationProvider = <T,>({
   //we store our prev search params in this ref. Since we never need to expose this
   //to components, and will onlyt be used internally, we don't need to store in state
   //to re-render the component tree
-  const prevSearch = useRef<undefined | SearchFuncProps | null>(null);
+  const prevSearch = useRef<undefined | SearchFuncProps | null>(defaultParams);
   //we use ref because its synchronous updates and good for internal component use,
   //as they are variables that will prevent expensive api call from re-running
   const isLoadingRef = useRef(isLoading);
@@ -98,6 +99,10 @@ const PaginationProvider = <T,>({
     };
   };
   const savedStartQuery = useMemo(() => startQuery, [paginate, take]);
+  //this function will never re-use parameters, since it's supposed to
+  //replace data completely. Therefore, parameters must be passed
+  //during time of execution. However, these parameters will be saved
+  //in subsequent calls of `loadMore`
   const loadNew = async (params?: SearchFuncProps) => {
     const result = await startQuery({ params, usePrevCursor: false });
     if (!result) return;
@@ -107,6 +112,9 @@ const PaginationProvider = <T,>({
       setData(result.newItems);
     });
   };
+  //note that this function will re-use parameters, if no
+  //new parameters are supplied. This is expected behavior
+  //for a load more function
   const loadMore = async (params?: SearchFuncProps) => {
     //if no cursor, we're already at the end of the list
     if (!cursorRef.current) return;

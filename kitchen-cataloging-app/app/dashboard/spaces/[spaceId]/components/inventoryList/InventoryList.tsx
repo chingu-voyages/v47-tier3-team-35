@@ -1,6 +1,5 @@
 "use client";
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
-import { searchFoodItems } from "../../actions/actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
 import { InventoryImage } from "./InventoryImage";
@@ -10,17 +9,6 @@ import InventoryListGridWrapper, {
   InventoryListItemGridWrapper,
 } from "./wrappers/InventoryListGridWrapper";
 import { SearchResultFood } from "../../actions/types/types";
-const paginateInventoryList =
-  (spaceId: string) =>
-  async ({ cursor, take }: { cursor?: string | null; take: number }) => {
-    const results = await searchFoodItems({
-      cursor: cursor,
-      spaceId: spaceId,
-      take: take,
-    });
-    return results;
-  };
-
 const InventoryList = ({
   spaceId,
   defaultItems,
@@ -36,8 +24,6 @@ const InventoryList = ({
     "rounded-b-23xl xs:rounded-b-26xl md:rounded-b-28xl";
   return (
     <PaginationWrapper
-      paginate={paginateInventoryList(spaceId)}
-      take={10}
       defaultItems={defaultItems}
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >

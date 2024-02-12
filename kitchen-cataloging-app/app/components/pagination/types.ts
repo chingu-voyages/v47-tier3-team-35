@@ -15,6 +15,7 @@ export type PaginationProviderProps<T> = {
   paginate: (
     props: PaginationProps & SearchFuncProps
   ) => Promise<IdRequiredObj<T>[] | null | undefined>;
+  defaultParams?: Partial<SearchFuncProps>;
 };
 export type PaginatationProviderContextState = {
   props: <A>() => PaginationProviderContextProps<A>;
