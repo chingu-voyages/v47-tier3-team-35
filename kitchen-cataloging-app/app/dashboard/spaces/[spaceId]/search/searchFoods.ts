@@ -1,7 +1,7 @@
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 import { Food } from "@prisma/client";
 import dbConnect from "@/mongoDB/connection";
-import FoodModel from "@/mongoDB/schema";
+import FoodModel from "@/mongoDB/FoodSchema";
 import mongoose from "mongoose";
 const ObjectId = mongoose.Types.ObjectId;
 export type SearchFoodProps = {
@@ -128,6 +128,6 @@ export const searchFoods = async ({
     const id = e._id.toString();
     if (e._id) delete e._id;
     return { ...e, id: id, roomId: e.roomId?.toString() };
-  }) as Partial<Food & { _id: string }>[];
+  }) as (Partial<Food> & { id: string })[];
   return serializedResult;
 };

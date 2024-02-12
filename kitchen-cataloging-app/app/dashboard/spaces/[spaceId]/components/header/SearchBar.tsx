@@ -2,7 +2,7 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { Food } from "@prisma/client";
 import { useEffect, useRef, useState } from "react";
-import { searchFoodItems } from "../../actions";
+import { searchFoodItems } from "../../actions/actions";
 import { unstable_batchedUpdates } from "react-dom";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";

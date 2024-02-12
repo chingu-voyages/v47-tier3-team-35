@@ -4,17 +4,17 @@ import { Box, Button, Typography } from "@mui/material";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Food } from "@prisma/client";
 import ItemContentWrapper, {
   ItemContentInnerWrapper,
   ItemDescriptionWrapper,
 } from "./wrappers/ItemContentWrapper";
+import { SearchResultFood } from "../../actions/types/types";
 const ItemStockInfoAndBtns = ({
   item,
   mediumWidth,
   smallWidth,
 }: {
-  item: Food;
+  item: SearchResultFood;
   mediumWidth: boolean;
   smallWidth: boolean;
 }) => {
@@ -144,7 +144,7 @@ const ItemContent = ({
   smallWidth,
   bottomBorderRadius,
 }: {
-  item: Food;
+  item: SearchResultFood;
   mediumWidth: boolean;
   smallWidth: boolean;
   bottomBorderRadius?: string;

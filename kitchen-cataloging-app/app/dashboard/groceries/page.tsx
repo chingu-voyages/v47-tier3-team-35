@@ -2,7 +2,10 @@ import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapp
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import GroceriesHeader from "./components/header/GroceriesHeader";
 import GroceriesItemList from "./components/list/GroceriesItemList";
-import GroceriesDataProvider from "./components/provider/GroceriesDataProvider";
+import { auth } from "@clerk/nextjs";
+import paginateGroceries from "./actions/search/paginateGroceries";
+import PaginationProvider from "@/components/pagination/PaginationProvider";
+import { searchGroceryItems } from "./actions/actions";
 const navDepthItems = [
   {
     routePath: "/",
@@ -13,16 +16,20 @@ const navDepthItems = [
     title: "Groceries",
   },
 ];
-const GroceriesPage = () => {
+const GroceriesPage = async () => {
+  const { userId } = auth();
+  const groceryItemData = await paginateGroceries({ userId, take: 10 });
   return (
     <ResponsivePaddingWrapper>
       <NavigationDepthBar items={navDepthItems} />
-      <GroceriesDataProvider
-        
+      <PaginationProvider
+        defaultItems={groceryItemData}
+        take={10}
+        paginate={searchGroceryItems}
       >
         <GroceriesHeader />
         <GroceriesItemList />
-      </GroceriesDataProvider>
+      </PaginationProvider>
     </ResponsivePaddingWrapper>
   );
 };

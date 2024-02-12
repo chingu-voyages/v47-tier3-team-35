@@ -1,7 +1,6 @@
 "use client";
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
-import { Food } from "@prisma/client";
-import { paginateFoodItems } from "../../actions";
+import { searchFoodItems } from "../../actions/actions";
 import Link from "next/link";
 import ItemContent from "./ItemContent";
 import { InventoryImage } from "./InventoryImage";
@@ -10,10 +9,11 @@ import useWindowWidth from "@/hooks/useWindowWidth";
 import InventoryListGridWrapper, {
   InventoryListItemGridWrapper,
 } from "./wrappers/InventoryListGridWrapper";
+import { SearchResultFood } from "../../actions/types/types";
 const paginateInventoryList =
   (spaceId: string) =>
   async ({ cursor, take }: { cursor?: string | null; take: number }) => {
-    const results = await paginateFoodItems({
+    const results = await searchFoodItems({
       cursor: cursor,
       spaceId: spaceId,
       take: take,
@@ -25,7 +25,7 @@ const InventoryList = ({
   spaceId,
   defaultItems,
 }: {
-  defaultItems?: Food[] | null;
+  defaultItems?: SearchResultFood[] | null;
   spaceId: string;
 }) => {
   const smallWidth = useWindowWidth(400);

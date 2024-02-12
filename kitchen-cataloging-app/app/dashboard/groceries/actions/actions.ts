@@ -7,7 +7,19 @@ import { GroceryItem } from "@prisma/client";
 import addSingleGroceryItem from "./crud/addSingleGroceryItem";
 import updateSingleGroceryItem from "./crud/updateSingleGroceryItem";
 import deleteManyGroceryItems from "./crud/deleteManyGroceryItems";
-
+import searchGroceries from "./search/searchGroceries";
+import { GroceryItemAsyncFuncDataProps } from "./types/types";
+export const searchGroceryItems = async (
+  props: GroceryItemAsyncFuncDataProps
+) => {
+  const { userId } = auth();
+  const { text, take } = props;
+  if (!text) return (await paginateGroceries({ take, userId })) || null;
+  return await searchGroceries({
+    userId,
+    ...props,
+  });
+};
 export const paginateGroceryItems = async (
   props: PaginationProps
 ): Promise<GroceryItem[] | null> => {

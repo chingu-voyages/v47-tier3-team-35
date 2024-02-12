@@ -1,10 +1,9 @@
-import { Box } from "@mui/material";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import SpaceHeader from "./components/header/SpaceHeader";
 import InventoryList from "./components/inventoryList/InventoryList";
 import { auth } from "@clerk/nextjs";
-import { getRoom } from "../actions/crud/getSingleRoom";
-import { paginateFoods } from "./utils/paginateFoods";
+import { getSingleRoom } from "../actions/crud/getSingleRoom";
+import { paginateFoods } from "./actions/search/paginateFoods";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 const navigationDepthArr = ({
   spaceId,
@@ -22,7 +21,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   const { userId } = auth();
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
   const spaceId = params.spaceId;
-  const roomDataPromise = getRoom({ id: spaceId, userId: userId });
+  const roomDataPromise = getSingleRoom({ id: spaceId, userId: userId });
   const itemDataPromise = paginateFoods({ spaceId: spaceId, take: 10, userId });
   //data
   const [roomData, itemData] = await Promise.all([
