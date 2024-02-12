@@ -112,7 +112,7 @@ const PaginationProvider = <T,>({
   const loadMore = async (params?: SearchFuncProps) => {
     //if no cursor, we're already at the end of the list
     if (!cursorRef.current) return;
-    const result = await startQuery({ params, usePrevCursor: false });
+    const result = await startQuery({ params, usePrevCursor: true });
     if (!result) return;
     unstable_batchedUpdates(() => {
       setCursor(result.newCursor);
@@ -166,6 +166,7 @@ const PaginationProvider = <T,>({
     }),
     [data, savedLoadMoreData, savedLoadNewData, isLoading, cursor]
   );
+  console.log(savedProps.props())
   return (
     <PaginationContext.Provider value={savedProps}>
       {children}
