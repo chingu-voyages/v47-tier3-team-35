@@ -1,6 +1,7 @@
 "use client";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -98,13 +99,13 @@ const PaginationProvider = <T,>({
       newCursor,
     };
   };
-  const savedStartQuery = useMemo(() => startQuery, [paginate, take]);
+  const savedStartQuery = useCallback(startQuery, [paginate, take]);
   //this function will never re-use parameters, since it's supposed to
   //replace data completely. Therefore, parameters must be passed
   //during time of execution. However, these parameters will be saved
   //in subsequent calls of `loadMore`
   const loadNew = async (params?: SearchFuncProps) => {
-    const result = await startQuery({ params, usePrevCursor: false });
+    const result = await savedStartQuery({ params, usePrevCursor: false });
     if (!result) return;
     unstable_batchedUpdates(() => {
       setCursor(result.newCursor);
@@ -118,7 +119,7 @@ const PaginationProvider = <T,>({
   const loadMore = async (params?: SearchFuncProps) => {
     //if no cursor, we're already at the end of the list
     if (!cursorRef.current) return;
-    const result = await startQuery({ params, usePrevCursor: true });
+    const result = await savedStartQuery({ params, usePrevCursor: true });
     if (!result) return;
     unstable_batchedUpdates(() => {
       setCursor(result.newCursor);
@@ -135,8 +136,8 @@ const PaginationProvider = <T,>({
       });
     });
   };
-  const savedLoadNewData = useMemo(() => loadNew, [savedStartQuery]);
-  const savedLoadMoreData = useMemo(() => loadMore, [savedStartQuery]);
+  const savedLoadNewData = useCallback(loadNew, [savedStartQuery]);
+  const savedLoadMoreData = useCallback(loadMore, [savedStartQuery]);
   //set mounted value, to ensure we aren't leaking any
   //memory by performing state updates when no component
   //exists

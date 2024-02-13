@@ -13,14 +13,14 @@ function useDebouncedInput(delay: number) {
       setInputValue(value);
       onDebounceChange(value);
     },
-    [delay, onDebounceChange]
+    [onDebounceChange]
   );
 
   useEffect(() => {
     return () => {
       onDebounceChange.cancel();
     };
-  }, []);
+  }, [onDebounceChange]);
 
   return [inputValue, debouncedValue, handleChange] as const;
 }

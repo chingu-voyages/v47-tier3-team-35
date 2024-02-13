@@ -15,11 +15,12 @@ function PaginationInnerWrapper<T>({
   const [ref, inView] = useInView({
     threshold: threshold,
   });
+  const loadMore = props?.loadMore;
   //trigger new data when loading component is seen
   useEffect(() => {
     //means we can load more. If cursor is null, it means we reached the end
-    if (inView && props?.loadMore) props?.loadMore();
-  }, [inView, props?.loadMore]);
+    if (inView && loadMore) loadMore();
+  }, [inView, loadMore]);
   if (!props) return <></>;
   return (
     <>
