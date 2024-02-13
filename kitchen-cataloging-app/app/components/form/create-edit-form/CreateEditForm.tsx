@@ -8,14 +8,14 @@ import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { Box, Select, InputLabel, FormControl, MenuItem } from "@mui/material";
 import { FoodType } from "@/prisma/mock/mockData";
-import FormInputs from "./create-edit-form-components/FormInputs";
+import FormInputs from "./components/FormInputs";
 import useWindowWidth from "@/hooks/useWindowWidth";
+import { addEditItem } from "./actions/CreateEditServerAction";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -27,14 +27,20 @@ const Transition = React.forwardRef(function Transition(
 });
 
 interface CreateEditForm {
-    children: React.ReactNode;
-  type: 'create' | 'edit';
+  children: React.ReactNode;
+  type: "create" | "edit";
   spaces: string[];
+  userId: string;
   itemData?: FoodType;
 }
 
-export default function CreateEditForm({ children, type, spaces, itemData }: CreateEditForm) {
-
+export default function CreateEditForm({
+  children,
+  type,
+  spaces,
+  userId,
+  itemData,
+}: CreateEditForm) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -44,10 +50,6 @@ export default function CreateEditForm({ children, type, spaces, itemData }: Cre
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleForm = async(formData: FormData) => {
-    console.log(formData)
-  }
 
   return (
     <React.Fragment>
@@ -68,13 +70,18 @@ export default function CreateEditForm({ children, type, spaces, itemData }: Cre
         >
           <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
-        <FormInputs
-          type={type}
-          spaces={spaces}
-          itemData={itemData}
-          onClose={handleClose}
-          handleForm={handleForm}
-        />
+        <form
+          action={(formData) => addEditItem(formData, userId, itemData)}
+          onSubmit={() => handleClose()}
+          className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
+        >
+          <FormInputs
+            type={type}
+            spaces={spaces}
+            itemData={itemData}
+            onClose={handleClose}
+          />
+        </form>
       </Dialog>
     </React.Fragment>
   );
