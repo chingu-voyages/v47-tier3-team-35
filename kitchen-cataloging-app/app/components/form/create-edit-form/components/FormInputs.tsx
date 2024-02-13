@@ -1,22 +1,16 @@
 "use client";
 import React, { useEffect } from "react";
-import { MouseEvent, useState, useRef } from "react";
+import { useState} from "react";
 
 import {
   Box,
   Typography,
-  InputLabel,
-  FormControl,
-  Select,
   TextField,
-  MenuItem,
   Slider,
   InputAdornment,
   Button,
   IconButton,
-  Input,
 } from "@mui/material";
-import { Unstable_NumberInput as NumberInput } from "@mui/base";
 import CustomSelect from "./CustomSelect";
 import Close from "@mui/icons-material/Close";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -110,15 +104,16 @@ const FormInputs = ({
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
       const RFC3339Date = `${year}-${month}-${day}`;
-      console.log(RFC3339Date)
+      console.log(RFC3339Date);
       return RFC3339Date;
     }
     if (itemData?.expirationDate) {
-      console.log('true')
+      console.log("true");
       const expDate = convertToRFC3339(itemData.expirationDate.toDateString());
       console.log(expDate);
-      setExpDateDisplay(expDate)
+      setExpDateDisplay(expDate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

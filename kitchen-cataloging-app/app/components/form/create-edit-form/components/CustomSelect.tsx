@@ -22,11 +22,12 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
          space === "" &&
          !openSelect &&
          animateLabelClass !== "closed"
-       ) { 
+       ) {
          setAnimateLabelClass("deanimate-label");
        } else if (openSelect && animateLabelClass !== "open") {
          setAnimateLabelClass("animate-label");
        }
+       // eslint-disable-next-line react-hooks/exhaustive-deps
      }, [openSelect]);
     
     

@@ -352,6 +352,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [order, orderBy, page, rowsPerPage]
   );
 

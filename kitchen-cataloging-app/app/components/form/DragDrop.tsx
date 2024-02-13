@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from "react";
+import Image from "next/image";
 import { DragEvent } from "react";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import './drag-drop.css'
@@ -85,7 +86,7 @@ function DragDrop({ name, image }: DragDrop) {
         } ${file && "bg-slate-300"}`}
       >
         {image?.match(/unsplash/) && 
-          <img className="w-full h-full object-cover" src={image}></img>
+          <Image alt={name} className="w-full h-full object-cover" src={image}></Image>
         }
         {file &&
           <div className="max-w-30 text-sm flex items-center gap-2">
