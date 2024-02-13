@@ -16,6 +16,7 @@ import {
   IconButton,
   Input,
 } from "@mui/material";
+import { Unstable_NumberInput as NumberInput } from "@mui/base";
 import CustomSelect from "./CustomSelect";
 import Close from "@mui/icons-material/Close";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
@@ -32,18 +33,19 @@ import DragDrop from "../../DragDrop";
 interface FormInputs {
   type: "create" | "edit";
   spaces: string[];
-  handleForm: (formData: FormData) => void;
   onClose: () => void;
   itemData?: FoodType;
 }
 
+// COMPONENT
 const FormInputs = ({
   type,
   spaces,
-  handleForm,
   onClose,
   itemData,
 }: FormInputs) => {
+
+  console.log(itemData?.expirationDate)
 
   // Space
   const [space, setSpace] = useState(
@@ -97,6 +99,28 @@ const FormInputs = ({
   const marks = new Array(10).fill(0).map((val, i) => ({
     value: i + 1,
   }));
+
+  // Expiration date
+  const [expDateDisplay, setExpDateDisplay] = useState('')
+  useEffect(() => {
+    function convertToRFC3339(inputDateStr: string): string {
+      const date = new Date(inputDateStr);
+
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const RFC3339Date = `${year}-${month}-${day}`;
+      console.log(RFC3339Date)
+      return RFC3339Date;
+    }
+    if (itemData?.expirationDate) {
+      console.log('true')
+      const expDate = convertToRFC3339(itemData.expirationDate.toDateString());
+      console.log(expDate);
+      setExpDateDisplay(expDate)
+    }
+  }, [])
+
 
   return (
     <>
@@ -206,6 +230,9 @@ const FormInputs = ({
               startAdornment: (
                 <InputAdornment position="start">$</InputAdornment>
               ),
+              inputProps: {
+                step: 0.01, 
+              },
             }}
           />
 
@@ -217,7 +244,7 @@ const FormInputs = ({
             <Slider
               aria-labelledby="threshold-input-label"
               aria-label="Always visible"
-              defaultValue={5}
+              defaultValue={itemData?.threshold ? itemData.threshold : 5}
               // getAriaValueText={valuetext}
               step={1}
               min={0}
@@ -287,7 +314,6 @@ const FormInputs = ({
                 id="standard-helperText"
                 label=""
                 placeholder="Add Label"
-                // defaultValue={itemData?.labels}
                 value={newLabel}
                 helperText=""
                 hiddenLabel
@@ -327,7 +353,8 @@ const FormInputs = ({
               fullWidth
               id="standard-helperText"
               label=""
-              placeholder="mm/dd/yyyy"
+              // placeholder="mm/dd/yyyy"
+              defaultValue={expDateDisplay}
               helperText=""
               type="date"
               hiddenLabel
@@ -343,11 +370,7 @@ const FormInputs = ({
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="rounded-full"
-              variant="contained"
-            >
+            <Button type="submit" className="rounded-full" variant="contained">
               Save
             </Button>
           </Box>

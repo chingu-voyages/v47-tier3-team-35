@@ -9,18 +9,19 @@ import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
+import { FoodDataType } from "../page";
+import { FoodType } from "@/prisma/mock/mockData";
 
 const tempSpaces = ["kitchen", "my secret stash"];
 
 interface FoodInfo {
-  space: string;
-  title: string;
-  description: string;
-  price: number;
-  labels: string[];
+  foodData: FoodDataType;
+  userId: string;
 }
 
-const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
+const FoodInfo = ({ foodData, userId }: FoodInfo) => {
+  
+  const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toFixed(2).toString().split(".")[1];
 
@@ -41,7 +42,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
             variant="body2"
             className={"text-default-ref-neutral-neutral50"}
           >
-            {space}
+            {roomTitle}
           </Typography>
           <Typography
             variant={"h2"}
@@ -82,7 +83,7 @@ const FoodInfo = ({ title, space, description, price, labels }: FoodInfo) => {
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <CreateEditForm type={"edit"} spaces={tempSpaces}>
+          <CreateEditForm type={"edit"} spaces={tempSpaces} userId={userId} itemData={foodData as FoodType}>
             <EditOutlinedIcon
               color={"secondary"}
               className={`${iconClassList}`}

@@ -8,7 +8,6 @@ import Divider from "@mui/material/Divider";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
@@ -16,7 +15,7 @@ import { Box, Select, InputLabel, FormControl, MenuItem } from "@mui/material";
 import { FoodType } from "@/prisma/mock/mockData";
 import FormInputs from "./components/FormInputs";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import { handleForm } from "./actions/CreateEditServerAction";
+import { addEditItem } from "./actions/CreateEditServerAction";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -31,6 +30,7 @@ interface CreateEditForm {
   children: React.ReactNode;
   type: "create" | "edit";
   spaces: string[];
+  userId: string;
   itemData?: FoodType;
 }
 
@@ -38,6 +38,7 @@ export default function CreateEditForm({
   children,
   type,
   spaces,
+  userId,
   itemData,
 }: CreateEditForm) {
   const [open, setOpen] = React.useState(false);
@@ -70,7 +71,7 @@ export default function CreateEditForm({
           <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
         <form
-          action={handleForm}
+          action={(formData) => addEditItem(formData, userId, itemData)}
           onSubmit={() => handleClose()}
           className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
         >
@@ -79,7 +80,6 @@ export default function CreateEditForm({
             spaces={spaces}
             itemData={itemData}
             onClose={handleClose}
-            handleForm={handleForm}
           />
         </form>
       </Dialog>

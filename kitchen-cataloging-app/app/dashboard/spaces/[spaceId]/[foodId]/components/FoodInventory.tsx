@@ -249,7 +249,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
           >
             ${totalProductValue.toString().split(".")[0]}
             <span className="text-[1.5rem] md:text-[1.75rem] align-top inline-block">
-              {totalProductValue.toString().split(".")[1]}
+              {totalProductValue.toFixed(2).toString().split(".")[1]}
             </span>
           </Typography>
           <Typography

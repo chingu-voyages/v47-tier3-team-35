@@ -6,29 +6,26 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 
-const DesktopLayout = ({ foodData }: { foodData: FoodDataType }) => {
+const DesktopLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: string }) => {
     
     const food = foodData;
 
     return (
       <>
         <Stack direction="row" gap="12" className={"h-[42rem] pb-12"}>
-        <Box className="item-details flex flex-col w-1/2 pe-6">
+          <Box className="item-details flex flex-col w-1/2 pe-6">
             <Box className="img-container relative h-1/2">
-            {/* Food Img */}
-                <FoodImg
+              {/* Food Img */}
+              <FoodImg
                 description={food.description ? food.description : ""}
                 imgUrl={food.image?.url ? food.image.url : ""}
-                />
+              />
             </Box>
 
             {/* Food Info */}
             <FoodInfo
-              space={food.roomTitle}
-              title={food.title}
-              description={food.description ? food.description : ""}
-              price={food.price}
-              labels={food.labels}
+              foodData={foodData}
+              userId={userId}
             />
           </Box>
 
