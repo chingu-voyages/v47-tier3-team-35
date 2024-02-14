@@ -6,7 +6,7 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 
-const DesktopLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: string }) => {
+const DesktopLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; spaces: string[]; userId: string }) => {
     
     const food = foodData;
 
@@ -17,7 +17,7 @@ const DesktopLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: s
             <Box className="img-container relative h-1/2">
               {/* Food Img */}
               <FoodImg
-                title={food.description || ""}
+                title={food.title || ""}
                 imgUrl={food.image?.url || ""}
               />
             </Box>
@@ -25,6 +25,7 @@ const DesktopLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: s
             {/* Food Info */}
             <FoodInfo
               foodData={foodData}
+              spaces={spaces}
               userId={userId}
             />
           </Box>

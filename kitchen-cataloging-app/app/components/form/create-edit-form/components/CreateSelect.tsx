@@ -30,8 +30,6 @@ const CreateSelect = ({ labels, handleLabels }: CreateSelect) => {
     }
   };
 
-  console.log(addingLabel)
-
   const handleDeleteLabel = (val: string) => {
     handleLabels(labels.filter((label) => label !== val));
   };
@@ -67,13 +65,13 @@ const CreateSelect = ({ labels, handleLabels }: CreateSelect) => {
         </Typography>
       </Box>
       {/* Input to handle adding labels */}
-      <Box className="relative z-10 w-full h-fit">
+      <Box className="relative z-10 w-full h-fit bg-default-sys-light-surface-bright ps-2 pe-10 rounded-lg border border-default-sys-light-outline-variant">
         {/* Labels */}
-        <Box className="absolute z-20 top-4 left-2 labels-list flex-grow flex flex-row flex-wrap gap-1 mb-1">
+        <Box className="z-20 top-4 left-2 labels-list flex-grow flex flex-row flex-wrap items-center gap-1 mb-1">
           {labels.map((labelText, i) => (
             <Box
               key={i}
-              className="bg-default-sys-light-surface-container-high px-2 me-2 py-1.5 flex flex-row items-center"
+              className="bg-default-sys-light-surface-container-high px-2 me-2 py-1.5 flex flex-row items-center h-8 my-3"
             >
               <IconButton
                 className="p-0"
@@ -92,25 +90,21 @@ const CreateSelect = ({ labels, handleLabels }: CreateSelect) => {
               </Typography>
             </Box>
           ))}
+          <TextField
+            className="bg-default-sys-light-surface-bright flex-grow"
+            aria-labelledby="labels-input-label"
+            id=""
+            label=""
+            placeholder="Type or select a label"
+            value={newLabel}
+            helperText=""
+            hiddenLabel
+            onChange={(e) => handleNewLabel(e.target.value)}
+            sx={{
+              "& fieldset": { border: "none" },
+            }}
+          />
         </Box>
-        <TextField
-          className="bg-default-sys-light-surface-bright"
-          aria-labelledby="labels-input-label"
-          fullWidth
-          id="standard-helperText"
-          label=""
-          placeholder="Type or select a label"
-          value={newLabel}
-          helperText=""
-          hiddenLabel
-          onChange={(e) => handleNewLabel(e.target.value)}
-          // InputProps={{
-          //   sx: {
-          //     height: "500px",
-          //     backgroundColor: "red",
-          //   },
-          // }}
-        />
         {addingLabel === "creating" && (
           <CheckCircleIcon
             className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-primary`}

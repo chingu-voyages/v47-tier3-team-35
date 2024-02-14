@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from "react";
 
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+
 interface CustomSelect {
     space: string;
     spaces: string[];
@@ -32,11 +35,7 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
     
     
   return (
-    <div
-      className={`${
-        openSelect ? "select-arrow-down" : "select-arrow-up"
-      } relative z-10`}
-    >
+    <div className={`relative z-10`}>
       <div
         className="relative select bg-default-sys-light-surface-container-lowest w-52 h-12 rounded-lg ps-4 border border-default-sys-light-outline-variant"
         id="space-select"
@@ -51,9 +50,11 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
       <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
         {space}
       </p>
-      {(openSelect && space === '') && <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-outline-variant pointer-events-none">
-        Choose Space
-      </p>}
+      {openSelect && space === "" && (
+        <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-outline-variant pointer-events-none">
+          Choose Space
+        </p>
+      )}
       <label
         className={`${animateLabelClass} absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none`}
         htmlFor="space-select"
@@ -62,7 +63,7 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
         Choose Space
       </label>
       {openSelect && (
-        <ul className="absolute -bottom-0.5 left-0 translate-y-full w-full bg-white rounded-b-lg">
+        <ul className="absolute -bottom-0.5 left-0 translate-y-full w-full bg-white rounded-b-lg max-h-48 overflow-y-scroll">
           {spaces.map((spaceOption, i) => (
             <li
               className="space-item relative select bg-default-sys-light-surface-container-lowest w-52 h-12 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pe-3 pt-3 border-b border-default-sys-light-outline-variant"
@@ -76,6 +77,16 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
             </li>
           ))}
         </ul>
+      )}
+      {!openSelect && (
+        <ArrowDropDownIcon
+          className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
+        />
+      )}
+      {openSelect && (
+        <ArrowDropUpIcon
+          className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
+        />
       )}
     </div>
   );

@@ -10,7 +10,7 @@ export const getSingleFood = async ({
 }) => {
   const user = await getUserInfoServer({ userId });
   if (!user?.id) return null;
-  const doc = await prisma.food.findFirst({
+  const food = await prisma.food.findFirst({
     where: {
       userId: user.id,
       id: foodId,
@@ -19,5 +19,13 @@ export const getSingleFood = async ({
       logs: true,
     },
   });
-  return doc;
+  const spaces = await prisma.room.findMany({
+    select: {
+      title: true,
+    }
+  })
+  return {
+    foodData: food,
+    spaces: spaces,
+  };
 };

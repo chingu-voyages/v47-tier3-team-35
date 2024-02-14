@@ -6,7 +6,7 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 
-const MobileLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: string; }) => {
+const MobileLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; spaces: string[]; userId: string; }) => {
   const food = foodData;
 
   return (
@@ -21,7 +21,7 @@ const MobileLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: st
         </Box>
         {/* Food Info */}
         <Box className="info-container bg-default-sys-light-surface-container -mt-7 pt-2 mb-9 z-10 rounded-tl-[2rem] w-full px-5">
-          <FoodInfo foodData={foodData} userId={userId} />
+          <FoodInfo foodData={foodData} spaces={spaces} userId={userId} />
         </Box>
 
         {/* Food Inventory */}

@@ -16,7 +16,7 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { addEditItem } from "../actions/CreateEditServerAction";
 import uploadImages from "@/aws/content/uploadImages";
-
+import CloseIcon from "@mui/icons-material/Close";
 import { FoodType } from "@/prisma/mock/mockData";
 
 import "./customstyles.css";
@@ -41,8 +41,7 @@ const FormInputs = ({
   userId,
   itemData,
 }: FormInputs) => {
-  // HandleForm
-
+  // STATE AND HANDLER FUNCTIONS
   // Space
   const [space, setSpace] = useState(
     itemData?.roomTitle ? itemData?.roomTitle : ""
@@ -53,6 +52,9 @@ const FormInputs = ({
 
   // title
   const titleRef = useRef<HTMLInputElement | null>(null);
+
+  // Price
+  const computersAreDumb = 0.001;
 
   // Image
   const [image, setImage] = useState<Image>(
@@ -68,9 +70,10 @@ const FormInputs = ({
       s3ObjKey: img.objKey || "",
       url: url || "",
     });
-  }
+  };
 
-  const imgTitle = titleRef && titleRef.current ? titleRef?.current.value : "nofile";
+  const imgTitle =
+    titleRef && titleRef.current ? titleRef?.current.value : "nofile";
 
   const srcToFile = async (src: string, fileName: string) => {
     const response = await fetch(src);
@@ -103,7 +106,6 @@ const FormInputs = ({
       }
     }
   };
-  
 
   // description
 
@@ -122,8 +124,10 @@ const FormInputs = ({
   // Threshold
 
   const thresholdRef = useRef<HTMLInputElement | null>(null);
-  const text = thresholdRef?.current ? thresholdRef.current.children[1].getAttribute('style') : '0';
-  const width = text ? text.split(/[%\s+]/) : '0'; // getting width value
+  const text = thresholdRef?.current
+    ? thresholdRef.current.children[1].getAttribute("style")
+    : "0";
+  const width = text ? text.split(/[%\s+]/) : "0"; // getting width value
   const threshold = parseInt(width[4]) / 10; // width percentage
 
   // Expiration date
@@ -147,51 +151,69 @@ const FormInputs = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <form
-      // action={(formData) => addEditItem(formData, userId, itemData)}
-      onSubmit={(e) => {
-        console.log("submitting");
-        // Handle Image
-        console.log(space);
-        console.log(titleRef?.current?.value);
-        console.log(image);
-        console.log(priceRef?.current?.value);
-        console.log(descriptionRef?.current?.value);
-        console.log(threshold);
-        console.log(labels);
-        console.log(expirationDateRef?.current?.value);
-        console.log(userId);
-        if (
-          titleRef.current &&
-          titleRef.current?.value &&
-          priceRef.current &&
-          priceRef.current?.value &&
-          descriptionRef.current &&
-          descriptionRef.current?.value &&
-          expirationDateRef.current &&
-          expirationDateRef.current?.value
-        ) {
-          console.log("all information exists");
-          addEditItem(
-            space,
-            titleRef.current.value,
-            image,
-            priceRef.current.value,
-            descriptionRef.current.value,
-            threshold,
-            labels,
-            expirationDateRef.current.value,
-            userId,
-            itemData
-          );
-        }
-        onClose;
-      }}
-      className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
-    >
-      {/* Heading */}
+  // Errors for required inputs
+  const [errors, setErrors] = useState({
+    space: false,
+    title: false,
+    price: false,
+    description: false,
+  });
 
+  // submit form
+  const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    console.log("submitting");
+    if (
+      titleRef.current &&
+      priceRef.current &&
+      descriptionRef.current &&
+      expirationDateRef.current
+    ) {
+      console.log("all refs exist");
+      const errorObject = {
+        space: space === "" ? true : false,
+        title: titleRef.current.value === "",
+        price:
+          priceRef.current.value === "" ||
+          Math.abs(
+            Math.round(parseFloat(priceRef.current.value) * 100) -
+              parseFloat(priceRef.current.value) * 100
+          ) > computersAreDumb
+            ? true
+            : false,
+        description: descriptionRef.current.value === "" ? true : false,
+      };
+      setErrors(errorObject);
+      if (Object.values(errorObject).every((err) => err === false)) {
+        console.log("no errors");
+        await addEditItem(
+          space,
+          titleRef.current.value,
+          image,
+          priceRef.current.value,
+          descriptionRef.current.value,
+          threshold,
+          labels,
+          expirationDateRef.current.value,
+          userId,
+          itemData
+        );
+        window.location.reload();
+      }
+    }
+  };
+
+  return (
+    <form className="p-10 flex flex-col min-h-fit h-full bg-default-sys-light-surface-container-low overflow-auto">
+      
+      {/* Heading */}
+      <IconButton
+        className="absolute top-2 right-2"
+        onClick={onClose}
+        aria-label="close"
+      >
+        <CloseIcon className="text-black"></CloseIcon>
+      </IconButton>
       <section className="modal-header w-full flex pb-10">
         <Box className="flex flex-col gap-8">
           <Typography
@@ -210,31 +232,41 @@ const FormInputs = ({
 
       {/* Main */}
       <section className="modal-main h-full flex flex-col gap-8 md:gap-16 md:flex-row">
+        
         {/* Left Section (desktop) */}
         {/* Title */}
-        <Box className="h-full w-full flex flex-col gap-8 md:gap-0">
+        <Box className="container-left-desktop h-full w-full flex flex-col gap-8 md:gap-0">
           <TextField
-            className="h-14 mb-12"
+            className="h-14 md:mb-12"
             id="outlined-start-adornment"
             label="Name"
             defaultValue={itemData?.title}
             inputRef={titleRef}
-            helperText=""
+            error={errors.title}
+            helperText={errors.title && "Title is required"}
             variant="standard"
             placeholder="Item Name"
             name="title"
-            // onChange={(e) => setNewTitle(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start"></InputAdornment>
               ),
             }}
+            onChange={(e) => {
+              if (e.target.value !== "") {
+                setErrors({ ...errors, title: false });
+              }
+            }}
           />
 
           {/* Image  */}
 
-          <Box className="flex-grow relative">
-            <DragDrop name={"image"} imageUrl={image.url || ""} handleImage={handleImage} />
+          <Box className="flex-grow h-full relative">
+            <DragDrop
+              name={"image"}
+              imageUrl={image.url || ""}
+              handleImage={handleImage}
+            />
             <Box className="image-icons absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
               <IconButton className="p-2 rounded-full bg-default-sys-light-on-primary border border-default-sys-light-primary">
                 <FileUploadOutlinedIcon className="text-default-sys-light-primary" />
@@ -279,7 +311,8 @@ const FormInputs = ({
             placeholder="Item Description"
             defaultValue={itemData?.description}
             inputRef={descriptionRef}
-            helperText=""
+            error={errors.description}
+            helperText={errors.description && "Description is required"}
             variant="standard"
             name="description"
             InputProps={{
@@ -287,7 +320,13 @@ const FormInputs = ({
                 <InputAdornment position="start"></InputAdornment>
               ),
             }}
+            onChange={(e) => {
+              if (e.target.value !== "") {
+                setErrors({ ...errors, description: false });
+              }
+            }}
           />
+          
           {/* price */}
           <TextField
             className="h-14"
@@ -296,7 +335,11 @@ const FormInputs = ({
             placeholder="Item Price"
             defaultValue={itemData?.price}
             inputRef={priceRef}
-            helperText=""
+            error={errors.price}
+            helperText={
+              errors.price &&
+              "Price is required and must be formatted correctly (X.XX)"
+            }
             variant="standard"
             name="price"
             type="number"
@@ -307,6 +350,20 @@ const FormInputs = ({
               inputProps: {
                 step: 0.01,
               },
+            }}
+            onChange={(e) => {
+              const val = e.target.value;
+              const valNum = parseFloat(val);
+              if (val !== "") {
+                setErrors({ ...errors, price: false });
+              }
+              if (
+                val !== "" &&
+                Math.abs(Math.round(valNum * 100) - valNum * 100) >
+                  computersAreDumb
+              ) {
+                setErrors({ ...errors, price: true });
+              }
             }}
           />
 
@@ -346,7 +403,7 @@ const FormInputs = ({
           {/* labels */}
           <CreateSelect labels={labels} handleLabels={handleLabels} />
 
-          {/* date */}
+          {/* expiration date */}
           <Box>
             <Typography
               variant="button"
@@ -362,7 +419,7 @@ const FormInputs = ({
               fullWidth
               id="standard-helperText"
               label=""
-              // placeholder="mm/dd/yyyy"
+              placeholder="mm/dd/yyyy"
               defaultValue={expDateDisplay}
               inputRef={expirationDateRef}
               helperText=""
@@ -371,6 +428,8 @@ const FormInputs = ({
               name="date"
             />
           </Box>
+
+          {/* Save/cancel buttons */}
           <Box className="flex flex-row justify-end gap-4">
             <Button
               type="button"
@@ -380,7 +439,12 @@ const FormInputs = ({
             >
               Cancel
             </Button>
-            <Button type="submit" className="rounded-full" variant="contained">
+            <Button
+              type="submit"
+              className="rounded-full"
+              variant="contained"
+              onClick={(e) => handleSubmit(e)}
+            >
               Save
             </Button>
           </Box>
