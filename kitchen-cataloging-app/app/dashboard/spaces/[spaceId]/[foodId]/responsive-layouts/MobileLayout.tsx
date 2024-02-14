@@ -15,8 +15,8 @@ const MobileLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: st
         {/* Food Img */}
         <Box className="img-container relative h-[17.5rem] w-full">
           <FoodImg
-            description={food.description ? food.description : ""}
-            imgUrl={food.image?.url ? food.image.url : ""}
+            title={food.title || ""}
+            imgUrl={food.image?.url || ""}
           />
         </Box>
         {/* Food Info */}

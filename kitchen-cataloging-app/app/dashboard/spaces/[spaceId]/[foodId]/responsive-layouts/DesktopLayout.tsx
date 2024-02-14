@@ -17,8 +17,8 @@ const DesktopLayout = ({ foodData, userId }: { foodData: FoodDataType; userId: s
             <Box className="img-container relative h-1/2">
               {/* Food Img */}
               <FoodImg
-                description={food.description ? food.description : ""}
-                imgUrl={food.image?.url ? food.image.url : ""}
+                title={food.description || ""}
+                imgUrl={food.image?.url || ""}
               />
             </Box>
 

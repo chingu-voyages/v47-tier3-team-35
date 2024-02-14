@@ -70,18 +70,13 @@ export default function CreateEditForm({
         >
           <CloseIcon className="text-black"></CloseIcon>
         </IconButton>
-        <form
-          action={(formData) => addEditItem(formData, userId, itemData)}
-          onSubmit={() => handleClose()}
-          className="p-10 flex flex-col bg-default-sys-light-surface-container-low"
-        >
-          <FormInputs
-            type={type}
-            spaces={spaces}
-            itemData={itemData}
-            onClose={handleClose}
-          />
-        </form>
+        <FormInputs
+          type={type}
+          spaces={spaces}
+          onClose={handleClose}
+          userId={userId}
+          itemData={itemData}
+        />
       </Dialog>
     </React.Fragment>
   );

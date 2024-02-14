@@ -3,19 +3,19 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 
 interface FoodImg {
-  description: string;
+  title: string;
   imgUrl?: string;
 }
 
-const FoodImg = ({imgUrl, description}: FoodImg) => {
+const FoodImg = ({imgUrl, title}: FoodImg) => {
 
   return (
       <Image
         fill
         className={"object-cover object-center md:rounded-[28px]"}
-        alt={description}
+        alt={title}
         src={
-          imgUrl ? imgUrl : `https://source.unsplash.com/random/?${description}`
+          imgUrl ? imgUrl : `https://source.unsplash.com/random/?${title}`
         }
         sizes={""}
       />
