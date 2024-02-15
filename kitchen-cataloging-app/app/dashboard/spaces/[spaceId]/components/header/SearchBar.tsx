@@ -83,16 +83,16 @@ export function SearchBar({ spaceId }: { spaceId?: string }) {
       loading={loading}
       value={value}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      onChange={(event, newValue) => {
-        unstable_batchedUpdates(() => {
-          setOptions(
-            newValue
-              ? [newValue, ...options.filter((e) => e.id !== e.id)]
-              : options
-          );
-          setValue(newValue);
-        });
-      }}
+      // onChange={(event, newValue) => {
+      //   unstable_batchedUpdates(() => {
+      //     setOptions(
+      //       newValue
+      //         ? [newValue, ...options.filter((e) => e.id !== e.id)]
+      //         : options
+      //     );
+      //     setValue(newValue);
+      //   });
+      // }}
       onInputChange={(event, newInputValue, reason) => {
         if (reason === "reset") return;
         setNewInputValue(newInputValue);

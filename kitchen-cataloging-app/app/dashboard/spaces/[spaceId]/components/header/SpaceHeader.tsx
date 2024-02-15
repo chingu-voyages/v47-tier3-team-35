@@ -1,9 +1,8 @@
 "use client";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { Room } from "@prisma/client";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { useState } from "react";
-import AddIcon from "@mui/icons-material/Add";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { SearchBar } from "./SearchBar";
@@ -11,31 +10,7 @@ import SpaceHeaderBottomBox from "./wrappers/SpaceHeaderBottomBox";
 import SpaceHeaderTopmostBox from "./wrappers/SpaceHeaderTopmostBox";
 import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
 import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
-const AddItemBtn = () => {
-  return (
-    <Button
-      variant="contained"
-      size="large"
-      className="font-medium rounded-full flex items-center space-x-1.5 py-2.5 pl-4 pr-6 sm:space-x-2 sm:py-2.5 sm:pl-5 sm:pr-7 md:py-3 lg:space-x-2.5 lg:py-4 lg:pl-6 lg:pr-8"
-      sx={{
-        minHeight: "0",
-        height: "fit-content",
-      }}
-    >
-      <AddIcon className="text-6xl sm:text-8xl" />
-      <Typography
-        noWrap
-        variant={"button"}
-        className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal tracking-wide leading-4 sm:leading-5 md:leading-6 lg:leading-8"
-        sx={{
-          textTransform: "none",
-        }}
-      >
-        Add Item
-      </Typography>
-    </Button>
-  );
-};
+import AddItemBtn from "@/components/UI/AddItemBtn";
 const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
     <SpaceActionBtnsWrapper>

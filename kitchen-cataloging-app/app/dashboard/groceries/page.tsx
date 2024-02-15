@@ -6,9 +6,10 @@ import { auth } from "@clerk/nextjs";
 import paginateGroceries from "./actions/search/paginateGroceries";
 import PaginationProvider from "@/components/pagination/PaginationProvider";
 import { searchGroceryItems } from "./actions/actions";
+import GroceriesProvider from "./providers/GroceriesProvider";
 const navDepthItems = [
   {
-    routePath: "/",
+    routePath: "dashboard",
     title: "Home",
   },
   {
@@ -27,8 +28,10 @@ const GroceriesPage = async () => {
         take={10}
         paginate={searchGroceryItems}
       >
-        <GroceriesHeader />
-        <GroceriesItemList />
+        <GroceriesProvider>
+          <GroceriesHeader />
+          <GroceriesItemList />
+        </GroceriesProvider>
       </PaginationProvider>
     </ResponsivePaddingWrapper>
   );

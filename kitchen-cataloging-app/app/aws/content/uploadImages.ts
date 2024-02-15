@@ -1,5 +1,4 @@
 import { getS3BucketPutSignedUrl } from "../presignUrls/actions";
-import { FileToBeUploadedProps } from "../presignUrls/utils/presignS3BucketPutCommand";
 import axios from "axios";
 export type FileMediaType = {
   objKey?: string;
@@ -8,7 +7,7 @@ export type FileMediaType = {
 const uploadImages = async ({
   files,
 }: {
-  files: (File & FileToBeUploadedProps)[];
+  files: File[];
 }) => {
   const signedUrls = await getS3BucketPutSignedUrl({
     files: files.map((file) => ({ name: file.name, type: file.type })),

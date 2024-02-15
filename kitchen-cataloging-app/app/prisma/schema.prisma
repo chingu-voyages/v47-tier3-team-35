@@ -1,7 +1,6 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
@@ -48,16 +47,26 @@ model Food {
   image Image?
   amount Int
   //food specific key
+  expirationDate DateTime
   price Float //limit to 2 decimal places
   threshold Int?
-  expirationDate DateTime
   logs Log[] //stores log for each time user adds or subtracts this food
   roomTitle String
   user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String @db.ObjectId
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId
+  // foodItemInstances FoodItemModelInstance[]
 }
+// model FoodItemModelInstance {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
+//   createdAt DateTime @default(now()) //purchase date
+//   updatedAt DateTime @updatedAt 
+//   expirationDate DateTime
+//   price Float //limit to 2 decimal places
+//   foodId String?
+//   Food Food? @relation(fields: [foodId], references: [id])
+// }
 model GroceryItem {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now()) //date added to list

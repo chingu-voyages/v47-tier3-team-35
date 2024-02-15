@@ -36,7 +36,6 @@ export const resizeImgToSquare = async ({
   fileBuffer,
   sideSize,
   placeholderSideSize,
-  
 }: ImgProps & { sideSize: number; placeholderSideSize: number }) => {
   const squareImg = await resizeImgToSquareRatio({ mimeType, fileBuffer });
   if (!squareImg) return null;
