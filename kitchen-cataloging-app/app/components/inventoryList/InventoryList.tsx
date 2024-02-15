@@ -2,7 +2,9 @@
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
 import LoadingComponent from "@/components/pagination/FullPagePaginationLoadingComponent";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import InventoryListGridWrapper from "@/components/inventoryList/wrappers/InventoryListGridWrapper";
+import InventoryListGridWrapper, {
+  InventoryListItemGridWrapper,
+} from "@/components/inventoryList/wrappers/InventoryListGridWrapper";
 import { IdRequiredObj } from "@/components/pagination/types";
 const InventoryList = <T,>({
   defaultItems,
@@ -38,16 +40,18 @@ const InventoryList = <T,>({
     >
       {(props) => (
         <InventoryListGridWrapper>
-          {props.data.map((item) =>
-            children({
-              item,
-              width: { small: smallWidth, medium: mediumWidth },
-              borderRadius: {
-                top: cardTopBorderRadius,
-                bottom: cardBottomBorderRadius,
-              },
-            })
-          )}
+          {props.data.map((item) => (
+            <InventoryListItemGridWrapper key={item.id}>
+              {children({
+                item,
+                width: { small: smallWidth, medium: mediumWidth },
+                borderRadius: {
+                  top: cardTopBorderRadius,
+                  bottom: cardBottomBorderRadius,
+                },
+              })}
+            </InventoryListItemGridWrapper>
+          ))}
         </InventoryListGridWrapper>
       )}
     </PaginationWrapper>

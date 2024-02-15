@@ -1,70 +1,39 @@
 "use client";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
-import { Box, Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import ItemContentWrapper, {
   ItemContentInnerWrapper,
   ItemDescriptionWrapper,
-} from "../../../../../components/inventoryList/wrappers/ItemContentWrapper";
+  ItemCardButton,
+  ItemCardTitle,
+  ItemCardChip,
+  ItemCardFirstRowWrapper,
+  ItemCardCounterBtns,
+} from "@/components/inventoryList/wrappers/ItemContentWrapper";
 import { SearchResultFood } from "../../actions/types/types";
 const ItemStockInfoAndBtns = ({
   item,
   mediumWidth,
-  smallWidth,
 }: {
   item: SearchResultFood;
   mediumWidth: boolean;
-  smallWidth: boolean;
 }) => {
   return (
-    <Box className="flex w-full justify-between items-center">
-      <Box className="flex items-center rounded-l-32xl rounded-r-lg px-0.5 bg-default-sys-light-tertiary-container min-h-0 min-w-0">
+    <ItemCardFirstRowWrapper>
+      <ItemCardChip text={`${item.amount} in stock`}>
         {mediumWidth && (
           <CheckCircleOutlineOutlinedIcon
             fontSize="small"
             className="p-[0.1rem] m-0 text-default-sys-light-on-tertiary-container"
           />
         )}
-        <Typography
-          className="font-medium leading-5 sm:leading-6 px-0.5 xs:px-1 break-all sm:pl-0.5 sm:pr-1 text-default-sys-light-on-tertiary-container"
-          noWrap
-          variant={smallWidth ? "caption" : "overline"}
-          sx={{
-            textTransform: "none",
-          }}
-        >
-          {item.amount} in stock
-        </Typography>
-      </Box>
-      <Box className="flex space-x-2 xs:space-x-2.5 sm:space-x-3 ml-1.5 xs:ml-2">
-        <Button
-          aria-label={`add-${item.title}-item`}
-          variant="contained"
-          className="rounded-full aspect-square p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
-          sx={{
-            minHeight: "unset",
-            boxShadow: "unset",
-            minWidth: "unset",
-          }}
-        >
-          <AddIcon fontSize="small" className="p-[0.15rem] sm:p-[0.05rem]" />
-        </Button>
-        <Button
-          aria-label={`delete-${item.title}-item`}
-          variant="contained"
-          className="rounded-full aspect-square p-0.5 sm:p-1 bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30"
-          sx={{
-            minHeight: "unset",
-            boxShadow: "unset",
-            minWidth: "unset",
-          }}
-        >
-          <RemoveIcon fontSize="small" className="p-[0.15rem] sm:p-[0.05rem]" />
-        </Button>
-      </Box>
-    </Box>
+      </ItemCardChip>
+      <ItemCardCounterBtns
+        addBtnProps={{ "aria-label": `add-${item.title}-item` }}
+        removeBtnProps={{ "aria-label": `remove-${item.title}-item` }}
+      />
+    </ItemCardFirstRowWrapper>
   );
 };
 const ItemDescription = ({
@@ -77,23 +46,10 @@ const ItemDescription = ({
   mediumWidth: boolean;
 }) => {
   const locale = navigator.language || "en-US";
-  const desktopOverflow = {
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    display: "-webkit-box",
-    WebkitLineClamp: "2",
-    WebkitBoxOrient: "vertical",
-  };
+
   return (
     <ItemDescriptionWrapper>
-      <Typography
-        className="font-medium text-3xl sm:text-4xl leading-5 sm:leading-6 text-default-ref-neutral-neutral30"
-        variant={"subtitle2"}
-        noWrap={!mediumWidth}
-        sx={mediumWidth ? desktopOverflow : undefined}
-      >
-        {title}
-      </Typography>
+      <ItemCardTitle title={title} mediumWidth={mediumWidth} />
       <Typography
         variant={mediumWidth ? "button" : "caption"}
         noWrap
@@ -112,58 +68,36 @@ const ItemDescription = ({
     </ItemDescriptionWrapper>
   );
 };
-const AddToGroceriesBtn = ({ mediumWidth }: { mediumWidth: boolean }) => {
+const AddToGroceriesBtn = () => {
   return (
-    <Button
-      variant="contained"
-      className="rounded-full space-x-0.5 sm:space-x-1 min-h-0 py-2 sm:py-2 lg:py-2.5 bg-default-sys-light-primary"
-      sx={{
-        boxShadow: "none",
-      }}
-    >
+    <ItemCardButton text={"Add to Groceries"}>
       <AddShoppingCartOutlinedIcon
         fontSize="small"
         className="p-[0.15rem] sm:p-0"
       />
-      <Typography
-        noWrap
-        variant={mediumWidth ? "button" : "caption"}
-        className="lg:text-3xl font-normal tracking-wide text-default-sys-light-on-primary"
-        sx={{
-          textTransform: "none",
-        }}
-      >
-        Add to Groceries
-      </Typography>
-    </Button>
+    </ItemCardButton>
   );
 };
 const ItemContent = ({
   item,
   mediumWidth,
-  smallWidth,
   bottomBorderRadius,
 }: {
   item: SearchResultFood;
   mediumWidth: boolean;
-  smallWidth: boolean;
   bottomBorderRadius?: string;
 }) => {
   return (
     <ItemContentWrapper bottomBorderRadius={bottomBorderRadius}>
       <ItemContentInnerWrapper>
-        <ItemStockInfoAndBtns
-          item={item}
-          mediumWidth={mediumWidth}
-          smallWidth={smallWidth}
-        />
+        <ItemStockInfoAndBtns item={item} mediumWidth={mediumWidth} />
         <ItemDescription
           expirationDate={item.expirationDate}
           title={item.title}
           mediumWidth={mediumWidth}
         />
       </ItemContentInnerWrapper>
-      <AddToGroceriesBtn mediumWidth={mediumWidth} />
+      <AddToGroceriesBtn />
     </ItemContentWrapper>
   );
 };
