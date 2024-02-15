@@ -1,7 +1,7 @@
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import GroceriesHeader from "./components/header/GroceriesHeader";
-import GroceriesItemList from "./components/list/GroceriesItemList";
+import GroceriesItemList from "./components/groceriesList/GroceriesItemList";
 import { auth } from "@clerk/nextjs";
 import paginateGroceries from "./actions/search/paginateGroceries";
 import PaginationProvider from "@/components/pagination/PaginationProvider";

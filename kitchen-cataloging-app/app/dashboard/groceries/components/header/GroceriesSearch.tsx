@@ -1,5 +1,5 @@
 "use client";
-import FullPageTextSearch from "@/components/navigation/search/FullPageTextSearch";
+import FullPageTextSearch from "@/components/search/FullPageTextSearch";
 import { usePaginationProvider } from "@/components/pagination/PaginationProvider";
 import React, { useMemo } from "react";
 export default function GroceriesSearch() {

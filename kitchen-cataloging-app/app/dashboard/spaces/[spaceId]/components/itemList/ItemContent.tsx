@@ -7,7 +7,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import ItemContentWrapper, {
   ItemContentInnerWrapper,
   ItemDescriptionWrapper,
-} from "./wrappers/ItemContentWrapper";
+} from "../../../../../components/inventoryList/wrappers/ItemContentWrapper";
 import { SearchResultFood } from "../../actions/types/types";
 const ItemStockInfoAndBtns = ({
   item,

@@ -1,5 +1,5 @@
 import { removeExtension } from "@/utils/removeExtension";
-import { Food } from "@prisma/client";
+import { Food, GroceryItem } from "@prisma/client";
 import Image from "next/image";
 import InventoryImageWrapper from "./wrappers/InventoryImageWrapper";
 export const InventoryImage = ({
@@ -7,8 +7,8 @@ export const InventoryImage = ({
   image,
   borderRadius,
 }: {
-  image?: Food["image"];
-  itemName: Food["title"];
+  image?: Food["image"] | GroceryItem["image"];
+  itemName: string;
   borderRadius?: string;
 }) => {
   const src = image?.url ? image?.url : "";

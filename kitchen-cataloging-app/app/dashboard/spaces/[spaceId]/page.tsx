@@ -1,6 +1,5 @@
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import SpaceHeader from "./components/header/SpaceHeader";
-import InventoryList from "./components/inventoryList/InventoryList";
 import { auth } from "@clerk/nextjs";
 import { getSingleRoom } from "../actions/crud/getSingleRoom";
 import { paginateFoods } from "./actions/search/paginateFoods";
@@ -8,6 +7,8 @@ import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapp
 import PaginationProvider from "@/components/pagination/PaginationProvider";
 import { searchFoodItems } from "./actions/actions";
 import { SearchResultFood } from "./actions/types/types";
+import ItemList from "./components/itemList/ItemList";
+
 const navigationDepthArr = ({
   spaceId,
   spaceName,
@@ -50,7 +51,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
           })}
         />
         <SpaceHeader defaultData={roomData} />
-        <InventoryList spaceId={roomData.id} />
+        <ItemList defaultItems={itemData} spaceId={roomData.id} />
       </PaginationProvider>
     </ResponsivePaddingWrapper>
   );

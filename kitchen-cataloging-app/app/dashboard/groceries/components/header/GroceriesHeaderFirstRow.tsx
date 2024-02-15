@@ -3,7 +3,7 @@ import React from "react";
 import GroceriesHeaderTopBox from "./wrappers/GroceriesHeaderTopBox";
 import GroceriesHeaderTabs from "./GroceriesHeaderTabs";
 import useWindowWidth from "@/hooks/useWindowWidth";
-import AddItemBtn from "@/components/UI/AddItemBtn";
+import AddItemBtn from "@/components/actionBtns/AddItemBtn";
 export default function GroceriesHeaderFirstRow() {
   const smallWidth = useWindowWidth(640);
   return (
