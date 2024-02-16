@@ -6,7 +6,14 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 
-const DesktopLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; spaces: string[]; userId: string }) => {
+export interface ResponsiveLayout {
+  foodData: FoodDataType;
+  spaces: string[];
+  userId: string;
+  handleIncrement: (num: number) => void;
+}
+
+const DesktopLayout = ({ foodData, spaces, userId, handleIncrement }: ResponsiveLayout) => {
     
     const food = foodData;
 
@@ -27,6 +34,7 @@ const DesktopLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; s
               foodData={foodData}
               spaces={spaces}
               userId={userId}
+              handleIncrement={handleIncrement}
             />
           </Box>
 
@@ -40,7 +48,10 @@ const DesktopLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; s
         {/* Food Inventory */}
 
         <Paper className="w-full flex flex-col pt-12 pb-8 md:min-h-[18rem] md:box-content md:-ms-12 md:px-12">
-          <FoodInventory foodDataSingle={foodData} />{" "}
+          <FoodInventory
+            foodDataSingle={foodData}
+            handleIncrement={handleIncrement}
+          />{" "}
         </Paper>
       </>
     );

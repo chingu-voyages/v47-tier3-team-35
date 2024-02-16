@@ -51,15 +51,16 @@ function createData(
     amount,
     totalCost,
   };
-}
+}git 
 
 interface FoodInventory {
   foodDataSingle: FoodDataType;
+  handleIncrement: (num: number) => void;
 }
 
-// COMPONENT STARTS HERE -- because I need the props
+// COMPONENT STARTS HERE -- because the props are needed
 
-const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
+const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
 
   // REFACTOR: at the moment, only one food is being passed in. (So it's put in an array for now) Do we want to find ALL foods of a certain title?
   const foodData = [foodDataSingle];
@@ -472,6 +473,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
                           width: { xs: "1.25rem", md: "1.5rem" },
                           height: { xs: "1.25rem", md: "1.5rem" },
                         }}
+                        onClick={() => handleIncrement(1)}
                       >
                         <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>
@@ -481,6 +483,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
                           width: { xs: "1.25rem", md: "1.5rem" },
                           height: { xs: "1.25rem", md: "1.5rem" },
                         }}
+                        onClick={() => handleIncrement(-1)}
                       >
                         <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>
