@@ -6,6 +6,29 @@ import InventoryListGridWrapper, {
   InventoryListItemGridWrapper,
 } from "@/components/inventoryList/wrappers/InventoryListGridWrapper";
 import { IdRequiredObj } from "@/components/pagination/types";
+import { Box, Typography } from "@mui/material";
+import AddItemBtn from "../actionBtns/AddItemBtn";
+const EmptyList = () => {
+  return (
+    <Box className="flex flex-col items-center justify-center w-full space-y-4">
+      <Box className="flex flex-col justify-center items-center grow max-w-screen-sm">
+        <Box className="flex items-center justify-center">
+          <Typography className="text-10xl xs:text-11xl md:text-12xl xl:text-13xl leading-relaxed text-default-ref-neutral-neutral40 font-medium">
+            No items found
+          </Typography>
+        </Box>
+        <Typography className="text-2xl xs:text-3xl md:text-4xl xl:text-5xl leading-normal tracking-wide text-default-ref-neutral-neutral30 text-center">
+          Add an item to get started
+        </Typography>
+      </Box>
+      <AddItemBtn
+        responsive={{
+          disableTextHide: true,
+        }}
+      />
+    </Box>
+  );
+};
 const InventoryList = <T,>({
   defaultItems,
   children,
@@ -38,22 +61,26 @@ const InventoryList = <T,>({
       defaultItems={defaultItems}
       loadingComponent={(ref) => <LoadingComponent setRef={ref} />}
     >
-      {(props) => (
-        <InventoryListGridWrapper>
-          {props.data.map((item) => (
-            <InventoryListItemGridWrapper key={item.id}>
-              {children({
-                item,
-                width: { small: smallWidth, medium: mediumWidth },
-                borderRadius: {
-                  top: cardTopBorderRadius,
-                  bottom: cardBottomBorderRadius,
-                },
-              })}
-            </InventoryListItemGridWrapper>
-          ))}
-        </InventoryListGridWrapper>
-      )}
+      {(props) =>
+        props.data.length <= 0 ? (
+          <EmptyList />
+        ) : (
+          <InventoryListGridWrapper>
+            {props.data.map((item) => (
+              <InventoryListItemGridWrapper key={item.id}>
+                {children({
+                  item,
+                  width: { small: smallWidth, medium: mediumWidth },
+                  borderRadius: {
+                    top: cardTopBorderRadius,
+                    bottom: cardBottomBorderRadius,
+                  },
+                })}
+              </InventoryListItemGridWrapper>
+            ))}
+          </InventoryListGridWrapper>
+        )
+      }
     </PaginationWrapper>
   );
 };

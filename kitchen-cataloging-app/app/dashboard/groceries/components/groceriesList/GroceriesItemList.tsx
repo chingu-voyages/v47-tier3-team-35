@@ -2,10 +2,15 @@
 import InventoryList from "@/components/inventoryList/InventoryList";
 import React from "react";
 import { SearchResultGroceries } from "../../types";
-import { Box } from "@mui/material";
+import { Box, } from "@mui/material";
 import { InventoryImage } from "@/components/inventoryList/InventoryImage";
 import GroceriesItemContent from "./GroceriesItemContent";
-export default function GrocieresItemList() {
+import { useGroceries } from "../../providers/GroceriesProvider";
+import ComingSoonBanner from "@/components/comingSoon/ComingSoonBanner";
+const PurchasedPage = () => {
+  return <ComingSoonBanner />;
+};
+const ShoppingPage = () => {
   return (
     <InventoryList<SearchResultGroceries>>
       {(props) => (
@@ -30,4 +35,11 @@ export default function GrocieresItemList() {
       )}
     </InventoryList>
   );
+};
+export default function GrocieresItemList() {
+  const props = useGroceries();
+  if (!props) return <></>;
+  if (props.pageType === "shopping") return <ShoppingPage />;
+  else if (props.pageType === "purchased") return <PurchasedPage />;
+  else return <></>;
 }
