@@ -1,19 +1,33 @@
 'use server'
 
+import { Image } from "@prisma/client";
 import addSingleFoodItem from "./crud/addFoodItem";
 import updateSingleFoodItem from "./crud/updateFoodItem";
 import { FoodType } from "@/prisma/mock/mockData";
 
-export const addEditItem = async (formData: FormData, userId: string, itemData?: FoodType,) => {
-    const newSpace = formData.get("space") as string;
-    const newTitle = formData.get("title") as string;
-    const newImageUrl = formData.get("image") as string;
-    const newDescription = formData.get("description") as string;
-    const newPrice = parseInt(formData.get("price") as string);
-    const newThreshold = parseInt(formData.get("threshold") as string);
-    const getLabels = formData.get("labels") as string;
-    const newLabels = getLabels?.split(',');
-    const newExpiration = formData.get("date") as string;
+export const addEditItem = async (
+    newSpace: string,
+    newTitle: string,
+    newImage: Image,
+    newPrice: string,
+    newDescription: string,
+    newThreshold: number,
+    newLabels: string[],
+    newExpiration: string,
+    userId: string,
+    itemData?: FoodType,
+) => {
+    // const newSpace = formData.get("space") as string;
+    // const newTitle = formData.get("title") as string;
+    // const newImageUrl = formData.get("image") as string;
+    // const newDescription = formData.get("description") as string;
+    // const newPrice = parseInt(formData.get("price") as string);
+    // const newThreshold = parseInt(formData.get("threshold") as string);
+    // const getLabels = formData.get("labels") as string;
+    // const newLabels = getLabels?.split(',');
+    // const newExpiration = formData.get("date") as string;
+
+    console.log('creating new doc')
 
     const newDoc = {
         createdAt: itemData?.createdAt ? itemData.createdAt : new Date(),
@@ -21,15 +35,11 @@ export const addEditItem = async (formData: FormData, userId: string, itemData?:
         description: newDescription,
         labels: newLabels, 
         amount: itemData?.amount ? itemData.amount : 0,
-        price: newPrice,
+        price: parseFloat(newPrice),
         threshold: newThreshold,
         expirationDate: new Date(newExpiration),
         // Need to add ability to upload image to aws when it is a file. -- use uploadImgs function in aws folder -- do this in drag&drop component
-        // image: {
-            // s3ObjKey: formData.get("itemImgS3ObjectImgUrl")?.toString(),
-            // s3ObjKey: null,
-            // url: newImageUrl,
-            // },
+        image: newImage,
         roomTitle: newSpace,
     }
 

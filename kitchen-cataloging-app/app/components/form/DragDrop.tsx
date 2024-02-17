@@ -1,21 +1,25 @@
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
+import Image from "next/image";
 import { DragEvent } from "react";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
+import uploadImages, { FileMediaType } from "@/aws/content/uploadImages";
 import './drag-drop.css'
+import { resizeImgToSquare } from "@/aws/content/processImages";
 
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 
 interface DragDrop {
   name: string;
-  image?: string;
+  handleImage: (files: FileMediaType[]) => void;
+  imageUrl?: string;
 }
 
-function DragDrop({ name, image }: DragDrop) {
+function DragDrop({ name, handleImage, imageUrl }: DragDrop) {
   
   const [file, setFile] = useState<File | null>(null);
   const [drag, setDrag] = useState(false);
   
-  const handleImage = (e: DragEvent<HTMLDivElement>) => {
+  const getImage = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     // Check if files contain any images
@@ -33,33 +37,24 @@ function DragDrop({ name, image }: DragDrop) {
     }
   };
 
-  const fileToDataURL = (file: File) => {
-    return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  };
-
-  // useEffect to handle file change
-  React.useEffect(() => {
+  // useEffect to handle file upload
+  useEffect(() => {
     if (file) {
-      fileToDataURL(file)
-        .then((dataURL) => {
-          // Set input value to data URL
-          const inputElement = document.querySelector<HTMLInputElement>(
-            `input[name="${name}"]`
-          );
-          if (inputElement) {
-            inputElement.value = dataURL as string;
+      console.log(file);
+      const uploadedImgs = async (file: File) => {
+        try {
+          const imgData = await uploadImages({ files: [file] });
+          if ("uploaded" in imgData && Array.isArray(imgData.uploaded)) {
+            // imgData has the shape { uploaded: FileMediaType[] }
+            const uploadedFiles: FileMediaType[] = imgData.uploaded;
+            console.log(uploadedFiles)
+            handleImage(uploadedFiles);
           }
-        })
-        .catch((error) => {
-          console.error("Error converting file to data URL:", error);
-        });
+        } catch (e) {
+          console.error(e)
+        }
+      }
+      uploadedImgs(file);
     }
   }, [file, name]);
   
@@ -69,7 +64,7 @@ function DragDrop({ name, image }: DragDrop) {
       onDragEnter={() => setDrag(true)}
       onDragLeave={() => setDrag(false)}
       onDrop={(e) => {
-        handleImage(e);
+        getImage(e);
         setDrag(false);
       }}
     >
@@ -84,8 +79,8 @@ function DragDrop({ name, image }: DragDrop) {
           drag && "bg-slate-400 opacity-30"
         } ${file && "bg-slate-300"}`}
       >
-        {image?.match(/unsplash/) && 
-          <img className="w-full h-full object-cover" src={image}></img>
+        {imageUrl?.match(/unsplash/) && 
+          <Image alt={name} className="w-full h-full object-cover" width='300' height='300' src={imageUrl}></Image>
         }
         {file &&
           <div className="max-w-30 text-sm flex items-center gap-2">
@@ -93,13 +88,6 @@ function DragDrop({ name, image }: DragDrop) {
             Image successfully uploaded!
         </div>}
       </div>
-      <input
-        className="w-0 h-0 bg-transparent opacity-0"
-        type="text"
-        name="image"
-        value={image ? image : ''}
-        readOnly
-      ></input>
     </div>
   );
 }

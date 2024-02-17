@@ -12,14 +12,13 @@ import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
 import { FoodDataType } from "../page";
 import { FoodType } from "@/prisma/mock/mockData";
 
-const tempSpaces = ["kitchen", "my secret stash"];
-
 interface FoodInfo {
   foodData: FoodDataType;
+  spaces: string[];
   userId: string;
 }
 
-const FoodInfo = ({ foodData, userId }: FoodInfo) => {
+const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
   
   const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
@@ -83,7 +82,7 @@ const FoodInfo = ({ foodData, userId }: FoodInfo) => {
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <CreateEditForm type={"edit"} spaces={tempSpaces} userId={userId} itemData={foodData as FoodType}>
+          <CreateEditForm type={"edit"} spaces={spaces} userId={userId} itemData={foodData as FoodType}>
             <EditOutlinedIcon
               color={"secondary"}
               className={`${iconClassList}`}

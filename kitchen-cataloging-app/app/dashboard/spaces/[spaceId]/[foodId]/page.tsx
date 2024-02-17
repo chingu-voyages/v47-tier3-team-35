@@ -23,7 +23,9 @@ const Food = async({ params }: Food) => {
   const { spaceId, foodId } = params;
   const { userId } = auth();
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
-  const foodData = await getSingleFood({ foodId: foodId, userId: userId });
+  const data = await getSingleFood({ foodId: foodId, userId: userId });
+  const foodData = data?.foodData;
+  const spaces = data?.spaces.map(space => space.title) || [];
   //guard clause in case no data is returned
   if (!foodData) return <>No data found for this item</>;
   if (!userId) return <>You must log in to view this page</>;
@@ -46,11 +48,11 @@ const Food = async({ params }: Food) => {
         />
         {/* Desktop Layout */}
         <Box className="desktop-layout hidden md:block pt-9">
-          <DesktopLayout foodData={foodData} userId={userId} />
+          <DesktopLayout foodData={foodData} spaces={spaces || []} userId={userId} />
         </Box>
         {/* Mobile Layout */}
         <Box className="mobile-layout md:hidden">
-          <MobileLayout foodData={foodData} userId={userId} />
+          <MobileLayout foodData={foodData} spaces={spaces || []} userId={userId} />
         </Box>
       </Box>
     );

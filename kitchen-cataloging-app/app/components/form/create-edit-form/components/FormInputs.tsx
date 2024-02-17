@@ -1,39 +1,35 @@
 "use client";
-import React, { useEffect } from "react";
-import { MouseEvent, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import {
   Box,
   Typography,
-  InputLabel,
-  FormControl,
-  Select,
   TextField,
-  MenuItem,
   Slider,
   InputAdornment,
   Button,
   IconButton,
-  Input,
 } from "@mui/material";
-import { Unstable_NumberInput as NumberInput } from "@mui/base";
 import CustomSelect from "./CustomSelect";
-import Close from "@mui/icons-material/Close";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { ChangeEvent } from "react";
-
+import { addEditItem } from "../actions/CreateEditServerAction";
+import uploadImages from "@/aws/content/uploadImages";
+import CloseIcon from "@mui/icons-material/Close";
 import { FoodType } from "@/prisma/mock/mockData";
 
 import "./customstyles.css";
 import DragDrop from "../../DragDrop";
+import CreateSelect from "./CreateSelect";
+import { Image } from "@prisma/client";
+import { FileMediaType } from "@/aws/content/uploadImages";
 
 interface FormInputs {
   type: "create" | "edit";
   spaces: string[];
   onClose: () => void;
+  userId: string;
   itemData?: FoodType;
 }
 
@@ -42,11 +38,10 @@ const FormInputs = ({
   type,
   spaces,
   onClose,
+  userId,
   itemData,
 }: FormInputs) => {
-
-  console.log(itemData?.expirationDate)
-
+  // STATE AND HANDLER FUNCTIONS
   // Space
   const [space, setSpace] = useState(
     itemData?.roomTitle ? itemData?.roomTitle : ""
@@ -55,77 +50,170 @@ const FormInputs = ({
     setSpace(val);
   };
 
-  const [newTitle, setNewTitle] = useState('')
+  // title
+  const titleRef = useRef<HTMLInputElement | null>(null);
 
-  // Image 
-  const [image, setImage] = useState(itemData?.image?.url);
-  const handleGeneratedImage = () => {
-    if (newTitle) {
-      setImage(`https://source.unsplash.com/random/?${newTitle}`);
+  // Price
+  const computersAreDumb = 0.001;
+
+  // Image
+  const [image, setImage] = useState<Image>(
+    itemData?.image || {
+      s3ObjKey: null,
+      url: null,
     }
-  }
+  );
 
-  // Labels
-  const [labels, setLabels] = useState(itemData?.labels ? itemData.labels : []);
-  const [addingLabel, setAddingLabel] = useState(false);
-  const [newLabel, setNewLabel] = useState("");
+  const handleImage = (imgs: FileMediaType[], url?: string) => {
+    const img = imgs[0];
+    setImage({
+      s3ObjKey: img.objKey || "",
+      url: url || "",
+    });
+  };
 
-  const handleNewLabel = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (e.target.value !== "") {
-      setNewLabel(e.target.value);
-      setAddingLabel(true);
-    } else {
-      setNewLabel(e.target.value);
-      setAddingLabel(false);
+  const imgTitle =
+    titleRef && titleRef.current ? titleRef?.current.value : "nofile";
+
+  const srcToFile = async (src: string, fileName: string) => {
+    const response = await fetch(src);
+    const blob = await response.blob();
+    const mimeType = response.headers.get("content-type");
+    if (mimeType) {
+      const file = new File([blob], fileName, { type: mimeType });
+      // Use this test to make sure the image shows when generated:
+      // console.log(file);
+      // setImage({
+      //   s3ObjKey: "",
+      //   url: src || "",
+      // });
+      if (file) {
+        console.log(file);
+        const uploadedImgs = async (file: File) => {
+          try {
+            const imgData = await uploadImages({ files: [file] });
+            if ("uploaded" in imgData && Array.isArray(imgData.uploaded)) {
+              // imgData has the shape { uploaded: FileMediaType[] }
+              const uploadedFiles: FileMediaType[] = imgData.uploaded;
+              console.log(uploadedFiles);
+              handleImage(uploadedFiles, src);
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        };
+        uploadedImgs(file);
+      }
     }
   };
 
-  const handleDeleteLabel = (val: string) => {
-    setLabels(labels.filter((label) => label !== val));
-  };
+  // description
 
-  const handleAddLabel = () => {
-    if (newLabel !== "") {
-      setLabels([...labels, newLabel]);
-      setNewLabel('')
-      setAddingLabel(false);
-    }
+  const descriptionRef = useRef<HTMLInputElement | null>(null);
+
+  // price
+
+  const priceRef = useRef<HTMLInputElement | null>(null);
+
+  // labels
+  const [labels, setLabels] = useState(itemData?.labels || []);
+  const handleLabels = (val: string[]) => {
+    setLabels(val);
   };
 
   // Threshold
 
-  const marks = new Array(10).fill(0).map((val, i) => ({
-    value: i + 1,
-  }));
+  const thresholdRef = useRef<HTMLInputElement | null>(null);
+  const text = thresholdRef?.current
+    ? thresholdRef.current.children[1].getAttribute("style")
+    : "0";
+  const width = text ? text.split(/[%\s+]/) : "0"; // getting width value
+  const threshold = parseInt(width[4]) / 10; // width percentage
 
   // Expiration date
-  const [expDateDisplay, setExpDateDisplay] = useState('')
+
+  const expirationDateRef = useRef<HTMLInputElement | null>(null);
+
+  const [expDateDisplay, setExpDateDisplay] = useState("");
   useEffect(() => {
     function convertToRFC3339(inputDateStr: string): string {
       const date = new Date(inputDateStr);
-
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
       const RFC3339Date = `${year}-${month}-${day}`;
-      console.log(RFC3339Date)
       return RFC3339Date;
     }
     if (itemData?.expirationDate) {
-      console.log('true')
       const expDate = convertToRFC3339(itemData.expirationDate.toDateString());
-      console.log(expDate);
-      setExpDateDisplay(expDate)
+      setExpDateDisplay(expDate);
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
+  // Errors for required inputs
+  const [errors, setErrors] = useState({
+    space: false,
+    title: false,
+    price: false,
+    description: false,
+  });
+
+  // submit form
+  const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    console.log("submitting");
+    if (
+      titleRef.current &&
+      priceRef.current &&
+      descriptionRef.current &&
+      expirationDateRef.current
+    ) {
+      console.log("all refs exist");
+      const errorObject = {
+        space: space === "" ? true : false,
+        title: titleRef.current.value === "",
+        price:
+          priceRef.current.value === "" ||
+          Math.abs(
+            Math.round(parseFloat(priceRef.current.value) * 100) -
+              parseFloat(priceRef.current.value) * 100
+          ) > computersAreDumb
+            ? true
+            : false,
+        description: descriptionRef.current.value === "" ? true : false,
+      };
+      setErrors(errorObject);
+      if (Object.values(errorObject).every((err) => err === false)) {
+        console.log("no errors");
+        await addEditItem(
+          space,
+          titleRef.current.value,
+          image,
+          priceRef.current.value,
+          descriptionRef.current.value,
+          threshold,
+          labels,
+          expirationDateRef.current.value,
+          userId,
+          itemData
+        );
+        window.location.reload();
+      }
+    }
+  };
 
   return (
-    <>
+    <form className="p-10 flex flex-col min-h-fit h-full bg-default-sys-light-surface-container-low overflow-auto">
+      
       {/* Heading */}
-
+      <IconButton
+        className="absolute top-2 right-2"
+        onClick={onClose}
+        aria-label="close"
+      >
+        <CloseIcon className="text-black"></CloseIcon>
+      </IconButton>
       <section className="modal-header w-full flex pb-10">
         <Box className="flex flex-col gap-8">
           <Typography
@@ -144,37 +232,53 @@ const FormInputs = ({
 
       {/* Main */}
       <section className="modal-main h-full flex flex-col gap-8 md:gap-16 md:flex-row">
+        
         {/* Left Section (desktop) */}
         {/* Title */}
-        <Box className="h-full w-full flex flex-col gap-8 md:gap-0">
+        <Box className="container-left-desktop h-full w-full flex flex-col gap-8 md:gap-0">
           <TextField
-            className="h-14 mb-12"
+            className="h-14 md:mb-12"
             id="outlined-start-adornment"
             label="Name"
             defaultValue={itemData?.title}
-            helperText=""
+            inputRef={titleRef}
+            error={errors.title}
+            helperText={errors.title && "Title is required"}
             variant="standard"
             placeholder="Item Name"
             name="title"
-            onChange={(e) => setNewTitle(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start"></InputAdornment>
               ),
             }}
+            onChange={(e) => {
+              if (e.target.value !== "") {
+                setErrors({ ...errors, title: false });
+              }
+            }}
           />
 
           {/* Image  */}
 
-          <Box className="flex-grow relative">
-            <DragDrop name={"image"} image={image ? image : ""} />
-            <Box className="absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
+          <Box className="flex-grow h-full relative">
+            <DragDrop
+              name={"image"}
+              imageUrl={image.url || ""}
+              handleImage={handleImage}
+            />
+            <Box className="image-icons absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
               <IconButton className="p-2 rounded-full bg-default-sys-light-on-primary border border-default-sys-light-primary">
                 <FileUploadOutlinedIcon className="text-default-sys-light-primary" />
               </IconButton>
               <IconButton
                 className="p-2 rounded-full bg-default-sys-light-primary pointer-events-auto cursor-pointer"
-                onClick={() => handleGeneratedImage()}
+                onClick={() =>
+                  srcToFile(
+                    `https://source.unsplash.com/random/300x300/?${imgTitle}`,
+                    imgTitle
+                  )
+                }
               >
                 <AutoAwesomeIcon className="text-default-sys-light-on-primary" />
               </IconButton>
@@ -206,7 +310,9 @@ const FormInputs = ({
             label="Description"
             placeholder="Item Description"
             defaultValue={itemData?.description}
-            helperText=""
+            inputRef={descriptionRef}
+            error={errors.description}
+            helperText={errors.description && "Description is required"}
             variant="standard"
             name="description"
             InputProps={{
@@ -214,7 +320,13 @@ const FormInputs = ({
                 <InputAdornment position="start"></InputAdornment>
               ),
             }}
+            onChange={(e) => {
+              if (e.target.value !== "") {
+                setErrors({ ...errors, description: false });
+              }
+            }}
           />
+          
           {/* price */}
           <TextField
             className="h-14"
@@ -222,7 +334,12 @@ const FormInputs = ({
             label="Price"
             placeholder="Item Price"
             defaultValue={itemData?.price}
-            helperText=""
+            inputRef={priceRef}
+            error={errors.price}
+            helperText={
+              errors.price &&
+              "Price is required and must be formatted correctly (X.XX)"
+            }
             variant="standard"
             name="price"
             type="number"
@@ -231,8 +348,22 @@ const FormInputs = ({
                 <InputAdornment position="start">$</InputAdornment>
               ),
               inputProps: {
-                step: 0.01, 
+                step: 0.01,
               },
+            }}
+            onChange={(e) => {
+              const val = e.target.value;
+              const valNum = parseFloat(val);
+              if (val !== "") {
+                setErrors({ ...errors, price: false });
+              }
+              if (
+                val !== "" &&
+                Math.abs(Math.round(valNum * 100) - valNum * 100) >
+                  computersAreDumb
+              ) {
+                setErrors({ ...errors, price: true });
+              }
             }}
           />
 
@@ -244,7 +375,8 @@ const FormInputs = ({
             <Slider
               aria-labelledby="threshold-input-label"
               aria-label="Always visible"
-              defaultValue={itemData?.threshold ? itemData.threshold : 5}
+              defaultValue={itemData?.threshold || 5}
+              ref={thresholdRef}
               // getAriaValueText={valuetext}
               step={1}
               min={0}
@@ -269,75 +401,9 @@ const FormInputs = ({
           </Box>
 
           {/* labels */}
-          <Box>
-            <Box className="flex flex-row px-4 gap-4 w-full items-end overflow-x-scroll">
-              <Typography
-                className="w-fit"
-                variant="button"
-                sx={{ textTransform: "unset", fontWeight: "unset" }}
-                id="labels-input-label"
-                gutterBottom
-              >
-                Labels
-              </Typography>
-              <Box className="flex-grow flex flex-row flex-wrap gap-1 mb-1">
-                {labels.map((labelText, i) => (
-                  <Box
-                    key={i}
-                    className="bg-default-sys-light-surface-container-high rounded-full px-2 me-2 py-1.5 flex flex-row items-center"
-                  >
-                    <IconButton
-                      className="p-0"
-                      onClick={() => {
-                        handleDeleteLabel(labelText);
-                      }}
-                    >
-                      <Close className="text-default-sys-light-on-surface text-xs" />
-                    </IconButton>
-                    <Typography
-                      className="leading-none"
-                      variant="button"
-                      sx={{ textTransform: "unset", fontWeight: "unset" }}
-                    >
-                      {labelText}
-                    </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-            {/* Input to handle adding labels */}
-            <Box className="relative w-full h-fit">
-              <TextField
-                className="bg-default-sys-light-surface-bright"
-                aria-labelledby="labels-input-label"
-                fullWidth
-                id="standard-helperText"
-                label=""
-                placeholder="Add Label"
-                value={newLabel}
-                helperText=""
-                hiddenLabel
-                onChange={(e) => handleNewLabel(e)}
-              />
-              <CheckCircleIcon
-                className={`absolute right-4 top-1/2 -translate-y-1/2 ${
-                  addingLabel
-                    ? "text-default-sys-light-primary"
-                    : "text-default-sys-light-surface-container-high"
-                }`}
-                onClick={() => handleAddLabel()}
-              />
-            </Box>
-            {/* Input to store label data */}
-            <input
-              className="hidden"
-              value={labels}
-              name="labels"
-              readOnly
-            ></input>
-          </Box>
+          <CreateSelect labels={labels} handleLabels={handleLabels} />
 
-          {/* date */}
+          {/* expiration date */}
           <Box>
             <Typography
               variant="button"
@@ -353,14 +419,17 @@ const FormInputs = ({
               fullWidth
               id="standard-helperText"
               label=""
-              // placeholder="mm/dd/yyyy"
+              placeholder="mm/dd/yyyy"
               defaultValue={expDateDisplay}
+              inputRef={expirationDateRef}
               helperText=""
               type="date"
               hiddenLabel
               name="date"
             />
           </Box>
+
+          {/* Save/cancel buttons */}
           <Box className="flex flex-row justify-end gap-4">
             <Button
               type="button"
@@ -370,13 +439,18 @@ const FormInputs = ({
             >
               Cancel
             </Button>
-            <Button type="submit" className="rounded-full" variant="contained">
+            <Button
+              type="submit"
+              className="rounded-full"
+              variant="contained"
+              onClick={(e) => handleSubmit(e)}
+            >
               Save
             </Button>
           </Box>
         </Box>
       </section>
-    </>
+    </form>
   );
 };
 
