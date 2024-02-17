@@ -28,7 +28,7 @@ export const createGroceryItemSearchQuery = ({
       },
     });
   }
-  const query:any[] = [
+  const query: any[] = [
     {
       $search: {
         index: "search_grocery_items_by_text",

@@ -1,6 +1,6 @@
 "use client";
 import { Room } from "@prisma/client";
-import { paginateRooms } from "../../actions/actions";
+import { paginateRooms } from "../../../../actions/space/actions";
 import PaginationWrapper from "@/components/pagination/PaginationWrapper";
 import useWindowWidth from "@/hooks/useWindowWidth";
 import { DesktopSpacesList } from "./DesktopSpacesList";

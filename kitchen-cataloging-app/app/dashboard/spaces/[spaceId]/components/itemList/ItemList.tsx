@@ -4,7 +4,7 @@ import InventoryList from "@/components/inventoryList/InventoryList";
 import Link from "next/link";
 import React from "react";
 import ItemContent from "./ItemContent";
-import { SearchResultFood } from "../../actions/types/types";
+import { SearchResultFood } from "../../../../../actions/food/types/types";
 export default function ItemList({
   defaultItems,
   spaceId,

@@ -11,7 +11,7 @@ import ItemContentWrapper, {
   ItemCardFirstRowWrapper,
   ItemCardCounterBtns,
 } from "@/components/inventoryList/wrappers/ItemContentWrapper";
-import { SearchResultFood } from "../../actions/types/types";
+import { SearchResultFood } from "../../../../../actions/food/types/types";
 const ItemStockInfoAndBtns = ({
   item,
   mediumWidth,

@@ -1,12 +1,12 @@
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import SpaceHeader from "./components/header/SpaceHeader";
 import { auth } from "@clerk/nextjs";
-import { getSingleRoom } from "../actions/crud/getSingleRoom";
-import { paginateFoods } from "./actions/search/paginateFoods";
+import { getSingleRoom } from "../../../actions/space/crud/getSingleRoom";
+import { paginateFoods } from "../../../actions/food/search/paginateFoods";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 import PaginationProvider from "@/components/pagination/PaginationProvider";
-import { searchFoodItems } from "./actions/actions";
-import { SearchResultFood } from "./actions/types/types";
+import { searchFoodItems } from "../../../actions/food/actions";
+import { SearchResultFood } from "../../../actions/food/types/types";
 import ItemList from "./components/itemList/ItemList";
 
 const navigationDepthArr = ({

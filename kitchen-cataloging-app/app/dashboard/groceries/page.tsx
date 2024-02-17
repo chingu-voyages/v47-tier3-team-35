@@ -3,9 +3,9 @@ import NavigationDepthBar from "@/components/navigation/navigationDepthBar/Navig
 import GroceriesHeader from "./components/header/GroceriesHeader";
 import GroceriesItemList from "./components/groceriesList/GroceriesItemList";
 import { auth } from "@clerk/nextjs";
-import paginateGroceries from "./actions/search/paginateGroceries";
+import paginateGroceries from "../../actions/groceries/search/paginateGroceries";
 import PaginationProvider from "@/components/pagination/PaginationProvider";
-import { searchGroceryItems } from "./actions/actions";
+import { searchGroceryItems } from "../../actions/groceries/actions";
 import GroceriesProvider from "./providers/GroceriesProvider";
 const navDepthItems = [
   {

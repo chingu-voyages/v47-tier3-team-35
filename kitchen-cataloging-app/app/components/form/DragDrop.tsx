@@ -3,7 +3,7 @@ import Image from "next/image";
 import { DragEvent } from "react";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import uploadImages, { FileMediaType } from "@/aws/content/uploadImages";
-import "./drag-drop.css";
+
 import { resizeImgToSquare } from "@/aws/content/processImages";
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 
@@ -73,7 +73,7 @@ function DragDrop({ name, handleImage, imageUrl }: DragDrop) {
         onChange={(e) => handleFileSelect(e)}
       ></input>
       <div
-        className={`absolute top-[2px] left-[2px] inner-container -z-10 box-content rounded-lg flex justify-center items-center ${
+        className={`absolute top-[2px] left-[2px] w-[calc(100%-4px)] h-[calc(100%-4px)] -z-10 box-content rounded-lg flex justify-center items-center ${
           drag && "bg-slate-400 opacity-30"
         } ${file && "bg-slate-300"}`}
       >
