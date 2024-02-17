@@ -3,9 +3,8 @@ import Image from "next/image";
 import { DragEvent } from "react";
 import DownloadDoneIcon from "@mui/icons-material/DownloadDone";
 import uploadImages, { FileMediaType } from "@/aws/content/uploadImages";
-import './drag-drop.css'
+import "./drag-drop.css";
 import { resizeImgToSquare } from "@/aws/content/processImages";
-
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 
 interface DragDrop {
@@ -15,17 +14,16 @@ interface DragDrop {
 }
 
 function DragDrop({ name, handleImage, imageUrl }: DragDrop) {
-  
   const [file, setFile] = useState<File | null>(null);
   const [drag, setDrag] = useState(false);
-  
+
   const getImage = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     // Check if files contain any images
-      if (files[0].type.match(/^image\//)) {
-        setFile(files[0])
-      }
+    if (files[0].type.match(/^image\//)) {
+      setFile(files[0]);
+    }
   };
 
   const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
@@ -40,24 +38,24 @@ function DragDrop({ name, handleImage, imageUrl }: DragDrop) {
   // useEffect to handle file upload
   useEffect(() => {
     if (file) {
-      console.log(file);
-      const uploadedImgs = async (file: File) => {
-        try {
-          const imgData = await uploadImages({ files: [file] });
-          if ("uploaded" in imgData && Array.isArray(imgData.uploaded)) {
-            // imgData has the shape { uploaded: FileMediaType[] }
-            const uploadedFiles: FileMediaType[] = imgData.uploaded;
-            console.log(uploadedFiles)
-            handleImage(uploadedFiles);
-          }
-        } catch (e) {
-          console.error(e)
-        }
-      }
-      uploadedImgs(file);
+      // console.log(file);
+      // const uploadedImgs = async (file: File) => {
+      //   try {
+      //     const imgData = await uploadImages({ files: [file] });
+      //     if ("uploaded" in imgData && Array.isArray(imgData.uploaded)) {
+      //       // imgData has the shape { uploaded: FileMediaType[] }
+      //       const uploadedFiles: FileMediaType[] = imgData.uploaded;
+      //       console.log(uploadedFiles);
+      //       handleImage(uploadedFiles);
+      //     }
+      //   } catch (e) {
+      //     console.error(e);
+      //   }
+      // };
+      // uploadedImgs(file);
     }
-  }, [file, name]);
-  
+  }, [file, name, handleImage]);
+
   return (
     <div
       className="dropzone absolute top-0 left-0 z-40 bg-transparent w-full h-full"
@@ -79,14 +77,21 @@ function DragDrop({ name, handleImage, imageUrl }: DragDrop) {
           drag && "bg-slate-400 opacity-30"
         } ${file && "bg-slate-300"}`}
       >
-        {imageUrl?.match(/unsplash/) && 
-          <Image alt={name} className="w-full h-full object-cover" width='300' height='300' src={imageUrl}></Image>
-        }
-        {file &&
+        {imageUrl?.match(/unsplash/) && (
+          <Image
+            alt={name}
+            className="w-full h-full object-cover"
+            width="300"
+            height="300"
+            src={imageUrl}
+          ></Image>
+        )}
+        {file && (
           <div className="max-w-30 text-sm flex items-center gap-2">
-            <DownloadDoneIcon/>
+            <DownloadDoneIcon />
             Image successfully uploaded!
-        </div>}
+          </div>
+        )}
       </div>
     </div>
   );
