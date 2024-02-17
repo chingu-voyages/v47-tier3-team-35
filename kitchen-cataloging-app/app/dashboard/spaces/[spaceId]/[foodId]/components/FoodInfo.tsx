@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Stack, Typography, Box, IconButton } from "@mui/material";
 import AddShoppingCartOutlinedIcon from "@mui/icons-material/AddShoppingCartOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -11,21 +13,36 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
 import { FoodDataType } from "../page";
 import { FoodType } from "@/prisma/mock/mockData";
+import { getIncrementFood } from "@/actions/food/actions";
 
 interface FoodInfo {
   foodData: FoodDataType;
   spaces: string[];
   userId: string;
+  handleIncrement: (num: number) => void;
 }
 
 const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
-  
   const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toFixed(2).toString().split(".")[1];
 
-  const handleIncrement = (direction: "+" | "-") => {
-    console.log(direction);
+  const [amount, setAmount] = useState(foodData.amount);
+
+  const handleIncrement = async (num: number) => {
+    // update optimistically
+    const originalValue = amount;
+    const newValue = amount + num;
+    if (newValue > 0) {
+      setAmount(newValue);
+      try {
+        const updateResponse = await getIncrementFood(foodData.id, newValue);
+        console.log(updateResponse);
+      } catch (err) {
+        console.log(err);
+        setAmount(originalValue);
+      }
+    }
   };
 
   const iconClassList = "h-9 w-9";
@@ -82,7 +99,12 @@ const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <CreateEditForm type={"edit"} spaces={spaces} userId={userId} itemData={foodData as FoodType}>
+          <CreateEditForm
+            type={"edit"}
+            spaces={spaces}
+            userId={userId}
+            itemData={foodData as FoodType}
+          >
             <EditOutlinedIcon
               color={"secondary"}
               className={`${iconClassList}`}
@@ -97,14 +119,14 @@ const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
           <IconButton
             className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
             size={"medium"}
-            onClick={() => console.log("click")}
+            onClick={() => handleIncrement(1)}
           >
             <AddIcon className={`text-3xl`} />
           </IconButton>
           <IconButton
             className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
             size={"medium"}
-            onClick={() => console.log("click")}
+            onClick={() => handleIncrement(-1)}
           >
             <RemoveIcon className={`text-3xl`} />
           </IconButton>

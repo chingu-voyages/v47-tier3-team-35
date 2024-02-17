@@ -12,7 +12,7 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography"
+import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -55,25 +55,33 @@ function createData(
 
 interface FoodInventory {
   foodDataSingle: FoodDataType;
+  handleIncrement: (num: number) => void;
 }
 
-// COMPONENT STARTS HERE -- because I need the props
+// COMPONENT STARTS HERE -- because the props are needed
 
-const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
-
+const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
   // REFACTOR: at the moment, only one food is being passed in. (So it's put in an array for now) Do we want to find ALL foods of a certain title?
   const foodData = [foodDataSingle];
 
   const theme = useTheme();
 
   const tablePadding = 6;
-  const totalProductAmount = foodData.map((data) => data.amount).reduce((a, c) => a + c);
+  const totalProductAmount = foodData
+    .map((data) => data.amount)
+    .reduce((a, c) => a + c);
   const totalProductValue: number = foodData
     .map((data) => data.price * data.amount)
     .reduce((a, c) => a + c);
 
   const rows = foodData.map((row, i) =>
-    createData(i, row.expirationDate ? row.expirationDate.getTime() : 0, row.price, row.amount, (row.price * row.amount))
+    createData(
+      i,
+      row.expirationDate ? row.expirationDate.getTime() : 0,
+      row.price,
+      row.amount,
+      row.price * row.amount
+    )
   );
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -191,7 +199,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
               sortDirection={orderBy === headCell.id ? order : false}
               className="text-default-ref-neutral-neutral60 px-4 pb-2"
               sx={{
-                fontSize: {xs: "0.875rem", md: "1.125rem"},
+                fontSize: { xs: "0.875rem", md: "1.125rem" },
               }}
             >
               <TableSortLabel
@@ -199,7 +207,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
                 className="text-default-ref-neutral-neutral60"
-                sx={{transform: `${i > 0 ? "translateX(12px)" : ''}`}}
+                sx={{ transform: `${i > 0 ? "translateX(12px)" : ""}` }}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
@@ -295,7 +303,11 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
             }}
           >
             {foodData[0].title}
-            {(totalProductAmount !== 1 && foodData[0].title[foodData[0].title.length - 1] !== "s") ? "s" : ""} in {foodData[0].roomTitle}
+            {totalProductAmount !== 1 &&
+            foodData[0].title[foodData[0].title.length - 1] !== "s"
+              ? "s"
+              : ""}{" "}
+            in {foodData[0].roomTitle}
           </Typography>
         </Stack>
       </Toolbar>
@@ -319,7 +331,6 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
     setOrderBy(property);
   };
 
-
   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
@@ -339,9 +350,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
     setSelected(newSelected);
   };
 
-
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -472,6 +481,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
                           width: { xs: "1.25rem", md: "1.5rem" },
                           height: { xs: "1.25rem", md: "1.5rem" },
                         }}
+                        onClick={() => handleIncrement(1)}
                       >
                         <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>
@@ -481,6 +491,7 @@ const FoodInventory = ({ foodDataSingle }: FoodInventory) => {
                           width: { xs: "1.25rem", md: "1.5rem" },
                           height: { xs: "1.25rem", md: "1.5rem" },
                         }}
+                        onClick={() => handleIncrement(-1)}
                       >
                         <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
                       </IconButton>

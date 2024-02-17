@@ -3,10 +3,14 @@ import FoodImg from "../components/FoodImg";
 import FoodInfo from "../components/FoodInfo";
 import FoodActivity from "../components/FoodActivity";
 import FoodInventory from "../components/FoodInventory";
-
+import { ResponsiveLayout } from "./DesktopLayout";
 import { FoodDataType } from "../page";
-
-const MobileLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; spaces: string[]; userId: string; }) => {
+const MobileLayout = ({
+  foodData,
+  spaces,
+  userId,
+  handleIncrement,
+}: ResponsiveLayout) => {
   const food = foodData;
 
   return (
@@ -14,21 +18,26 @@ const MobileLayout = ({ foodData, spaces, userId }: { foodData: FoodDataType; sp
       <Stack gap="2" className={"relative"}>
         {/* Food Img */}
         <Box className="img-container relative h-[17.5rem] w-full">
-          <FoodImg
-            title={food.title || ""}
-            imgUrl={food.image?.url || ""}
-          />
+          <FoodImg title={food.title || ""} imgUrl={food.image?.url || ""} />
         </Box>
         {/* Food Info */}
         <Box className="info-container bg-default-sys-light-surface-container -mt-7 pt-2 mb-9 z-10 rounded-tl-[2rem] w-full px-5">
-          <FoodInfo foodData={foodData} spaces={spaces} userId={userId} />
+          <FoodInfo
+            foodData={foodData}
+            spaces={spaces}
+            userId={userId}
+            handleIncrement={handleIncrement}
+          />
         </Box>
 
         {/* Food Inventory */}
 
         <Box className="px-5 w-full mb-9">
           <Paper className="flex flex-col pt-5 pb-8 w-full">
-            <FoodInventory foodDataSingle={foodData} />{" "}
+            <FoodInventory
+              foodDataSingle={foodData}
+              handleIncrement={handleIncrement}
+            />{" "}
           </Paper>
         </Box>
 
