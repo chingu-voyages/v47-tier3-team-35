@@ -1,3 +1,5 @@
+'use client'
+
 import { Stack, Box, Paper } from "@mui/material";
 import FoodImg from "../components/FoodImg";
 import FoodInfo from "../components/FoodInfo";
@@ -5,17 +7,18 @@ import FoodActivity from "../components/FoodActivity";
 import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
+import useFoodData from "@/hooks/useFoodData";
+
 
 export interface ResponsiveLayout {
   foodData: FoodDataType;
   spaces: string[];
   userId: string;
-  handleIncrement: (num: number) => void;
 }
 
-const DesktopLayout = ({ foodData, spaces, userId, handleIncrement }: ResponsiveLayout) => {
+const DesktopLayout = ({ foodData, spaces, userId}: ResponsiveLayout) => {
     
-    const food = foodData;
+  const { currentFoodData, handleIncrement } = useFoodData(foodData);
 
     return (
       <>
@@ -24,14 +27,14 @@ const DesktopLayout = ({ foodData, spaces, userId, handleIncrement }: Responsive
             <Box className="img-container relative h-1/2">
               {/* Food Img */}
               <FoodImg
-                title={food.title || ""}
-                imgUrl={food.image?.url || ""}
+                title={currentFoodData.title || ""}
+                imgUrl={currentFoodData.image?.url || ""}
               />
             </Box>
 
             {/* Food Info */}
             <FoodInfo
-              foodData={foodData}
+              foodData={currentFoodData}
               spaces={spaces}
               userId={userId}
               handleIncrement={handleIncrement}
@@ -41,7 +44,7 @@ const DesktopLayout = ({ foodData, spaces, userId, handleIncrement }: Responsive
           {/* Food Activity */}
 
           <Box className="w-1/2 ps-6">
-            <FoodActivity foodLogs={food.logs} />
+            <FoodActivity foodLogs={currentFoodData.logs} />
           </Box>
         </Stack>
 
@@ -49,7 +52,7 @@ const DesktopLayout = ({ foodData, spaces, userId, handleIncrement }: Responsive
 
         <Paper className="w-full flex flex-col pt-12 pb-8 md:min-h-[18rem] md:box-content md:-ms-12 md:px-12">
           <FoodInventory
-            foodDataSingle={foodData}
+            foodDataSingle={currentFoodData}
             handleIncrement={handleIncrement}
           />{" "}
         </Paper>

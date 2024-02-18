@@ -51,7 +51,7 @@ function createData(
     amount,
     totalCost,
   };
-}git 
+}
 
 interface FoodInventory {
   foodDataSingle: FoodDataType;
@@ -74,7 +74,13 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
     .reduce((a, c) => a + c);
 
   const rows = foodData.map((row, i) =>
-    createData(i, row.expirationDate ? row.expirationDate.getTime() : 0, row.price, row.amount, (row.price * row.amount))
+    createData(
+      i,
+      row.expirationDate ? row.expirationDate.getTime() : 0,
+      row.price,
+      row.amount,
+      row.price * row.amount
+    )
   );
 
   function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -456,7 +462,7 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
                     }}
                     align="center"
                   >
-                    {row.amount}
+                    {foodDataSingle.amount}
                   </TableCell>
                   <TableCell padding="none" align="center">
                     <Box

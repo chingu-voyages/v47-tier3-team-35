@@ -23,29 +23,11 @@ interface FoodInfo {
   handleIncrement: (num: number) => void;
 }
 
-const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
-  
+const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
+
   const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toFixed(2).toString().split(".")[1];
-
-  const [amount, setAmount] = useState(foodData.amount)
-
-  const handleIncrement = async(num: number) => {
-    // update optimistically
-    const originalValue = amount;
-    const newValue = amount + num;
-    if (newValue > 0) {
-      setAmount(newValue) 
-      try {
-        const updateResponse = await getIncrementFood(foodData.id, newValue);
-        console.log(updateResponse);
-      } catch (err) {
-        console.log(err)
-        setAmount(originalValue); 
-      }
-    }
-  } 
 
   const iconClassList = "h-9 w-9";
   // room name, food name, price, description, tags
@@ -137,7 +119,7 @@ const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
 
       {/* Pills -- category -- these might end up being mapped */}
 
-      <Stack direction={"row"} className="w-full items-center gap-2.5 pt-2">
+      <Stack direction={"row"} className="w-full items-center gap-2.5 pt-2 flex-wrap">
         {labels.map((label, i) => (
           <Pill
             key={i}

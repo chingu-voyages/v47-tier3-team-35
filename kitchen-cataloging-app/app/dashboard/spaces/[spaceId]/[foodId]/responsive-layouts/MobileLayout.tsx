@@ -1,3 +1,5 @@
+"use client";
+
 import { Stack, Box, Paper } from "@mui/material";
 import FoodImg from "../components/FoodImg";
 import FoodInfo from "../components/FoodInfo";
@@ -6,9 +8,10 @@ import FoodInventory from "../components/FoodInventory";
 
 import { FoodDataType } from "../page";
 import { ResponsiveLayout } from "./DesktopLayout";
+import useFoodData from "@/hooks/useFoodData";
 
-const MobileLayout = ({ foodData, spaces, userId, handleIncrement }: ResponsiveLayout) => {
-  const food = foodData;
+const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
+  const { currentFoodData, handleIncrement } = useFoodData(foodData);
 
   return (
     <>
@@ -16,27 +19,35 @@ const MobileLayout = ({ foodData, spaces, userId, handleIncrement }: ResponsiveL
         {/* Food Img */}
         <Box className="img-container relative h-[17.5rem] w-full">
           <FoodImg
-            title={food.title || ""}
-            imgUrl={food.image?.url || ""}
+            title={currentFoodData.title || ""}
+            imgUrl={currentFoodData.image?.url || ""}
           />
         </Box>
         {/* Food Info */}
         <Box className="info-container bg-default-sys-light-surface-container -mt-7 pt-2 mb-9 z-10 rounded-tl-[2rem] w-full px-5">
-          <FoodInfo foodData={foodData} spaces={spaces} userId={userId} handleIncrement={handleIncrement} />
+          <FoodInfo
+            foodData={currentFoodData}
+            spaces={spaces}
+            userId={userId}
+            handleIncrement={handleIncrement}
+          />
         </Box>
 
         {/* Food Inventory */}
 
         <Box className="px-5 w-full mb-9">
           <Paper className="flex flex-col pt-5 pb-8 w-full">
-            <FoodInventory foodDataSingle={foodData} handleIncrement={handleIncrement} />{" "}
+            <FoodInventory
+              foodDataSingle={currentFoodData}
+              handleIncrement={handleIncrement}
+            />{" "}
           </Paper>
         </Box>
 
         {/* Food Activity */}
 
         <Box className="w-full px-5 mb-9">
-          <FoodActivity foodLogs={food.logs} />
+          <FoodActivity foodLogs={currentFoodData.logs} />
         </Box>
       </Stack>
     </>
