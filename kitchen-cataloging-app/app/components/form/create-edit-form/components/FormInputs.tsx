@@ -36,7 +36,8 @@ interface FormInputs {
 // COMPONENT
 // Forward ref exists becaue MUI passes a focus lock ref into the modal automatically
 const FormInputs = forwardRef(
-  ({ type, spaces, onClose, userId, itemData }: FormInputs, ref) => {
+  function FormInputs({ type, spaces, onClose, userId, itemData }: FormInputs, ref) {
+
     // STATE AND HANDLER FUNCTIONS
     // Space
     const [space, setSpace] = useState(
