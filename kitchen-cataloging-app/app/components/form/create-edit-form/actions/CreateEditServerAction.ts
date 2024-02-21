@@ -1,8 +1,8 @@
 'use server'
 
 import { Image } from "@prisma/client";
-import addSingleFoodItem from "./crud/addFoodItem";
-import updateSingleFoodItem from "./crud/updateFoodItem";
+import addSingleFoodItem from "@/actions/food/crud/addFoodItem";
+import updateSingleFoodItem from "@/actions/food/crud/updateFoodItem";
 import { FoodType } from "@/prisma/mock/mockData";
 
 export const addEditItem = async (

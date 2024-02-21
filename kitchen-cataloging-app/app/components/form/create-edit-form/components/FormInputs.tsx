@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-
 import {
   Box,
   Typography,
@@ -18,7 +17,6 @@ import { addEditItem } from "../actions/CreateEditServerAction";
 import uploadImages from "@/aws/content/uploadImages";
 import CloseIcon from "@mui/icons-material/Close";
 import { FoodType } from "@/prisma/mock/mockData";
-
 import "./customstyles.css";
 import DragDrop from "../../DragDrop";
 import CreateSelect from "./CreateSelect";
