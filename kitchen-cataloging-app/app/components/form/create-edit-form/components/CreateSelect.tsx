@@ -7,7 +7,6 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import Close from "@mui/icons-material/Close";
 
 import { itemLabels } from '@/data/labels';
-import { validateHeaderValue } from 'http';
 
 interface CreateSelect {
   labels: string[];

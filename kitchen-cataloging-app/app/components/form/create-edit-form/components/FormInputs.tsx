@@ -18,7 +18,7 @@ import uploadImages from "@/aws/content/uploadImages";
 import CloseIcon from "@mui/icons-material/Close";
 import { FoodType } from "@/prisma/mock/mockData";
 import "./customstyles.css";
-import DragDrop from "../../DragDrop";
+import DragDrop from "../../dnd/DragDrop";
 import CreateSelect from "./CreateSelect";
 import { Image } from "@prisma/client";
 import { FileMediaType } from "@/aws/content/uploadImages";
