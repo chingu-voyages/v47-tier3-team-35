@@ -1,19 +1,8 @@
 import * as React from "react";
-import Slide from "@mui/material/Slide";
-import { TransitionProps } from "@mui/material/transitions";
-import { Box} from "@mui/material";
 import { FoodType } from "@/prisma/mock/mockData";
 import FormInputs from "./components/FormInputs";
 import Modal from "@mui/material/Modal";
 
-const Transition = React.forwardRef(function Transition(
-  props: TransitionProps & {
-    children: React.ReactElement;
-  },
-  ref: React.Ref<unknown>
-) {
-  return <Slide direction="right" ref={ref} {...props} />;
-});
 
 interface CreateEditForm {
   children: React.ReactNode;
@@ -39,13 +28,6 @@ export default function CreateEditForm({
       <div className={"cursor-pointer"} onClick={handleOpen}>
         {children}
       </div>
-      {/* <Modal
-        className="max-w-[900px] bg-default-sys-light-surface-container-low"
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        // TransitionComponent={Transition}
-      > */}
       <Modal
         className="max-w-[900px] bg-default-sys-light-surface-container-low mx-auto"
         open={open}
