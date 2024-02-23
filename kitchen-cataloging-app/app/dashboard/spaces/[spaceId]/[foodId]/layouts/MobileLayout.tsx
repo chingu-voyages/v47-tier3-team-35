@@ -1,3 +1,4 @@
+
 import { Stack, Box, Paper } from "@mui/material";
 import FoodImg from "../components/FoodImg";
 import FoodInfo from "../components/FoodInfo";

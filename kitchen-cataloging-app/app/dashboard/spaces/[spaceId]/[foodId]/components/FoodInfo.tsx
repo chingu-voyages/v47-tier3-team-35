@@ -22,7 +22,8 @@ interface FoodInfo {
   handleIncrement: (num: number) => void;
 }
 
-const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
+const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
+
   const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toFixed(2).toString().split(".")[1];
@@ -135,7 +136,7 @@ const FoodInfo = ({ foodData, spaces, userId }: FoodInfo) => {
 
       {/* Pills -- category -- these might end up being mapped */}
 
-      <Stack direction={"row"} className="w-full items-center gap-2.5 pt-2">
+      <Stack direction={"row"} className="w-full items-center gap-2.5 pt-2 flex-wrap">
         {labels.map((label, i) => (
           <Pill
             key={i}

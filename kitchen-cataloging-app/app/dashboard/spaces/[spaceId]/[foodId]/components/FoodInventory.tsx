@@ -61,6 +61,7 @@ interface FoodInventory {
 // COMPONENT STARTS HERE -- because the props are needed
 
 const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
+
   // REFACTOR: at the moment, only one food is being passed in. (So it's put in an array for now) Do we want to find ALL foods of a certain title?
   const foodData = [foodDataSingle];
 
@@ -464,7 +465,7 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
                     }}
                     align="center"
                   >
-                    {row.amount}
+                    {foodDataSingle.amount}
                   </TableCell>
                   <TableCell padding="none" align="center">
                     <Box

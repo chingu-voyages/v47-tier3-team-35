@@ -391,7 +391,7 @@ return (
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+      onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
 );
