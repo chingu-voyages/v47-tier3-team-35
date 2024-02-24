@@ -3,7 +3,6 @@ import { FoodType } from "@/prisma/mock/mockData";
 import FormInputs from "./components/FormInputs";
 import Modal from "@mui/material/Modal";
 
-
 interface CreateEditForm {
   children: React.ReactNode;
   type: "create" | "edit";
@@ -19,9 +18,9 @@ export default function CreateEditForm({
   userId,
   itemData,
 }: CreateEditForm) {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+  const [open, setOpen] = React.useState(true);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <>
@@ -29,7 +28,7 @@ export default function CreateEditForm({
         {children}
       </div>
       <Modal
-        className="max-w-[900px] bg-default-sys-light-surface-container-low mx-auto"
+        className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh]"
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"

@@ -12,6 +12,6 @@ export const itemLabels = [
   "Beverages",
   "Snacks",
   "Baked Goods",
-    "Desserts",
+  "Desserts",
   "Alcohol"
 ];
