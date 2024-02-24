@@ -30,22 +30,6 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
 
   const [amount, setAmount] = useState(foodData.amount);
 
-  const handleIncrement = async (num: number) => {
-    // update optimistically
-    const originalValue = amount;
-    const newValue = amount + num;
-    if (newValue > 0) {
-      setAmount(newValue);
-      try {
-        const updateResponse = await getIncrementFood(foodData.id, newValue);
-        console.log(updateResponse);
-      } catch (err) {
-        console.log(err);
-        setAmount(originalValue);
-      }
-    }
-  };
-
   const iconClassList = "h-9 w-9";
   // room name, food name, price, description, tags
 

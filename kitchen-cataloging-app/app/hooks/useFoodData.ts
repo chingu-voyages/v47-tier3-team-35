@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import { getIncrementFood } from '@/dashboard/spaces/[spaceId]/[foodId]/actions/actions';
+import { getIncrementFood } from '@/actions/food/actions';
 import { FoodDataType } from '@/dashboard/spaces/[spaceId]/[foodId]/page';
 
 
