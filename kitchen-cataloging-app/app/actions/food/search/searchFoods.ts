@@ -73,8 +73,7 @@ export const createFoodItemSearchQuery = ({
         scoreDetails: true,
       },
     },
-    //where match for cursor pagination will be inserted
-    { $limit: take },
+    // this is where we add the cursor logic
     {
       $project: {
         _id: 1,
@@ -88,11 +87,28 @@ export const createFoodItemSearchQuery = ({
         score: { $meta: "searchScore" },
       },
     },
+    //keep most relevant first, then sort id accordingly inside
+    { $sort: { score: 1, _id: -1 } },
+    { $limit: take },
     { $match: { score: { $gt: 0.5 } } },
   ];
   if (cursor) {
-    const cursorQuery = { $match: { _id: { $gt: new ObjectId(cursor) } } };
-    query.splice(1, 0, cursorQuery);
+    //cursor will contain the object id, and the score
+    const cursorArr = cursor.split("?score=");
+    if (cursorArr.length >= 2) {
+      const [cursorId, score] = cursorArr;
+      const cursorQuery = {
+        $match: {
+          $or: [
+            //less than current score, we haven't seen the documents
+            { score: { $lt: parseFloat(score) } },
+            //greater than current score, we have seen the documents, but not the current one
+            { score: score, _id: { $gt: new ObjectId(cursorId) } },
+          ],
+        },
+      };
+      query.splice(2, 0, cursorQuery);
+    }
   }
   return query;
 };
@@ -101,6 +117,7 @@ export const searchFoods = async ({
   take,
   spaceId,
   userId,
+  cursor,
 }: SearchFoodProps & {
   userId?: string | null;
 }) => {
@@ -117,6 +134,7 @@ export const searchFoods = async ({
     spaceId: spaceId,
     text: searchText,
     take,
+    cursor,
   });
   const result = await FoodModel.aggregate(query).exec();
   const serializedResult = result.map((e) => {

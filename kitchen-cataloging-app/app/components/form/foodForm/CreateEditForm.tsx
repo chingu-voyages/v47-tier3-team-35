@@ -2,22 +2,17 @@ import * as React from "react";
 import { FoodType } from "@/prisma/mock/mockData";
 import FormInputs from "./components/FormInputs";
 import Modal from "@mui/material/Modal";
-
-interface CreateEditForm {
-  children: React.ReactNode;
-  type: "create" | "edit";
-  spaces: string[];
-  userId: string;
-  itemData?: FoodType;
-}
-
+import { PriceProvider } from "../inputs/price/PriceProvider";
+import { DescriptionProvider } from "../inputs/description/DescriptionProvider";
+import { TitleProvider } from "../inputs/title/TitleProvider";
+import { CreateEditFormProps } from "../types/types";
 export default function CreateEditForm({
   children,
   type,
   spaces,
   userId,
   itemData,
-}: CreateEditForm) {
+}: CreateEditFormProps<FoodType>) {
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -34,13 +29,19 @@ export default function CreateEditForm({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <FormInputs
-          type={type}
-          spaces={spaces}
-          onClose={handleClose}
-          userId={userId}
-          itemData={itemData}
-        />
+        <TitleProvider defaultValue={itemData?.title}>
+          <DescriptionProvider defaultValue={itemData?.description}>
+            <PriceProvider defaultValue={itemData?.price}>
+              <FormInputs
+                type={type}
+                spaces={spaces}
+                onClose={handleClose}
+                userId={userId}
+                itemData={itemData}
+              />
+            </PriceProvider>
+          </DescriptionProvider>
+        </TitleProvider>
       </Modal>
     </>
   );

@@ -1,83 +1,101 @@
-import { useState } from "react";
-import Creatable from "react-select/creatable";
 import { Box } from "@mui/material";
-import { itemLabels } from "@/data/labels";
-import { unstable_batchedUpdates } from "react-dom";
-import Label from "../label/Label";
-interface SelectInput {
-  defaultValues?: string[];
-  handleValues?: (val: string[]) => void;
+import React, { useCallback, useRef, useState } from "react";
+import AsyncSelect from "react-select/async";
+import { ValueProps } from "./types";
+import { determineSelectStyles } from "./determineSelectStyles";
+export interface SelectInputProps {
+  defaultValue?: ValueProps;
+  handleValue?: (val: string) => void;
   name?: string;
-  label?: string;
+  placeholder?: string;
+  loadOptions: ({
+    cursor,
+    inputStr,
+  }: {
+    cursor?: string | null;
+    inputStr: string;
+  }) => Promise<ValueProps[]>;
 }
 
-export const convertToSelectOptions = (arr: string[]) => {
-  return arr.map((val) => ({
-    value: val,
-    label: val,
-  }));
-};
-
-const SelectMultiInput = ({
-  defaultValues,
-  handleValues,
+const SelectInput = ({
+  defaultValue,
+  handleValue,
   name,
-  label,
-}: SelectInput) => {
-  const [labels, setLabels] = useState(defaultValues || []);
-  const [focus, setFocus] = useState(false);
-  //stringified labels
-  const [labelsStr, setLabelsStr] = useState(JSON.stringify([]));
+  placeholder,
+  loadOptions,
+}: SelectInputProps) => {
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [value, setValue] = useState(defaultValue || null);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [options, setOptions] = useState<ValueProps[]>([]);
+  const loadingRef = useRef(loading);
+  //our function handlers. All of them have their dependencies managed
+  //and memoized to prevent unnecessary re-renders given that options
+  //can be a large list
+  const setLoadingFunc = (val: boolean) => {
+    loadingRef.current = val;
+    setLoading(val);
+  };
+  const loadOptionWrapperFunc = async (inputStr: string) => {
+    if (loadingRef.current) return null;
+    setLoadingFunc(true);
+    const result = await loadOptions({
+      inputStr,
+      cursor: cursor || undefined,
+    });
+    if (result.length > 0) setCursor(result[result.length - 1].value);
+    else setCursor(null);
+    setLoadingFunc(false);
+    return result;
+  };
+  const savedLoadOptionsWrapperFunc = useCallback(loadOptionWrapperFunc, [
+    loadOptions,
+  ]);
+  const loadOptionsFunc = async (inputStr: string) => {
+    const result = await savedLoadOptionsWrapperFunc(inputStr);
+    if (result === null) return [];
+    setOptions(result);
+    return result;
+  };
+  const savedLoadOptionsFunc = useCallback(loadOptionsFunc, [
+    savedLoadOptionsWrapperFunc,
+  ]);
+  const onMenuScrollToBottom = async () => {
+    const results = await savedLoadOptionsWrapperFunc(input);
+    if (results === null) return [];
+    setOptions((prev) => [...prev, ...results]);
+    return results;
+  };
+  const savedOnMenuScrollToBottom = useCallback(onMenuScrollToBottom, [
+    savedLoadOptionsWrapperFunc,
+  ]);
+  const onChange = (value?: ValueProps | null) => {
+    const newValue = value || null;
+    setValue(newValue);
+    if (handleValue) handleValue(newValue?.value || "");
+  };
+  const savedOnChangeFunc = useCallback(onChange, [handleValue]);
+  const onInputChange = (e: string) => setInput(e);
+  const savedOnInputChange = useCallback(onInputChange, []);
+
   return (
     <Box className="flex flex-col relative w-full">
-      <Label text={label || ""} active={focus} />
-      <Creatable
-        isClearable
-        isMulti
-        onFocus={() => {
-          setFocus(true);
-        }}
-        onBlur={() => {
-          setFocus(false);
-        }}
-        value={convertToSelectOptions(labels)}
-        options={convertToSelectOptions(itemLabels)}
-        placeholder="Type or select a label"
-        classNames={{
-          container: () => "flex w-full min-h-14",
-          control: (props) =>
-            `w-full min-h-0 bg-default-sys-light-surface-bright shadow-none ${
-              props.isFocused
-                ? "border-[2.4px] border-default-sys-light-primary"
-                : "border-[0.5px] border-default-ref-neutral-neutral80"
-            }`,
-          valueContainer: () => "w-full",
-          option: () => "w-full",
-          placeholder: (props) =>
-            props.isFocused ? "text-default-sys-light-primary" : "",
-          indicatorSeparator: (props) =>
-            props.isFocused ? "bg-default-sys-light-primary" : "",
-          dropdownIndicator: (props) =>
-            props.isFocused ? "text-default-sys-light-primary" : "",
-        }}
-        onChange={(e) => {
-          const newLabels = e.map((val) => val.value);
-          unstable_batchedUpdates(() => {
-            setLabels(newLabels);
-            setLabelsStr(JSON.stringify(newLabels));
-            if (handleValues) handleValues(newLabels);
-          });
-        }}
-      />
-      <input
-        aria-label="hidden"
-        className="invisible w-0 h-0 absolute -z-10 p-0 m-0"
-        value={labelsStr}
-        onChange={() => {}}
+      <AsyncSelect
+        cacheOptions
+        defaultOptions
+        isLoading={loading}
+        loadOptions={savedLoadOptionsFunc}
+        options={options}
+        onMenuScrollToBottom={savedOnMenuScrollToBottom}
         name={name}
+        value={value}
+        placeholder={placeholder}
+        onInputChange={savedOnInputChange}
+        classNames={determineSelectStyles}
+        onChange={savedOnChangeFunc}
       />
     </Box>
   );
 };
-
-export default SelectMultiInput;
+export default SelectInput;

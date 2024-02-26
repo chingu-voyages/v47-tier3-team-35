@@ -74,7 +74,8 @@ export const createGroceryItemSearchQuery = ({
         scoreDetails: true,
       },
     },
-    { $limit: take },
+    // this is where we add the cursor logic
+
     {
       $project: {
         _id: 1,
@@ -87,11 +88,28 @@ export const createGroceryItemSearchQuery = ({
         score: { $meta: "searchScore" },
       },
     },
+    //keep most relevant first, then sort id accordingly inside
+    { $sort: { score: 1, _id: -1 } },
+    { $limit: take },
     { $match: { score: { $gt: 0.5 } } },
   ];
   if (cursor) {
-    const cursorQuery = { $match: { _id: { $gt: new ObjectId(cursor) } } };
-    query.splice(1, 0, cursorQuery);
+    //cursor will contain the object id, and the score
+    const cursorArr = cursor.split("?score=");
+    if (cursorArr.length >= 2) {
+      const [cursorId, score] = cursorArr;
+      const cursorQuery = {
+        $match: {
+          $or: [
+            //less than current score, we haven't seen the documents
+            { score: { $lt: parseFloat(score) } },
+            //greater than current score, we have seen the documents, but not the current one
+            { score: score, _id: { $gt: new ObjectId(cursorId) } },
+          ],
+        },
+      };
+      query.splice(2, 0, cursorQuery);
+    }
   }
   return query;
 };
@@ -119,7 +137,7 @@ export const searchGroceries = async (
     const id = e._id.toString();
     if (e._id) delete e._id;
     return { ...e, id: id, roomId: e.roomId?.toString() };
-  }) as (Partial<GroceryItem> & { id: string })[];
+  }) as (Partial<GroceryItem> & { id: string; score?: number })[];
   return serializedResult;
 };
 

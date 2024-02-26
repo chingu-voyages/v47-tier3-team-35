@@ -19,6 +19,11 @@ const DateInput = ({
         <Label text="Expiration Date" active={focused} />
         <DatePicker
           onOpen={() => setFocused(true)}
+          orientation="portrait"
+          name={inputName}
+          defaultValue={defaultDate?.toString() || new Date().toString()}
+          className="bg-default-sys-light-surface-bright w-full"
+          aria-labelledby="date-input-label"
           slotProps={{
             textField: {
               helperText: "",
@@ -29,11 +34,6 @@ const DateInput = ({
               className: focused ? "text-default-sys-light-primary" : "",
             },
           }}
-          orientation="portrait"
-          name={inputName}
-          defaultValue={defaultDate?.toString() || new Date().toString()}
-          className="bg-default-sys-light-surface-bright w-full"
-          aria-labelledby="date-input-label"
         />
       </LocalizationProvider>
     </Box>

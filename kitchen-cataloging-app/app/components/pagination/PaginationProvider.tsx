@@ -91,7 +91,14 @@ const PaginationProvider = <T,>({
       });
       return;
     }
-    const newCursor = newItems[newItems.length - 1].id;
+    const newCursorId = newItems[newItems.length - 1].id;
+    const newCursorScore = newItems[newItems.length - 1].score;
+    const newCursor =
+      //this means we're performing a text search with a relevant score
+      params && params.text
+        ? `${newCursorId}?score=${newCursorScore}`
+        : //this means we're simply paginating by id
+          newCursorId;
     isLoadingRef.current = false;
     cursorRef.current = newCursor;
     return {

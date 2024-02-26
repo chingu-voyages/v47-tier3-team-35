@@ -4,10 +4,15 @@ export type SearchFuncProps = {
 };
 export type PaginationProps = {
   cursor?: string | null;
+  // | {
+  //     score: number;
+  //     id: string;
+  //   };
   take: number;
 };
 export type IdRequiredObj<T> = {
   id: string;
+  score?: number;
 } & T;
 export type PaginationProviderProps<T> = {
   take: number;
