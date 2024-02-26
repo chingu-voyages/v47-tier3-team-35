@@ -7,7 +7,11 @@ import { getSingleRoom } from "./crud/getSingleRoom";
 import { addSingleRoom } from "./crud/addSingleRoom";
 import deleteManyRooms from "./crud/deleteManyRooms";
 import editSingleRoom from "./crud/editSingleRoom";
-import { PaginationProps } from "@/components/pagination/types";
+import {
+  PaginationProps,
+  SearchFuncProps,
+} from "@/components/pagination/types";
+import searchSpaces from "./search/searchSpaces";
 // PAGINATE ROOMS -----------
 export async function paginateRooms(
   props: PaginationProps
@@ -20,6 +24,12 @@ export async function paginateRooms(
     return null;
   }
 }
+export const searchRooms = async (
+  props: PaginationProps & Pick<SearchFuncProps, "text">
+) => {
+  if (!props.text) return await paginateRooms(props);
+  else return await searchSpaces(props);
+};
 export const getRoom = async ({ id }: { id: string }) => {
   const { userId } = auth();
   return await getSingleRoom({ id, userId });

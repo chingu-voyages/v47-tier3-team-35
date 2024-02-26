@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
 }
 datasource db {
   provider = "mongodb"
@@ -34,6 +35,7 @@ model Room {
   groceryItems GroceryItem[]
   itemCount Int @default(0)
   createdAt DateTime @default(now())
+  @@fulltext([title])
 }
 
 // food items model. Stored as an array in User

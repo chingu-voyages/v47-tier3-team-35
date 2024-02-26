@@ -73,6 +73,8 @@ export const createFoodItemSearchQuery = ({
         scoreDetails: true,
       },
     },
+    //hard limit of 10000 relevant items at a time in search, to ensure query never performs poorly
+    { $limit: 10000 },
     // this is where we add the cursor logic
     {
       $project: {
@@ -87,10 +89,10 @@ export const createFoodItemSearchQuery = ({
         score: { $meta: "searchScore" },
       },
     },
+    { $match: { score: { $gt: 0.5 } } },
     //keep most relevant first, then sort id accordingly inside
     { $sort: { score: 1, _id: -1 } },
     { $limit: take },
-    { $match: { score: { $gt: 0.5 } } },
   ];
   if (cursor) {
     //cursor will contain the object id, and the score
@@ -107,7 +109,7 @@ export const createFoodItemSearchQuery = ({
           ],
         },
       };
-      query.splice(2, 0, cursorQuery);
+      query.splice(3, 0, cursorQuery);
     }
   }
   return query;

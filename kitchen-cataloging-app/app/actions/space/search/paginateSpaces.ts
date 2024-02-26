@@ -1,14 +1,16 @@
 import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-import { PaginationProps } from "@/components/pagination/types";
-
+import {
+  PaginationProps,
+  SearchFuncProps,
+} from "@/components/pagination/types";
 export const paginateSpaces = async ({
   cursor,
   take,
   userId,
 }: PaginationProps & {
-  userId?: string | null;
-}) => {
+    userId?: string | null;
+  }) => {
   if (!userId) return null;
   // ensure user only grabs rooms belonging to them
   const user = await getUserInfoServer({ userId });
