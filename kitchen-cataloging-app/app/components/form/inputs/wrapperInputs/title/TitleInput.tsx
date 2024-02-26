@@ -1,5 +1,5 @@
 import React from "react";
-import TextInput from "../text/TextInput";
+import TextInput from "../../innerComponents/text/TextInput";
 import { useTitleInput } from "./TitleProvider";
 export default function TitleInput() {
   const titleProps = useTitleInput();

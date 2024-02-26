@@ -4,10 +4,10 @@ import AsyncSelect from "react-select/async";
 import { ValueProps } from "./types";
 import { determineSelectStyles } from "./determineSelectStyles";
 export interface SelectInputProps {
-  defaultValue?: ValueProps;
-  handleValue?: (val: string) => void;
   name?: string;
   placeholder?: string;
+  onChange: (e: ValueProps | null) => void;
+  value: ValueProps | null;
   loadOptions: ({
     cursor,
     inputStr,
@@ -18,14 +18,14 @@ export interface SelectInputProps {
 }
 
 const SelectInput = ({
-  defaultValue,
-  handleValue,
   name,
+  value,
   placeholder,
   loadOptions,
+  onChange,
 }: SelectInputProps) => {
   const [cursor, setCursor] = useState<string | null>(null);
-  const [value, setValue] = useState(defaultValue || null);
+  // const [value, setValue] = useState(defaultValue || null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<ValueProps[]>([]);
@@ -70,12 +70,7 @@ const SelectInput = ({
   const savedOnMenuScrollToBottom = useCallback(onMenuScrollToBottom, [
     savedLoadOptionsWrapperFunc,
   ]);
-  const onChange = (value?: ValueProps | null) => {
-    const newValue = value || null;
-    setValue(newValue);
-    if (handleValue) handleValue(newValue?.value || "");
-  };
-  const savedOnChangeFunc = useCallback(onChange, [handleValue]);
+
   const onInputChange = (e: string) => setInput(e);
   const savedOnInputChange = useCallback(onInputChange, []);
 
@@ -93,7 +88,7 @@ const SelectInput = ({
         placeholder={placeholder}
         onInputChange={savedOnInputChange}
         classNames={determineSelectStyles}
-        onChange={savedOnChangeFunc}
+        onChange={onChange}
       />
     </Box>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import TextInput from "../text/TextInput";
+import TextInput from "../../innerComponents/text/TextInput";
 import { InputAdornment } from "@mui/material";
 import { usePriceInput } from "./PriceProvider";
 export default function PriceInput() {

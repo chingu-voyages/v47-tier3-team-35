@@ -1,5 +1,5 @@
 import React from "react";
-import TextInput from "../text/textInput";
+import TextInput from "../../innerComponents/text/TextInput";
 import { useDescriptionInput } from "./DescriptionProvider";
 export default function DescriptionInput() {
   const DescriptionProps = useDescriptionInput();

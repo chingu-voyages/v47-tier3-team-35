@@ -1,6 +1,6 @@
 import { Box, Slider } from "@mui/material";
 import React from "react";
-import Label from "../label/Label";
+import Label from "../inputLabel/Label";
 
 export default function SliderInput({
   label,

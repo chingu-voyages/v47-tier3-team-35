@@ -1,6 +1,6 @@
 "use client";
 import Box from "@mui/material/Box";
-import Label from "../label/Label";
+import Label from "../inputLabel/Label";
 import { useState } from "react";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";

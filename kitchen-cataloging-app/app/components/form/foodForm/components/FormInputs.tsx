@@ -1,25 +1,21 @@
 "use client";
-import { useState, useRef, forwardRef } from "react";
+import { useState, useRef } from "react";
 import { Box } from "@mui/material";
 import uploadImages from "@/aws/content/uploadImages";
 import "./customstyles.css";
 import { Food, Image } from "@prisma/client";
 import { FileMediaType } from "@/aws/content/uploadImages";
-import SelectMultiInput from "../../inputs/select/SelectMultiInput";
-import DateInput from "../../inputs/date/DateInput";
-import SliderInput from "../../inputs/slider/SliderInput";
-import PriceInput from "../../inputs/price/PriceInput";
-import DescriptionInput from "../../inputs/description/DescriptionInput";
-import TitleInput from "../../inputs/title/TitleInput";
+import DateInput from "../../inputs/innerComponents/date/DateInput";
+import SliderInput from "../../inputs/innerComponents/slider/SliderInput";
+import PriceInput from "../../inputs/wrapperInputs/price/PriceInput";
+import DescriptionInput from "../../inputs/wrapperInputs/description/DescriptionInput";
+import TitleInput from "../../inputs/wrapperInputs/title/TitleInput";
 import { CreateEditFormProps } from "../../types/types";
 import { FormActionBtns, FormCloseBtn } from "../../components/FormActionBtns";
 import FormHeader from "../../components/FormHeader";
+import LabelsInput from "../../inputs/wrapperInputs/labels/LabelsInput";
 // COMPONENT
-// Forward ref exists becaue MUI passes a focus lock ref into the modal automatically
-const FormInputs = forwardRef(function FormInputs(
-  { type, spaces, onClose, userId, itemData }: CreateEditFormProps<Food>,
-  ref
-) {
+const FormInputs = ({ type, onClose, itemData }: CreateEditFormProps<Food>) => {
   // STATE AND HANDLER FUNCTIONS
   // Space
   const [space, setSpace] = useState(
@@ -156,7 +152,7 @@ const FormInputs = forwardRef(function FormInputs(
           {/* threshold */}
           <SliderInput value={threshold} label="Threshold" name="threshold" />
           {/* labels */}
-          <SelectMultiInput label="Labels" />
+          <LabelsInput />
           {/* expiration date */}
           <DateInput defaultDate={itemData?.expirationDate} inputName="date" />
         </Box>
@@ -164,6 +160,6 @@ const FormInputs = forwardRef(function FormInputs(
       <FormActionBtns onClose={onClose} />
     </form>
   );
-});
+};
 
 export default FormInputs;

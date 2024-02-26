@@ -1,6 +1,6 @@
 import { Box, IconButton } from '@mui/material';
 import React from 'react'
-import DragDrop from '../dnd/DragDrop';
+import DragDrop from '../innerComponents/dnd/DragDrop';
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
