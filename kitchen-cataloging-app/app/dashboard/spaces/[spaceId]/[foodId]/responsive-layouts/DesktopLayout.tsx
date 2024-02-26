@@ -1,3 +1,5 @@
+'use client'
+
 import { Stack, Box, Paper } from "@mui/material";
 import FoodImg from "../components/FoodImg";
 import FoodInfo from "../components/FoodInfo";
@@ -48,7 +50,7 @@ const DesktopLayout = ({
 
       <Paper className="w-full flex flex-col pt-12 pb-8 md:min-h-[18rem] md:box-content md:-ms-12 md:px-12">
         <FoodInventory
-          foodDataSingle={foodData}
+          foodDataSingle={currentFoodData}
           handleIncrement={handleIncrement}
         />{" "}
       </Paper>

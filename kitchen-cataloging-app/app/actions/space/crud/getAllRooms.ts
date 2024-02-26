@@ -1,23 +1,20 @@
 import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 
-export const getSingleFood = async ({
-  foodId,
+export const getAllRoomNames = async ({
   userId,
 }: {
-  foodId: string;
   userId?: string | null;
 }) => {
   const user = await getUserInfoServer({ userId });
   if (!user?.id) return null;
-  const food = await prisma.food.findFirst({
+  const spaces = await prisma.room.findMany({
     where: {
       userId: user.id,
-      id: foodId,
     },
-    include: {
-      logs: true,
-    },
-  });
-  return food
+    select: {
+      title: true,
+    }
+  })
+  return spaces
 };

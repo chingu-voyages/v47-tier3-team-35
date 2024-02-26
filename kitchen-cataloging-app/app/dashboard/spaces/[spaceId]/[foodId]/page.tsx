@@ -1,4 +1,3 @@
-
 import { Box, Stack } from "@mui/material";
 import { auth } from "@clerk/nextjs";
 import DesktopLayout from "./responsive-layouts/DesktopLayout";
@@ -6,6 +5,7 @@ import MobileLayout from "./responsive-layouts/MobileLayout";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { FoodType, LogType } from "@/prisma/mock/mockData";
 import { getSingleFood } from "@/actions/food/crud/getSingleFood";
+import { getAllRoomNames } from "@/actions/space/crud/getAllRooms";
 // import { useParams } from "next/navigation";
 // Types for data
 export type LogDataType = Omit<LogType, "id" | "userId" | "foodId">;
@@ -16,14 +16,21 @@ interface Food {
 }
 
 const Food = async ({ params }: Food) => {
-  // const food: FoodDataType = tempFoodData[0];
-
   const { spaceId, foodId } = params;
   const { userId } = auth();
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
-  const data = await getSingleFood({ foodId: foodId, userId: userId });
-  const foodData = data?.foodData;
-  const spaces = data?.spaces.map((space) => space.title) || [];
+  const foodDataPromise = await getSingleFood({
+    foodId: foodId,
+    userId: userId,
+  });
+  const allRoomsDataPromise = await getAllRoomNames({ userId: userId });
+
+  const [foodData, spaceData] = await Promise.all([
+    foodDataPromise,
+    allRoomsDataPromise,
+  ]);
+
+  const spaces = spaceData?.map((space) => space.title) || [];
   //guard clause in case no data is returned
   if (!foodData) return <>No data found for this item</>;
   if (!userId) return <>You must log in to view this page</>;

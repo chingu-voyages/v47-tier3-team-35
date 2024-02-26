@@ -17,7 +17,7 @@ const useFoodData = (initialData: FoodDataType) => {
     if (newValue >= 0) {
       setFoodData({ ...currentFoodData, amount: newValue });
       try {
-        const updateResponse = await getIncrementFood(currentFoodData.id, newValue); // Assuming getIncrementFood is defined elsewhere
+        const updateResponse = await getIncrementFood(currentFoodData.id, newValue);
         console.log(updateResponse);
       } catch (err) {
         console.log(err);

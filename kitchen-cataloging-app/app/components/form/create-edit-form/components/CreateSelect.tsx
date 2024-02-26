@@ -35,7 +35,6 @@ const CreateSelect = ({ labels, handleLabels }: CreateSelect) => {
   };
 
   const handleAddLabel = (val?: string) => {
-    console.log(val)
     if (newLabel !== "" && labels.indexOf(newLabel) === -1) {
       setNewLabel("");
       setAddingLabel("closed");

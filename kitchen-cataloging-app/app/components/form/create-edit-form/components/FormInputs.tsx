@@ -13,7 +13,7 @@ import CustomSelect from "./CustomSelect";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import { addEditItem } from "../actions/CreateEditServerAction";
+import { addEditItem } from "../../../../actions/form/CreateEditServerAction";
 import uploadImages from "@/aws/content/uploadImages";
 import CloseIcon from "@mui/icons-material/Close";
 import { FoodType } from "@/prisma/mock/mockData";
@@ -42,7 +42,10 @@ const FormInputs = forwardRef(
       itemData?.roomTitle ? itemData?.roomTitle : ""
     );
     const handleSpace = (val: string) => {
-      setSpace(val);
+      if (val) {
+        setErrors({...errors, space: false})
+        setSpace(val);
+      }
     };
 
     // title
@@ -54,8 +57,8 @@ const FormInputs = forwardRef(
     // Image
     const [image, setImage] = useState<Image>(
       itemData?.image || {
-        s3ObjKey: null,
-        url: null,
+        s3ObjKey: "donuts.jpg",
+        url: "",
       }
     );
 
@@ -167,6 +170,7 @@ const FormInputs = forwardRef(
         expirationDateRef.current
       ) {
         console.log("all refs exist");
+        // Check for validation errors
         const errorObject = {
           space: space === "" ? true : false,
           title: titleRef.current.value === "",
@@ -180,9 +184,11 @@ const FormInputs = forwardRef(
               : false,
           description: descriptionRef.current.value === "" ? true : false,
         };
+        // Set validation errors if there are any
         setErrors(errorObject);
         if (Object.values(errorObject).every((err) => err === false)) {
           console.log("no errors");
+          // If no errors, submit form
           await addEditItem(
             space,
             titleRef.current.value,
@@ -218,10 +224,12 @@ const FormInputs = forwardRef(
             >
               {`${type.slice(0, 1).toUpperCase()}${type.slice(1)}`} Item
             </Typography>
+            {/* Space Select */}
             <CustomSelect
               space={space}
               spaces={spaces}
               handleSpace={handleSpace}
+              error={errors.space}
             />
           </Box>
         </section>

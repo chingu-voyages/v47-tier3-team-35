@@ -9,9 +9,10 @@ interface CustomSelect {
     space: string;
     spaces: string[];
     handleSpace: (val: string) => void;
+    error?: boolean
 }
 
-const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
+const CustomSelect = ({space, spaces, handleSpace, error = false}: CustomSelect) => {
 
      const [animateLabelClass, setAnimateLabelClass] = useState(
        space ? "open" : "closed"
@@ -35,60 +36,63 @@ const CustomSelect = ({space, spaces, handleSpace}: CustomSelect) => {
     
     
   return (
-    <div className={`relative z-10`}>
-      <div
-        className="relative select bg-default-sys-light-surface-container-lowest w-52 h-12 rounded-lg ps-4 border border-default-sys-light-outline-variant"
-        id="space-select"
-        onClick={() => setOpenSelect(!openSelect)}
-      ></div>
-      <input
-        className="absolute h-0 w-0 opacity-0"
-        value={space}
-        name="space"
-        readOnly
-      ></input>
-      <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
-        {space}
-      </p>
-      {openSelect && space === "" && (
-        <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-outline-variant pointer-events-none">
-          Choose Space
+    <>
+      <div className={`relative z-10`}>
+        <div
+          className="relative select bg-default-sys-light-surface-container-lowest w-100 h-12 rounded-lg border border-default-sys-light-outline-variant"
+          id="space-select"
+          onClick={() => setOpenSelect(!openSelect)}
+        ></div>
+        <input
+          className="absolute h-0 w-0 opacity-0"
+          value={space}
+          name="space"
+          readOnly
+        ></input>
+        <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none">
+          {space}
         </p>
-      )}
-      <label
-        className={`${animateLabelClass} absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none`}
-        htmlFor="space-select"
-        id="space-label"
-      >
-        Choose Space
-      </label>
-      {openSelect && (
-        <ul className="absolute -bottom-0.5 left-0 translate-y-full w-full bg-white rounded-b-lg max-h-48 overflow-y-scroll">
-          {spaces.map((spaceOption, i) => (
-            <li
-              className="space-item relative select bg-default-sys-light-surface-container-lowest w-52 h-12 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pe-3 pt-3 border-b border-default-sys-light-outline-variant"
-              key={i}
-              onClick={() => {
-                handleSpace(spaceOption);
-                setOpenSelect(false);
-              }}
-            >
-              {spaceOption}
-            </li>
-          ))}
-        </ul>
-      )}
-      {!openSelect && (
-        <ArrowDropDownIcon
-          className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
-        />
-      )}
-      {openSelect && (
-        <ArrowDropUpIcon
-          className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
-        />
-      )}
-    </div>
+        {openSelect && space === "" && (
+          <p className="space-selected absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-outline-variant pointer-events-none">
+            Choose Space
+          </p>
+        )}
+        <label
+          className={`${animateLabelClass} absolute whitespace-nowrap pe-3 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pointer-events-none`}
+          htmlFor="space-select"
+          id="space-label"
+        >
+          Choose Space
+        </label>
+        {openSelect && (
+          <ul className="absolute -bottom-0.5 left-0 translate-y-full w-full bg-white rounded-b-lg max-h-48 overflow-y-scroll">
+            {spaces.map((spaceOption, i) => (
+              <li
+                className="space-item relative select bg-default-sys-light-surface-container-lowest h-12 text-center font-semibold text-[1.125rem] text-default-sys-light-on-primary-fixed pe-3 pt-3 border-b border-default-sys-light-outline-variant"
+                key={i}
+                onClick={() => {
+                  handleSpace(spaceOption);
+                  setOpenSelect(false);
+                }}
+              >
+                {spaceOption}
+              </li>
+            ))}
+          </ul>
+        )}
+        {!openSelect && (
+          <ArrowDropDownIcon
+            className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
+          />
+        )}
+        {openSelect && (
+          <ArrowDropUpIcon
+            className={`absolute right-4 top-1/2 -translate-y-1/2 text-default-sys-light-on-surface pointer-events-none`}
+          />
+        )}
+        {(error && !openSelect) && <p className="text-red-700 text-sm absolute -bottom-6">Please select a space</p>}
+      </div>
+    </>
   );
 }
 

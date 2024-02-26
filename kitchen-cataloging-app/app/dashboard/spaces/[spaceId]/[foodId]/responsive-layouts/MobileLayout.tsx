@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import { Stack, Box, Paper } from "@mui/material";
 import FoodImg from "../components/FoodImg";
@@ -13,7 +13,7 @@ import useFoodData from "@/hooks/useFoodData";
 const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
   
   const { currentFoodData, handleIncrement } = useFoodData(foodData);
-
+  
   return (
     <>
       <Stack gap="2" className={"relative"}>
