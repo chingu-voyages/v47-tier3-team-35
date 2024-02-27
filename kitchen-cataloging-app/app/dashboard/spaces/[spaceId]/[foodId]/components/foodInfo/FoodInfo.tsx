@@ -10,7 +10,7 @@ import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
+import CreateEditForm from "@/components/form/foodForm/CreateEditForm";
 import { FoodDataType } from "../../page";
 import { FoodType } from "@/prisma/mock/mockData";
 import { getIncrementFood } from "@/actions/food/actions";
@@ -109,10 +109,7 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
               <AddIcon className={`text-3xl`} />
             </IconButton>
           </IncrementPopup>
-          <IncrementPopup
-            type='decrement'
-            handleIncrement={handleIncrement}
-          >
+          <IncrementPopup type="decrement" handleIncrement={handleIncrement}>
             <IconButton
               className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
               size={"medium"}

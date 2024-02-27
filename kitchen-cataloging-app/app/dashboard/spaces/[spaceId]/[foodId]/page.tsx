@@ -1,7 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import { auth } from "@clerk/nextjs";
-import DesktopLayout from "./responsive-layouts/DesktopLayout";
-import MobileLayout from "./responsive-layouts/MobileLayout";
+import DesktopLayout from "./responsiveLayouts/DesktopLayout";
+import MobileLayout from "./responsiveLayouts/MobileLayout";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { FoodType, LogType } from "@/prisma/mock/mockData";
 import { getSingleFood } from "@/actions/food/crud/getSingleFood";
