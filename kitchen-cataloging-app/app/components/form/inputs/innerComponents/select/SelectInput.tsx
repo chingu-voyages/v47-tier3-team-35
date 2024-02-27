@@ -3,8 +3,10 @@ import React, { useCallback, useRef, useState } from "react";
 import AsyncSelect from "react-select/async";
 import { ValueProps } from "./types";
 import { determineSelectStyles } from "./determineSelectStyles";
+import Label from "../inputLabel/Label";
 export interface SelectInputProps {
   name?: string;
+  label?: string;
   placeholder?: string;
   onChange: (e: ValueProps | null) => void;
   value: ValueProps | null;
@@ -19,6 +21,7 @@ export interface SelectInputProps {
 
 const SelectInput = ({
   name,
+  label,
   value,
   placeholder,
   loadOptions,
@@ -29,6 +32,7 @@ const SelectInput = ({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<ValueProps[]>([]);
+  const [focus, setFocus] = useState(false);
   const loadingRef = useRef(loading);
   //our function handlers. All of them have their dependencies managed
   //and memoized to prevent unnecessary re-renders given that options
@@ -76,7 +80,14 @@ const SelectInput = ({
 
   return (
     <Box className="flex flex-col relative w-full">
+      {label && <Label text={label || ""} active={focus} />}
       <AsyncSelect
+        onFocus={() => {
+          setFocus(true);
+        }}
+        onBlur={() => {
+          setFocus(false);
+        }}
         cacheOptions
         defaultOptions
         isLoading={loading}

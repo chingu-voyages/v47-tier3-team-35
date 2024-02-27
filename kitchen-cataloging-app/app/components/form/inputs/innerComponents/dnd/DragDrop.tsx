@@ -3,8 +3,6 @@ import Image from "next/image";
 import { useDndFileInput } from "./DnDProvider";
 import { Box, IconButton } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 interface DragDrop {
   name: string;
@@ -66,7 +64,12 @@ function DragDrop({
         </div>
       </div>
       <Box className="image-icons absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
-        <IconButton className="p-2 rounded-full bg-default-sys-light-on-primary border border-default-sys-light-primary">
+        <IconButton
+          className="p-2 rounded-full bg-default-sys-light-on-primary border-default-sys-light-primary"
+          sx={{
+            border: 1,
+          }}
+        >
           <FileUploadOutlinedIcon className="text-default-sys-light-primary" />
         </IconButton>
         {btnContainerChildren}
