@@ -23,7 +23,7 @@ export const PriceProvider = ({
   defaultValue?: number;
   children: React.ReactNode;
 }) => {
-  const computersAreDumb = 0.001;
+  const decimalLimit = 0.001;
   const [price, setPrice] = useState(defaultValue || 0.00);
   const [error, setError] = useState(false);
   const onChange = (
@@ -36,7 +36,7 @@ export const PriceProvider = ({
     }
     if (
       val !== "" &&
-      Math.abs(Math.round(valNum * 100) - valNum * 100) > computersAreDumb
+      Math.abs(Math.round(valNum * 100) - valNum * 100) > decimalLimit
     ) {
       setError(true);
     }

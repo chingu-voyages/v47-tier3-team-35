@@ -14,7 +14,7 @@ const DashboardGreeting = async () => {
   const user = await getUserInfoServer({ userId });
   return (
     <>
-      <Container className="flex flex-row items-center p-0 gap-2 justify-center md:justify-start">
+      <Box className="flex flex-row items-center gap-2 justify-center md:justify-start">
         <Typography
           className="text-default-ref-neutral-neutral30"
           sx={{
@@ -24,7 +24,7 @@ const DashboardGreeting = async () => {
           Welcome, {user?.firstName}!
         </Typography>
         <WavingHandTwoToneIcon className="hidden md:inline-block" />
-      </Container>
+      </Box>
       <Typography
         className="text-default-ref-neutral-neutral50"
         sx={{
