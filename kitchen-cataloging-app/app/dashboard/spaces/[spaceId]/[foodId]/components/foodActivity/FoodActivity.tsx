@@ -284,7 +284,7 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
 
   return (
     <Paper className={"w-full h-full"}>
-      <EnhancedTableToolbar />
+      {/* <EnhancedTableToolbar />
       <TableContainer sx={{ flexGrow: 1 }}>
         <Table className="w-full" aria-labelledby="tableTitle">
           <EnhancedTableHead
@@ -410,7 +410,7 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
             display: "none",
           },
         }}
-      />
+      /> */}
     </Paper>
   );
 };

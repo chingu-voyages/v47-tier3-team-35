@@ -9,6 +9,7 @@ import { CreateEditFormProps } from "../types/types";
 import { Box } from "@mui/material";
 import { LabelsProvider } from "../inputs/wrapperInputs/labels/LabelsProvider";
 import { SpaceProvider } from "../inputs/wrapperInputs/space/SpaceProvider";
+import { DndFileProvider } from "../inputs/innerComponents/dnd/DnDProvider";
 export default function CreateEditForm({
   children,
   type,
@@ -17,6 +18,7 @@ export default function CreateEditForm({
   const [open, setOpen] = React.useState(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  console.log(itemData?.image)
   return (
     <>
       <div className={"cursor-pointer"} onClick={handleOpen}>
@@ -27,7 +29,7 @@ export default function CreateEditForm({
           itemData && itemData.roomId
             ? {
                 label: itemData.roomTitle,
-                value: itemData.roomId
+                value: itemData.roomId,
               }
             : null
         }
@@ -36,21 +38,23 @@ export default function CreateEditForm({
           <DescriptionProvider defaultValue={itemData?.description}>
             <PriceProvider defaultValue={itemData?.price}>
               <LabelsProvider defaultValue={itemData?.labels}>
-                <Modal
-                  className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh]"
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="modal-modal-title"
-                  aria-describedby="modal-modal-description"
-                >
-                  <Box className="flex flex-col w-full">
-                    <FormInputs
-                      type={type}
-                      onClose={handleClose}
-                      itemData={itemData}
-                    />
-                  </Box>
-                </Modal>
+                <DndFileProvider defaultValue={itemData?.image?.url}>
+                  <Modal
+                    className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh]"
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                  >
+                    <Box className="flex flex-col w-full">
+                      <FormInputs
+                        type={type}
+                        onClose={handleClose}
+                        itemData={itemData}
+                      />
+                    </Box>
+                  </Modal>
+                </DndFileProvider>
               </LabelsProvider>
             </PriceProvider>
           </DescriptionProvider>
