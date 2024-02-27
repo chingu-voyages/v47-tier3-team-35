@@ -11,9 +11,10 @@ import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
-import { FoodDataType } from "../page";
+import { FoodDataType } from "../../page";
 import { FoodType } from "@/prisma/mock/mockData";
 import { getIncrementFood } from "@/actions/food/actions";
+import IncrementPopup from "./IncrementPopup";
 
 interface FoodInfo {
   foodData: FoodDataType;
@@ -23,7 +24,6 @@ interface FoodInfo {
 }
 
 const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
-
   const { title, roomTitle, description, price, labels } = foodData;
   const priceDollars = price.toString().split(".")[0];
   const priceCents = price.toFixed(2).toString().split(".")[1];
@@ -101,26 +101,34 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
           />
         </Stack>
         <Stack direction={"row"} className={"justify-end gap-5"}>
-          <IconButton
-            className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
-            size={"medium"}
-            onClick={() => handleIncrement(1)}
+          <IncrementPopup handleIncrement={handleIncrement}>
+            <IconButton
+              className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
+              size={"medium"}
+            >
+              <AddIcon className={`text-3xl`} />
+            </IconButton>
+          </IncrementPopup>
+          <IncrementPopup
+            type='decrement'
+            handleIncrement={handleIncrement}
           >
-            <AddIcon className={`text-3xl`} />
-          </IconButton>
-          <IconButton
-            className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
-            size={"medium"}
-            onClick={() => handleIncrement(-1)}
-          >
-            <RemoveIcon className={`text-3xl`} />
-          </IconButton>
+            <IconButton
+              className={`bg-default-ref-neutral-neutral90 text-default-ref-neutral-neutral30 shadow-[0px_1px_2px_gray] hover:bg-default-ref-neutral-neutral95 ${iconClassList}`}
+              size={"medium"}
+            >
+              <RemoveIcon className={`text-3xl`} />
+            </IconButton>
+          </IncrementPopup>
         </Stack>
       </Stack>
 
       {/* Pills -- category -- these might end up being mapped */}
 
-      <Stack direction={"row"} className="w-full items-center gap-2.5 pt-2 flex-wrap">
+      <Stack
+        direction={"row"}
+        className="w-full items-center gap-2.5 pt-2 flex-wrap"
+      >
         {labels.map((label, i) => (
           <Pill
             key={i}

@@ -1,11 +1,11 @@
-'use client'
+"use client";
 
 import { Stack, Box, Paper } from "@mui/material";
-import FoodImg from "../components/FoodImg";
-import FoodInfo from "../components/FoodInfo";
-import FoodActivity from "../components/FoodActivity";
-import FoodInventory from "../components/FoodInventory";
-import useFoodData from "@/hooks/useFoodData";
+import FoodImg from "../components/foodInfo/FoodImg";
+import FoodInfo from "../components/foodInfo/FoodInfo";
+import FoodActivity from "../components/foodActivity/FoodActivity";
+import FoodInventory from "../components/foodInventory/FoodInventory";
+import useIncrementFoodData from "@/hooks/useIncrementFoodData";
 import { FoodDataType } from "../page";
 
 export interface ResponsiveLayout {
@@ -14,12 +14,8 @@ export interface ResponsiveLayout {
   userId: string;
 }
 
-const DesktopLayout = ({
-  foodData,
-  spaces,
-  userId,
-}: ResponsiveLayout) => {
-  const { currentFoodData, handleIncrement } = useFoodData(foodData);
+const DesktopLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
+  const { currentFoodData, handleIncrement } = useIncrementFoodData(foodData);
 
   return (
     <>
@@ -27,7 +23,10 @@ const DesktopLayout = ({
         <Box className="item-details flex flex-col w-1/2 pe-6">
           <Box className="img-container relative h-1/2">
             {/* Food Img */}
-            <FoodImg title={currentFoodData.title || ""} imgUrl={currentFoodData.image?.url || ""} />
+            <FoodImg
+              title={currentFoodData.title || ""}
+              imgUrl={currentFoodData.image?.url || ""}
+            />
           </Box>
 
           {/* Food Info */}

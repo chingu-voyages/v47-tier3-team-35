@@ -7,23 +7,21 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import Paper from "@mui/material/Paper";
 import { visuallyHidden } from "@mui/utils";
-import { useTheme } from "@mui/material/styles";
+import { useTheme } from "@mui/material";
 
-import { FoodDataType } from "../page";
-import { Stack } from "@mui/material";
+import { LogDataType } from "../../page";
 
 // Need to modify the type since the date needs to be a number in order to compare
-type FoodDataTypeMod = {
+type LogDataTypeMod = {
   id: number;
-  expirationDate: number;
+  timestamp: number;
   price: number;
   amount: number;
   totalCost: number;
@@ -31,46 +29,33 @@ type FoodDataTypeMod = {
 
 function createData(
   id: number,
-  expirationDate: number,
+  timestamp: number,
   price: number,
   amount: number,
   totalCost: number
-): FoodDataTypeMod {
+): LogDataTypeMod {
   return {
     id,
-    expirationDate,
+    timestamp,
     price,
     amount,
     totalCost,
   };
 }
 
-interface FoodInventory {
-  foodDataSingle: FoodDataType;
-  handleIncrement: (num: number) => void;
+interface FoodActivity {
+  foodLogs: LogDataType[];
 }
 
-// COMPONENT STARTS HERE -- because the props are needed
+// COMPONENT STARTS HERE -- because I need the props
 
-const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
-
-  // REFACTOR: at the moment, only one food is being passed in. (So it's put in an array for now) Do we want to find ALL foods of a certain title?
-  const foodData = [foodDataSingle];
-
+const FoodActivity = ({ foodLogs }: FoodActivity) => {
   const theme = useTheme();
 
-  const tablePadding = 6;
-  const totalProductAmount = foodData
-    .map((data) => data.amount)
-    .reduce((a, c) => a + c);
-  const totalProductValue: number = foodData
-    .map((data) => data.price * data.amount)
-    .reduce((a, c) => a + c);
-
-  const rows = foodData.map((row, i) =>
+  const rows = foodLogs.map((row, i) =>
     createData(
       i,
-      row.expirationDate ? row.expirationDate.getTime() : 0,
+      row.timestamp.getTime(),
       row.price,
       row.amount,
       row.price * row.amount
@@ -122,30 +107,25 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
 
   interface HeadCell {
     disablePadding: boolean;
-    id: keyof FoodDataTypeMod;
+    id: keyof LogDataTypeMod;
     label: string;
     numeric: boolean;
   }
 
   const headCells: readonly HeadCell[] = [
     {
-      id: "expirationDate",
+      id: "timestamp",
       numeric: true,
       disablePadding: false,
-      label: "Expires",
+      label: "Date",
     },
+
     {
-      id: "price",
+      id: "totalCost",
       numeric: true,
-      disablePadding: false,
-      label: "Price",
+      disablePadding: true,
+      label: "Inventory Value",
     },
-    // {
-    //   id: "totalCost",
-    //   numeric: true,
-    //   disablePadding: true,
-    //   label: "Inventory Value",
-    // },
     {
       id: "amount",
       numeric: true,
@@ -155,52 +135,50 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
   ];
 
   interface EnhancedTableProps {
-    // numSelected: number;
     onRequestSort: (
       event: React.MouseEvent<unknown>,
-      property: keyof FoodDataTypeMod
+      property: keyof LogDataTypeMod
     ) => void;
-    // onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
   }
 
   function EnhancedTableHead(props: EnhancedTableProps) {
-    const {
-      // onSelectAllClick,
-      order,
-      orderBy,
-      // numSelected,
-      rowCount,
-      onRequestSort,
-    } = props;
+    const { order, orderBy, rowCount, onRequestSort } = props;
     const createSortHandler =
-      (property: keyof FoodDataTypeMod) =>
+      (property: keyof LogDataTypeMod) =>
       (event: React.MouseEvent<unknown>) => {
         onRequestSort(event, property);
       };
 
     return (
-      <TableHead>
-        <TableRow>
+      <TableHead className="w-full">
+        <TableRow className="w-full">
           {headCells.map((headCell, i) => (
             <TableCell
               key={headCell.id}
-              align={i === 0 ? "left" : "center"}
+              align={
+                i === 0
+                  ? "left"
+                  : i === headCells.length - 1
+                  ? "right"
+                  : "center"
+              }
               padding={"none"}
               sortDirection={orderBy === headCell.id ? order : false}
-              className="text-default-ref-neutral-neutral60 px-4 pb-2"
+              className={`text-default-ref-neutral-neutral60 py-2 ${
+                i === 0 ? "ps-4" : i === headCells.length - 1 ? "pe-4" : ""
+              }`}
               sx={{
-                fontSize: { xs: "0.875rem", md: "1.125rem" },
+                fontSize: { xs: "0.875rem", md: "1rem", lg: "1.125rem" },
               }}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
                 direction={orderBy === headCell.id ? order : "asc"}
                 onClick={createSortHandler(headCell.id)}
-                className="text-default-ref-neutral-neutral60"
-                sx={{ transform: `${i > 0 ? "translateX(12px)" : ""}` }}
+                className="text-default-ref-neutral-neutral60 whitespace-nowrap"
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
@@ -213,7 +191,6 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
               </TableSortLabel>
             </TableCell>
           ))}
-          <TableCell></TableCell>
         </TableRow>
       </TableHead>
     );
@@ -221,12 +198,17 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
 
   function EnhancedTableToolbar() {
     return (
-      <Toolbar className="px-4 pb-6 flex flex-row items-start flex-wrap md:flex-row md:items-center md:flex-nowrap md:px-0 md:pb-12">
+      <Toolbar
+        sx={{
+          pl: { sm: 2 },
+          pr: { xs: 1, sm: 1 },
+        }}
+      >
         <Typography
           variant="subtitle1"
           id="tableTitle"
           component="h1"
-          className="text-default-ref-neutral-neutral40 flex-grow w-full pb-3 md:w-fit"
+          className="text-default-ref-neutral-neutral40 flex-grow w-full pt-5 pb-3 md:w-fit"
           sx={{
             width: { xs: "100%", md: "" },
             [theme.breakpoints.up("md")]: {
@@ -234,82 +216,15 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
             },
           }}
         >
-          Inventory
+          Your Activity
         </Typography>
-        <Stack direction="row" className="items-center gap-3 w-1/2 md:w-fit">
-          <Typography
-            variant="h3"
-            id="tableTitle"
-            component="h2"
-            className="text-default-sys-light-tertiary relative whitespace-nowrap"
-            sx={{
-              [theme.breakpoints.up("md")]: {
-                variant: "h2",
-              },
-            }}
-          >
-            ${totalProductValue.toString().split(".")[0]}
-            <span className="text-[1.5rem] md:text-[1.75rem] align-top inline-block">
-              {totalProductValue.toFixed(2).toString().split(".")[1]}
-            </span>
-          </Typography>
-          <Typography
-            variant="body3"
-            id="tableTitle"
-            component="p"
-            className="text-default-sys-light-tertiary md:w-20"
-            sx={{
-              [theme.breakpoints.up("md")]: {
-                variant: "body1",
-              },
-            }}
-          >
-            of {foodData[0].title} in {foodData[0].roomTitle}
-          </Typography>
-        </Stack>
-        <Stack
-          direction="row"
-          className="justify-end items-center gap-3 w-1/2 ps-4 md:w-fit"
-        >
-          <Typography
-            variant="h3"
-            id="tableTitle"
-            component="h3"
-            className="text-default-sys-light-primary"
-            sx={{
-              [theme.breakpoints.up("md")]: {
-                variant: "h2",
-              },
-            }}
-          >
-            {totalProductAmount}
-          </Typography>
-          <Typography
-            variant="body3"
-            id="tableTitle"
-            component="p"
-            className="text-default-sys-light-primary md:w-20"
-            sx={{
-              [theme.breakpoints.up("md")]: {
-                variant: "body1",
-              },
-            }}
-          >
-            {foodData[0].title}
-            {totalProductAmount !== 1 &&
-            foodData[0].title[foodData[0].title.length - 1] !== "s"
-              ? "s"
-              : ""}{" "}
-            in {foodData[0].roomTitle}
-          </Typography>
-        </Stack>
       </Toolbar>
     );
   }
 
   const [order, setOrder] = React.useState<Order>("desc");
   const [orderBy, setOrderBy] =
-    React.useState<keyof FoodDataTypeMod>("expirationDate");
+    React.useState<keyof LogDataTypeMod>("timestamp");
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -317,7 +232,7 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof FoodDataTypeMod
+    property: keyof LogDataTypeMod
   ) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -343,7 +258,16 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
     setSelected(newSelected);
   };
 
-  const isSelected = (id: number) => selected.indexOf(id) !== -1;
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -359,39 +283,17 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
   );
 
   return (
-    <>
+    <Paper className={"w-full h-full"}>
       <EnhancedTableToolbar />
-      <TableContainer
-        className="pb-4"
-        sx={{
-          flexGrow: { xs: 0, md: 1 },
-        }}
-      >
-        <Table
-          className={`px-${tablePadding} mx-${tablePadding}`}
-          sx={{
-            boxSizing: "border-box",
-            maxWidth: "100%",
-            overflow: "hidden",
-            mt: { xs: "1rem", md: "0" },
-          }}
-          aria-labelledby="tableTitle"
-          // size={dense ? "small" : "medium"}
-        >
+      <TableContainer sx={{ flexGrow: 1 }}>
+        <Table className="w-full" aria-labelledby="tableTitle">
           <EnhancedTableHead
             order={order}
             orderBy={orderBy}
-            // onSelectAllClick={handleSelectAllClick}
             onRequestSort={handleRequestSort}
             rowCount={rows.length}
           />
-          <TableBody
-            sx={{
-              width: "100%",
-              maxWidth: "100%",
-              overflow: "hidden",
-            }}
-          >
+          <TableBody>
             {visibleRows.map((row, index) => {
               const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -400,11 +302,6 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
                   onClick={(event) => handleClick(event, row.id)}
                   tabIndex={-1}
                   key={row.id}
-                  sx={{
-                    width: "100%",
-                    maxWidth: "100%",
-                    overflow: "hidden",
-                  }}
                 >
                   <TableCell
                     component="th"
@@ -416,35 +313,50 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
                       }
                     `}
                     sx={{
-                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                      fontSize: { xs: "0.875rem", md: "1rem", lg: "1.125rem" },
+                      border: "none",
                     }}
                     id={labelId}
                     scope="row"
                   >
-                    {new Date(row.expirationDate).toLocaleString("en-US", {
+                    {new Date(row.timestamp).toLocaleString("en-US", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                     })}
                   </TableCell>
                   <TableCell
-                    className={`${"text-green-800 "}
+                    className={`${
+                      row.amount < 0 ? "text-red-800 " : "text-green-800 "
+                    }
                       ${
                         index % 2 === 0
                           ? "transparent"
                           : "bg-default-ref-primary-primary98"
-                      }
+                      } 
                     `}
                     sx={{
-                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                      fontSize: { xs: "0.875rem", md: "1rem", lg: "1.125rem" },
+                      border: "none",
                       fontWeight: "500",
                     }}
                     align="center"
                   >
-                    {row.price}
+                    {row.totalCost < 0 ? "-" : ""}$
+                    {
+                      row.totalCost
+                        .toFixed(2)
+                        .split(/[-.]/)
+                        .filter((s) => s)[0]
+                    }
+                    <span className="text-[0.625rem] align-top inline-block pt-[1px]">
+                      {row.totalCost.toFixed(2).split(".")[1]}
+                    </span>
                   </TableCell>
                   <TableCell
-                    className={`${"text-green-800 "}
+                    className={`${
+                      row.amount < 0 ? "text-red-800 " : "text-green-800 "
+                    }
                       ${
                         index % 2 === 0
                           ? "transparent"
@@ -452,43 +364,13 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
                       }
                     `}
                     sx={{
-                      fontSize: { xs: "0.875rem", md: "1.125rem" },
+                      fontSize: { xs: "0.875rem", md: "1rem", lg: "1.125rem" },
+                      border: "none",
                       fontWeight: "500",
                     }}
-                    align="center"
+                    align="right"
                   >
-                    {foodDataSingle.amount}
-                  </TableCell>
-                  <TableCell padding="none" align="center">
-                    <Box
-                      className="flex pe-2"
-                      sx={{
-                        gap: { xs: "0.875rem", md: "1rem" },
-                        justifyContent: { xs: "start", md: "center" },
-                        alignItems: "stretch",
-                      }}
-                    >
-                      <IconButton
-                        className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
-                        sx={{
-                          width: { xs: "1.25rem", md: "1.5rem" },
-                          height: { xs: "1.25rem", md: "1.5rem" },
-                        }}
-                        onClick={() => handleIncrement(1)}
-                      >
-                        <AddIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                      </IconButton>
-                      <IconButton
-                        className="text-default-ref-neutral-neutral30 bg-default-ref-neutral-neutral90"
-                        sx={{
-                          width: { xs: "1.25rem", md: "1.5rem" },
-                          height: { xs: "1.25rem", md: "1.5rem" },
-                        }}
-                        onClick={() => handleIncrement(-1)}
-                      >
-                        <RemoveIcon className="text-default-ref-neutral-neutral30 text-sm" />
-                      </IconButton>
-                    </Box>
+                    {row.amount}
                   </TableCell>
                 </TableRow>
               );
@@ -505,8 +387,17 @@ const FoodInventory = ({ foodDataSingle, handleIncrement }: FoodInventory) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
   );
 };
 
-export default FoodInventory;
+export default FoodActivity;

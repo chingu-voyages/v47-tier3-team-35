@@ -1,19 +1,18 @@
-"use client"
+"use client";
 
 import { Stack, Box, Paper } from "@mui/material";
-import FoodImg from "../components/FoodImg";
-import FoodInfo from "../components/FoodInfo";
-import FoodActivity from "../components/FoodActivity";
-import FoodInventory from "../components/FoodInventory";
+import FoodImg from "../components/foodInfo/FoodImg";
+import FoodInfo from "../components/foodInfo/FoodInfo";
+import FoodActivity from "../components/foodActivity/FoodActivity";
+import FoodInventory from "../components/foodInventory/FoodInventory";
 
 import { FoodDataType } from "../page";
 import { ResponsiveLayout } from "./DesktopLayout";
-import useFoodData from "@/hooks/useFoodData";
+import useIncrementFoodData from "@/hooks/useIncrementFoodData";
 
 const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
-  
-  const { currentFoodData, handleIncrement } = useFoodData(foodData);
-  
+  const { currentFoodData, handleIncrement } = useIncrementFoodData(foodData);
+
   return (
     <>
       <Stack gap="2" className={"relative"}>

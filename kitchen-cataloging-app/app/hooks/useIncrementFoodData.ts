@@ -6,7 +6,7 @@ import { getIncrementFood } from '@/actions/food/actions';
 import { FoodDataType } from '@/dashboard/spaces/[spaceId]/[foodId]/page';
 
 
-const useFoodData = (initialData: FoodDataType) => {
+const useIncrementFoodData = (initialData: FoodDataType) => {
   const [currentFoodData, setFoodData] = useState(initialData);
 
   const handleIncrement = async (num: number) => {
@@ -18,7 +18,7 @@ const useFoodData = (initialData: FoodDataType) => {
       setFoodData({ ...currentFoodData, amount: newValue });
       try {
         const updateResponse = await getIncrementFood(currentFoodData.id, newValue);
-        console.log(updateResponse);
+        console.log(updateResponse)
       } catch (err) {
         console.log(err);
         setFoodData({ ...currentFoodData, amount: originalValue });
@@ -29,4 +29,4 @@ const useFoodData = (initialData: FoodDataType) => {
   return { currentFoodData, handleIncrement };
 };
 
-export default useFoodData;
+export default useIncrementFoodData;
