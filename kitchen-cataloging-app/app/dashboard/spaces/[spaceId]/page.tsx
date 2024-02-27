@@ -2,6 +2,7 @@ import NavigationDepthBar from "@/components/navigation/navigationDepthBar/Navig
 import SpaceHeader from "./components/header/SpaceHeader";
 import { auth } from "@clerk/nextjs";
 import { getSingleRoom } from "../../../actions/space/crud/getSingleRoom";
+import { getAllRoomNames } from "@/actions/space/crud/getAllRooms";
 import { paginateFoods } from "../../../actions/food/search/paginateFoods";
 import ResponsivePaddingWrapper from "@/components/layout/ResponsivePaddingWrapper";
 import PaginationProvider from "@/components/pagination/PaginationProvider";
@@ -26,14 +27,17 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
   // Uses room name to find room based on the user id. Also includes foods that matches that room name
   const spaceId = params.spaceId;
   const roomDataPromise = getSingleRoom({ id: spaceId, userId: userId });
+  const allRoomsDataPromise = getAllRoomNames({ userId: userId });
   const itemDataPromise = paginateFoods({ spaceId: spaceId, take: 10, userId });
   //data
-  const [roomData, itemData] = await Promise.all([
+  const [roomData, spaceNames, itemData] = await Promise.all([
     roomDataPromise,
+    allRoomsDataPromise,
     itemDataPromise,
   ]);
-  //guard clause in case no data is returned
+  //guard clause in case no data is returned or userId does not exist
   if (!roomData) return <></>;
+  if (!userId) return <></>;
   return (
     <ResponsivePaddingWrapper>
       <PaginationProvider
@@ -50,7 +54,7 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
             spaceName: roomData?.title,
           })}
         />
-        <SpaceHeader defaultData={roomData} />
+        <SpaceHeader defaultData={roomData} spaceNames={spaceNames || []} userId={userId} />
         <ItemList defaultItems={itemData} spaceId={roomData.id} />
       </PaginationProvider>
     </ResponsivePaddingWrapper>
