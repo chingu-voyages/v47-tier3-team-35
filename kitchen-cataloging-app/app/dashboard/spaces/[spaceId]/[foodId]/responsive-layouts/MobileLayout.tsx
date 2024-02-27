@@ -11,7 +11,7 @@ import { ResponsiveLayout } from "./DesktopLayout";
 import useIncrementFoodData from "@/hooks/useIncrementFoodData";
 
 const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
-  const { currentFoodData, handleIncrement } = useIncrementFoodData(foodData);
+  const { currentFoodData, currentLogs, handleIncrement } = useIncrementFoodData(foodData);
 
   return (
     <>
@@ -47,7 +47,7 @@ const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
         {/* Food Activity */}
 
         <Box className="w-full px-5 mb-9">
-          <FoodActivity foodLogs={currentFoodData.logs} />
+          <FoodActivity foodLogs={currentLogs} />
         </Box>
       </Stack>
     </>

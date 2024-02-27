@@ -15,7 +15,7 @@ export interface ResponsiveLayout {
 }
 
 const DesktopLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
-  const { currentFoodData, handleIncrement } = useIncrementFoodData(foodData);
+  const { currentFoodData, currentLogs, handleIncrement } = useIncrementFoodData(foodData);
 
   return (
     <>
@@ -41,7 +41,7 @@ const DesktopLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
         {/* Food Activity */}
 
         <Box className="w-1/2 ps-6">
-          <FoodActivity foodLogs={currentFoodData.logs} />
+          <FoodActivity foodLogs={currentLogs} />
         </Box>
       </Stack>
 

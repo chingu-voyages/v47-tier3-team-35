@@ -54,7 +54,7 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
 
   const rows = foodLogs.map((row, i) =>
     createData(
-      i,
+      row.timestamp.getMilliseconds(),
       row.timestamp.getTime(),
       row.price,
       row.amount,
@@ -262,12 +262,12 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -279,7 +279,7 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
         page * rowsPerPage + rowsPerPage
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
   return (
@@ -388,13 +388,28 @@ const FoodActivity = ({ foodLogs }: FoodActivity) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={rows.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          "& .MuiTablePagination-selectLabel": {
+            display: "none",
+          },
+          "&.MuiTablePagination-input": {
+            display: "none",
+          },
+          "& .MuiTablePagination-select": {
+            display: "none",
+          },
+          "& input": {
+            display: "none",
+          },
+          "& .MuiTablePagination-selectIcon": {
+            display: "none",
+          },
+        }}
       />
     </Paper>
   );
