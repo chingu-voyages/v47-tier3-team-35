@@ -48,8 +48,8 @@ export default function FormSubmitWrapper({
   //   }
   // };
   return (
-    <form className="relative pt-6 px-10 pb-0 flex flex-col bg-default-sys-light-surface-container-low w-full overflow-y-auto h-full">
-      <div className="flex flex-col w-full md:m-auto">{children}</div>
+    <form className="relative flex flex-col bg-default-sys-light-surface-container-low w-full h-full">
+      {children}
     </form>
   );
 }

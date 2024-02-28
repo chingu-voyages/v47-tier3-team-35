@@ -22,9 +22,9 @@ function DragDrop({
   const [drag, setDrag] = useState(false);
   const borderStyles = `border-dashed border-default-sys-light-primary border-2`;
   return (
-    <Box className="flex-grow relative">
+    <Box className="w-full flex-grow relative z-0">
       <div
-        className="dropzone absolute top-0 left-0 z-40 bg-transparent w-full h-full"
+        className="dropzone absolute top-0 left-0 z-10 bg-transparent w-full h-full"
         onDragEnter={() => setDrag(true)}
         onDragLeave={() => setDrag(false)}
         onDrop={(e) => {
@@ -33,13 +33,13 @@ function DragDrop({
         }}
       >
         <input
-          className="w-full h-full bg-transparent z-50 opacity-0 cursor-pointer"
+          className="relative w-full h-full z-10 cursor-pointer bg-transparent opacity-0"
           type="file"
           accept="image/png, image/jpeg"
           onChange={(e) => handleFileSelect(e)}
         />
         <div
-          className={`absolute top-0 left-0 w-full h-full -z-10 box-content rounded-lg flex justify-center items-center ${
+          className={`absolute top-0 left-0 w-full h-full z-10 box-content rounded-lg flex justify-center items-center pointer-events-none ${
             drag && "bg-slate-400 opacity-30"
           } ${newFile && "bg-slate-300"}`}
         >
@@ -62,7 +62,7 @@ function DragDrop({
           )}
         </div>
       </div>
-      <Box className="image-icons absolute top-[12px] right-[12px] flex flex-row gap-3 z-50 pointer-events-none">
+      <Box className="image-icons absolute top-[12px] right-[12px] flex flex-row gap-3 z-20 pointer-events-none">
         <IconButton
           className="p-2 rounded-full bg-default-sys-light-on-primary border-default-sys-light-primary"
           sx={{
@@ -74,7 +74,9 @@ function DragDrop({
         {btnContainerChildren}
       </Box>
       <Box
-        className={`flex-grow relative w-full h-full rounded-lg flex justify-center items-center p-10 ${
+        className={`flex-grow relative ${
+          !dndFile && !defaultImageUrl ? "z-30" : "-z-10"
+        } w-full h-full rounded-lg flex justify-center items-center p-10 pointer-events-none ${
           dndFile ? "" : borderStyles
         }`}
       >
