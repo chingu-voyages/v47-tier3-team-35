@@ -4,6 +4,8 @@ import AsyncSelect from "react-select/async";
 import { ValueProps } from "./types";
 import { determineSelectStyles } from "./determineSelectStyles";
 import Label from "../inputLabel/Label";
+import { debounce } from "lodash";
+import { GroupBase, OptionsOrGroups } from "react-select";
 export interface SelectInputProps {
   name?: string;
   label?: string;
@@ -28,7 +30,6 @@ const SelectInput = ({
   onChange,
 }: SelectInputProps) => {
   const [cursor, setCursor] = useState<string | null>(null);
-  // const [value, setValue] = useState(defaultValue || null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState<ValueProps[]>([]);
@@ -56,13 +57,18 @@ const SelectInput = ({
   const savedLoadOptionsWrapperFunc = useCallback(loadOptionWrapperFunc, [
     loadOptions,
   ]);
-  const loadOptionsFunc = async (inputStr: string) => {
-    const result = await savedLoadOptionsWrapperFunc(inputStr);
-    if (result === null) return [];
-    setOptions(result);
-    return result;
+  const loadOptionsFunc = (
+    inputStr: string,
+    callback: (e: OptionsOrGroups<any, GroupBase<any>>) => void
+  ) => {
+    savedLoadOptionsWrapperFunc(inputStr).then((res) => {
+      if (res !== null) {
+        setOptions(res);
+        callback(res);
+      }
+    });
   };
-  const savedLoadOptionsFunc = useCallback(loadOptionsFunc, [
+  const savedLoadOptionsFunc = useCallback(debounce(loadOptionsFunc, 300), [
     savedLoadOptionsWrapperFunc,
   ]);
   const onMenuScrollToBottom = async () => {
@@ -77,7 +83,6 @@ const SelectInput = ({
 
   const onInputChange = (e: string) => setInput(e);
   const savedOnInputChange = useCallback(onInputChange, []);
-
   return (
     <Box className="flex flex-col relative w-full">
       {label && <Label text={label || ""} active={focus} />}

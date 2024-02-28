@@ -6,22 +6,28 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const DateInput = ({
-  defaultDate,
+  value,
+  label,
   inputName,
+  onChange,
 }: {
-  defaultDate?: Date;
+  value: string;
+  label: string;
   inputName: string;
+  onChange: (e: string | null) => void;
 }) => {
   const [focused, setFocused] = useState(false);
   return (
     <Box className="flex flex-col w-full">
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <Label text="Expiration Date" active={focused} />
+        <Label text={label} active={focused} />
         <DatePicker
+          value={value}
+          onChange={onChange}
           onOpen={() => setFocused(true)}
+          onClose={() => setFocused(false)}
           orientation="portrait"
           name={inputName}
-          defaultValue={defaultDate?.toString() || new Date().toString()}
           className="bg-default-sys-light-surface-bright w-full"
           aria-labelledby="date-input-label"
           slotProps={{

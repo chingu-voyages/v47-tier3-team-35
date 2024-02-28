@@ -21,7 +21,6 @@ function DragDrop({
   const { newFile, getImage, handleFileSelect, dndFile, loading } = props;
   const [drag, setDrag] = useState(false);
   const borderStyles = `border-dashed border-default-sys-light-primary border-2`;
-  console.log(newFile, defaultImageUrl);
   return (
     <Box className="flex-grow relative">
       <div

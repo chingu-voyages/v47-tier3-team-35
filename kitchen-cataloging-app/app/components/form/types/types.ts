@@ -4,5 +4,6 @@ export interface CreateEditFormProps<T> {
   type: "create" | "edit";
   spaces?: string[];
   userId?: string;
-  itemData?: T;
+  itemId?: string;
+  defaultData?: T
 }

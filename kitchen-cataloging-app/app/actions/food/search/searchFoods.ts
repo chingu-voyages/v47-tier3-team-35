@@ -3,6 +3,7 @@ import dbConnect from "@/mongoDB/connection";
 import FoodModel from "@/mongoDB/FoodSchema";
 import mongoose from "mongoose";
 import { SearchFoodProps, SearchResultFood } from "../types/types";
+import extractSignedUrls from "@/actions/utils/extractSignedUrls";
 const ObjectId = mongoose.Types.ObjectId;
 export const createFoodItemSearchQuery = ({
   userId,
@@ -144,5 +145,5 @@ export const searchFoods = async ({
     if (e._id) delete e._id;
     return { ...e, id: id, roomId: e.roomId?.toString() };
   }) as SearchResultFood[];
-  return serializedResult;
+  return extractSignedUrls(serializedResult);
 };

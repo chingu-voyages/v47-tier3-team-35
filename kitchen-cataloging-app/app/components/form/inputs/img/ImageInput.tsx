@@ -18,7 +18,6 @@ export default function GenerateImgBtn({
   const dndProps = useDndFileInput();
   const title = titleProps?.title;
   const setDndFile = dndProps?.setDndFile;
-  console.log(replaceSpaces(title || ""));
   const srcToFile = async (imgTitle?: string) => {
     if (!imgTitle) return;
     const src = `https://source.unsplash.com/random/800x800/?${replaceSpaces(

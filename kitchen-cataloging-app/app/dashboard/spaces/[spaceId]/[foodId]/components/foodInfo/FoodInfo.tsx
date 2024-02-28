@@ -88,7 +88,8 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
             type={"edit"}
             spaces={spaces}
             userId={userId}
-            itemData={foodData as FoodType}
+            defaultData={foodData}
+            itemId={foodData.id}
           >
             <EditOutlinedIcon
               color={"secondary"}

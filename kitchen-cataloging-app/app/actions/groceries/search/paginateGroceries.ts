@@ -1,3 +1,4 @@
+import extractSignedUrls from "@/actions/utils/extractSignedUrls";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 import { PaginationProps } from "@/components/pagination/types";
 import prisma from "@/prisma/client";
@@ -26,6 +27,6 @@ export default async function paginateGroceries({
     },
   });
   //return array if rooms exist, else return null
-  if (nextRooms.length > 0) return nextRooms;
+  if (nextRooms.length > 0) return extractSignedUrls(nextRooms);
   else return null;
 }

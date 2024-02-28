@@ -25,7 +25,7 @@ export const paginateGroceryItems = async (
 ): Promise<GroceryItem[] | null> => {
   try {
     const { userId } = auth();
-    return await paginateGroceries({ ...props, userId });
+    return (await paginateGroceries({ ...props, userId })) || null;
   } catch (err) {
     console.error("Error paginating rooms:", err);
     return null;

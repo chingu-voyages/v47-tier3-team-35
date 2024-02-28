@@ -4,6 +4,7 @@ import { GroceryItem } from "@prisma/client";
 import dbConnect from "@/mongoDB/connection";
 import GroceryItemModel from "@/mongoDB/GroceryItemSchema";
 import mongoose from "mongoose";
+import extractSignedUrls from "@/actions/utils/extractSignedUrls";
 const ObjectId = mongoose.Types.ObjectId;
 export const createGroceryItemSearchQuery = ({
   userId,
@@ -139,7 +140,7 @@ export const searchGroceries = async (
     if (e._id) delete e._id;
     return { ...e, id: id, roomId: e.roomId?.toString() };
   }) as (Partial<GroceryItem> & { id: string; score?: number })[];
-  return serializedResult;
+  return extractSignedUrls(serializedResult);
 };
 
 export default searchGroceries;

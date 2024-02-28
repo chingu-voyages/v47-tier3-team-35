@@ -11,7 +11,7 @@ import SpaceHeaderTopmostBox from "./wrappers/SpaceHeaderTopmostBox";
 import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
 import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
 import AddItemBtn from "@/components/actionBtns/AddItemBtn";
-import CreateEditForm from "@/components/form/create-edit-form/CreateEditForm";
+import CreateEditForm from "@/components/form/foodForm/CreateEditForm";
 const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
     <SpaceActionBtnsWrapper>
@@ -33,7 +33,15 @@ const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
     </SpaceActionBtnsWrapper>
   );
 };
-const SpaceHeader = ({ defaultData, spaceNames, userId }: { defaultData?: Room, spaceNames: { title: string }[], userId: string }) => {
+const SpaceHeader = ({
+  defaultData,
+  spaceNames,
+  userId,
+}: {
+  defaultData?: Room;
+  spaceNames: { title: string }[];
+  userId: string;
+}) => {
   const [spaceData, setSpaceData] = useState<Partial<Room>>(defaultData || {});
   const largeWidth = useWindowWidth(1024);
   const mediumWidth = useWindowWidth(768);
@@ -56,15 +64,15 @@ const SpaceHeader = ({ defaultData, spaceNames, userId }: { defaultData?: Room, 
           {spaceData.title}
         </Typography>
         <SpaceActionBtns>
-            {!mediumWidth && (
-              <CreateEditForm
-                type="create"
-                spaces={spaceNames.map((space) => space.title)}
-                userId={userId}
-              >
-                <AddItemBtn />
-              </CreateEditForm>
-            )}
+          {!mediumWidth && (
+            <CreateEditForm
+              type="create"
+              spaces={spaceNames.map((space) => space.title)}
+              userId={userId}
+            >
+              <AddItemBtn />
+            </CreateEditForm>
+          )}
         </SpaceActionBtns>
       </SpaceHeaderTopmostBox>
       <SpaceHeaderBottomBox>
