@@ -6,9 +6,10 @@ import PriceInput from "../../inputs/wrapperInputs/price/PriceInput";
 import DescriptionInput from "../../inputs/wrapperInputs/description/DescriptionInput";
 import TitleInput from "../../inputs/wrapperInputs/title/TitleInput";
 import LabelsInput from "../../inputs/wrapperInputs/labels/LabelsInput";
-import { ImageInput } from "../../inputs/img/ImageInput";
+import { ImageInput } from "../../inputs/wrapperInputs/img/ImageInput";
 import ExpirationDateInput from "../../inputs/wrapperInputs/expirationDate/ExpirationDateInput";
 import SpaceInput from "../../inputs/wrapperInputs/space/SpaceInput";
+import ThresholdInput from "../../inputs/wrapperInputs/threshold/ThresholdInput";
 // COMPONENT
 const FormInputs = () => {
   // Threshold
@@ -27,19 +28,19 @@ const FormInputs = () => {
       <section className="flex flex-col md:flex-row w-full">
         {/* Left Section (desktop) */}
         {/* Title */}
-        <Box className="w-full md:w-3/6 p-0 md:pr-4 lg:pr-8 container-left-desktop flex flex-col gap-8 md:gap-6 mb-6 md:mb-0">
+        <Box className="w-full md:w-3/6 p-0 md:pr-4 lg:pr-8 container-left-desktop flex flex-col gap-6 md:gap-6 mb-6 md:mb-0">
           <TitleInput />
           {/* Image  */}
           <ImageInput />
         </Box>
         {/* Right Section (desktop) */}
         {/* description */}
-        <Box className="w-full md:w-3/6 p-0 md:pl-4 lg:pl-8 flex flex-col justify-between gap-8 md:gap-4">
+        <Box className="w-full md:w-3/6 p-0 md:pl-4 lg:pl-8 flex flex-col justify-between gap-6 md:gap-4">
           <DescriptionInput />
           {/* price */}
           <PriceInput />
           {/* threshold */}
-          <SliderInput value={threshold} label="Threshold" name="threshold" />
+          <ThresholdInput />
           {/* labels */}
           <LabelsInput />
           {/* expiration date */}

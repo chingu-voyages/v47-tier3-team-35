@@ -1,24 +1,28 @@
 import { Box, Slider } from "@mui/material";
 import React from "react";
 import Label from "../inputLabel/Label";
-
 export default function SliderInput({
   label,
   value,
   name,
+  onChange,
 }: {
   name: string;
   label: string;
   value?: number;
+  onChange?: (e: number) => void;
 }) {
   return (
     <Box className="flex flex-col w-full">
       <Label text={label} />
       <Slider
-        aria-labelledby="threshold-input-label"
+        onChange={(e, value) => {
+          if (onChange && typeof value === "number") onChange(value);
+        }}
+        aria-labelledby="slider-input-label"
         aria-label="Always visible"
         name={name}
-        defaultValue={value || 5}
+        value={typeof value === "number" ? value : 0}
         step={1}
         min={0}
         max={10}

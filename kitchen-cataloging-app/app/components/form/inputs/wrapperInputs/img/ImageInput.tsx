@@ -1,13 +1,11 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import React, { useCallback } from "react";
-import DragDrop from "../innerComponents/dnd/DragDrop";
-import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
-import BackupOutlinedIcon from "@mui/icons-material/BackupOutlined";
+import DragDrop from "../../innerComponents/dnd/DragDrop";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import { v4 as uuid } from "uuid";
-import { useTitleInput } from "../wrapperInputs/title/TitleProvider";
-import { useDndFileInput } from "../innerComponents/dnd/DnDProvider";
+import { useTitleInput } from "../title/TitleProvider";
+import { useDndFileInput } from "../../innerComponents/dnd/DnDProvider";
 const replaceSpaces = (str: string) => str.replace(/[ ]+/g, "-");
 export default function GenerateImgBtn({
   type = "icon",

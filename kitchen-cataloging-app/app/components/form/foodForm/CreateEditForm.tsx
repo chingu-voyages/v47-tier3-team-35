@@ -15,6 +15,7 @@ import { ExpirationDateProvider } from "../inputs/wrapperInputs/expirationDate/E
 import FormSubmitWrapper from "../components/FormSubmitWrapper";
 import { FormActionBtns, FormCloseBtn } from "../components/FormActionBtns";
 import FormHeader from "../components/FormHeader";
+import { ThresholdProvider } from "../inputs/wrapperInputs/threshold/ThresholdProvider";
 export const CreateEditFormWrappers = ({
   itemData,
   children,
@@ -39,7 +40,9 @@ export const CreateEditFormWrappers = ({
                 <ExpirationDateProvider
                   defaultValue={itemData?.expirationDate.toString()}
                 >
-                  {children}
+                  <ThresholdProvider defaultValue={itemData?.threshold}>
+                    {children}
+                  </ThresholdProvider>
                 </ExpirationDateProvider>
               </DndFileProvider>
             </LabelsProvider>
@@ -87,7 +90,7 @@ export default function CreateEditForm({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="flex flex-col w-full max-h-[750px]">
+        <Box className="flex flex-col w-full md:max-h-[750px]">
           <CreateEditFormWrappers itemData={itemData}>
             <FormSubmitWrapper>
               {/*Close Btn*/}
