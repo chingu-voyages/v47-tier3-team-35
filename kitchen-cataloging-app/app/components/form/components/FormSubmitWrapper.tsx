@@ -3,7 +3,7 @@ export default function FormSubmitWrapper({
   children,
 }: {
   children: React.ReactNode;
-  }) {
+}) {
   // submit form
   // const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
   //   e.preventDefault();
@@ -48,8 +48,8 @@ export default function FormSubmitWrapper({
   //   }
   // };
   return (
-    <form className="relative p-10 flex flex-col bg-default-sys-light-surface-container-low w-full overflow-y-auto">
-      {children}
+    <form className="relative pt-6 px-10 pb-0 flex flex-col bg-default-sys-light-surface-container-low w-full overflow-y-auto h-full">
+      <div className="flex flex-col w-full m-auto">{children}</div>
     </form>
   );
 }

@@ -22,7 +22,7 @@ export const FormActionBtns = ({
   onClose: CreateEditFormProps<any>["onClose"];
 }) => {
   return (
-    <Box className="flex flex-row justify-end gap-4">
+    <Box className="flex flex-row justify-end gap-4 py-6">
       <Button
         type="button"
         className="rounded-full"

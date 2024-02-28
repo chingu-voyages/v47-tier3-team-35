@@ -87,7 +87,7 @@ export default function CreateEditForm({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="flex flex-col w-full">
+        <Box className="flex flex-col w-full max-h-[750px]">
           <CreateEditFormWrappers itemData={itemData}>
             <FormSubmitWrapper>
               {/*Close Btn*/}
