@@ -1,57 +1,30 @@
-'use server'
-
-import { Image } from "@prisma/client";
+"use server";
 import addSingleFoodItem from "@/actions/food/crud/addFoodItem";
 import updateSingleFoodItem from "@/actions/food/crud/updateFoodItem";
-import { FoodType } from "@/prisma/mock/mockData";
-
-export const addEditItem = async (
-    newSpace: string,
-    newTitle: string,
-    newImage: Image,
-    newPrice: string,
-    newDescription: string,
-    newThreshold: number,
-    newLabels: string[],
-    newExpiration: string,
-    userId: string,
-    itemData?: FoodType,
-) => {
-    // const newSpace = formData.get("space") as string;
-    // const newTitle = formData.get("title") as string;
-    // const newImageUrl = formData.get("image") as string;
-    // const newDescription = formData.get("description") as string;
-    // const newPrice = parseInt(formData.get("price") as string);
-    // const newThreshold = parseInt(formData.get("threshold") as string);
-    // const getLabels = formData.get("labels") as string;
-    // const newLabels = getLabels?.split(',');
-    // const newExpiration = formData.get("date") as string;
-
-    console.log('creating new doc')
-
-    const newDoc = {
-        createdAt: itemData?.createdAt ? itemData.createdAt : new Date(),
-        title: newTitle,
-        description: newDescription,
-        labels: newLabels, 
-        amount: itemData?.amount ? itemData.amount : 0,
-        price: parseFloat(newPrice),
-        threshold: newThreshold,
-        expirationDate: new Date(newExpiration),
-        // Need to add ability to upload image to aws when it is a file. -- use uploadImgs function in aws folder -- do this in drag&drop component
-        image: newImage,
-        roomTitle: newSpace,
-    }
-
-    if (itemData) {
-        const itemId = itemData.id;
-        const updatedFoodItem = await updateSingleFoodItem(userId, itemId, newDoc);
-        console.log('updatedFoodItem');
-        return updatedFoodItem;
-    } else {
-        const createdFoodItem = await addSingleFoodItem(userId, newDoc);
-        console.log('createdFoodItem');
-        return createdFoodItem;
-    }
+import { auth } from "@clerk/nextjs";
+import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import generateErrMessage from "@/utils/generateErrMessage";
+import { FoodItemZodSchema, FoodItemZodType } from "@/zodTypes/FoodItemSchema";
+export const uploadFoodItemData = async (newData: FoodItemZodType) => {
+  const { userId } = auth();
+  const user = await getUserInfoServer({ userId });
+  if (!user)
+    return generateErrMessage({
+      statusCode: 403,
+      message: "Operation Forbidden",
+    });
+  //runtime check
+  const validationResult = FoodItemZodSchema.safeParse(newData);
+  if (!validationResult.success)
+    return generateErrMessage({
+      statusCode: 400,
+      message: `Invalid object: ${validationResult.error.toString()}`,
+    });
+  return validationResult.data.id
+    ? await updateSingleFoodItem(
+        user.id,
+        validationResult.data.id,
+        validationResult.data
+      )
+    : await addSingleFoodItem(user.id, validationResult.data);
 };
-  

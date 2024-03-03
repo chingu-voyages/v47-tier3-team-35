@@ -1,9 +1,48 @@
 import React from "react";
+import { useThresholdInput } from "../inputs/wrapperInputs/threshold/ThresholdProvider";
+import { useExpirationDateInput } from "../inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
+import { useDndFileInput } from "../inputs/innerComponents/dnd/DnDProvider";
+import { useLabelsInput } from "../inputs/wrapperInputs/labels/LabelsProvider";
+import { usePriceInput } from "../inputs/wrapperInputs/price/PriceProvider";
+import { useDescriptionInput } from "../inputs/wrapperInputs/description/DescriptionProvider";
+import { useTitleInput } from "../inputs/wrapperInputs/title/TitleProvider";
+import { useSpaceInput } from "../inputs/wrapperInputs/space/SpaceProvider";
+import { FoodItemZodType } from "@/zodTypes/FoodItemSchema";
 export default function FormSubmitWrapper({
+  type,
   children,
 }: {
+  type: "edit" | "create";
   children: React.ReactNode;
 }) {
+  const spaceProps = useSpaceInput();
+  const titleProps = useTitleInput();
+  const descriptionProps = useDescriptionInput();
+  const priceProps = usePriceInput();
+  const labelsProps = useLabelsInput();
+  const imgProps = useDndFileInput();
+  const expirationDateProps = useExpirationDateInput();
+  const thresholdProps = useThresholdInput();
+  const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    if (!spaceProps?.space) return spaceProps?.setError(true);
+    if (!titleProps?.title) return titleProps?.setError(true);
+    if (typeof priceProps?.price !== "number")
+      return descriptionProps?.setError(true);
+    if (!expirationDateProps?.expirationDate)
+      return expirationDateProps?.setError(false);
+    if(!thresholdProps?.threshold) return thresholdProps?.setError(false)
+    const newDoc: FoodItemZodType = {
+      title: titleProps.title,
+      labels: labelsProps?.labels || [],
+      roomId: spaceProps.space.value,
+      // expirationDate: new Date(expirationDateProps.expirationDate),
+      description: descriptionProps?.description || "",
+      // amount: ,
+      threshold: thresholdProps.threshold,
+      // roomId:
+    };
+  };
   // submit form
   // const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
   //   e.preventDefault();

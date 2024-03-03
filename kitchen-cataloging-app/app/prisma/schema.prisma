@@ -24,6 +24,7 @@ model User {
   rooms Room[]
   logs Log[]
   groceryItems GroceryItem[]
+  foodItemVersions FoodItemVersion[]
 }
 
 model Room {
@@ -47,10 +48,13 @@ model Food {
   description String? @default("") //limit to 400 chars  
   labels String[] @default([]) //limit to 20 items
   image Image?
-  amount Int
+  // this is total count of all food item instances (this counter is incremented)
+  //whenever an item is added or deleted to keep track of all items
+  amount Int? @default(0)
+  //this is the avg price we give to each item depending on recent buyer history
+  //we continously change this according to food item versions added
+  price Float? @default(0.00) //limit to 2 decimal places
   //food specific key
-  expirationDate DateTime
-  price Float //limit to 2 decimal places
   threshold Int?
   logs Log[] //stores log for each time user adds or subtracts this food
   roomTitle String
@@ -58,17 +62,20 @@ model Food {
   userId String @db.ObjectId
   room Room? @relation(fields: [roomId], references: [id])
   roomId String? @db.ObjectId
-  // foodItemInstances FoodItemModelInstance[]
+  foodItemVersions FoodItemVersion[]
 }
-// model FoodItemModelInstance {
-//   id String @id @default(auto()) @map("_id") @db.ObjectId
-//   createdAt DateTime @default(now()) //purchase date
-//   updatedAt DateTime @updatedAt 
-//   expirationDate DateTime
-//   price Float //limit to 2 decimal places
-//   foodId String?
-//   Food Food? @relation(fields: [foodId], references: [id])
-// }
+model FoodItemVersion {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now()) //purchase date
+  updatedAt DateTime @updatedAt 
+  expirationDate DateTime
+  quantity Int // denotes how many of an item exists with the same price
+  price Float //limit to 2 decimal places
+  foodId String? @db.ObjectId
+  userId String? @db.ObjectId
+  user User? @relation(fields: [userId], references: [id])
+  food Food? @relation(fields: [foodId], references: [id])
+}
 model GroceryItem {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now()) //date added to list

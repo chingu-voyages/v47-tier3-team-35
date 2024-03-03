@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useDndFileInput } from "./DnDProvider";
-import { Box, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 const fileTypes = ["JPG", "PNG", "GIF", "JPEG", "SVG"];
 interface DragDrop {
@@ -23,6 +23,14 @@ function DragDrop({
   const borderStyles = `border-dashed border-default-sys-light-primary border-2`;
   return (
     <Box className="w-full flex-grow relative z-0">
+      {loading && (
+        <Box className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full bg-default-sys-light-surface-container-low z-30 space-y-5">
+          <CircularProgress size={"3.5rem"} />
+          <Typography className="text-6xl text-default-sys-light-primary">
+            Generating...
+          </Typography>
+        </Box>
+      )}
       <div
         className="dropzone absolute top-0 left-0 z-10 bg-transparent w-full h-full"
         onDragEnter={() => setDrag(true)}
