@@ -1,7 +1,6 @@
 import { z } from "zod";
 const FoodItemSchemaProps = {
   id: z.string().optional(),
-  createdAt: z.date().optional(),
   title: z.string(),
   description: z.string().optional(),
   labels: z.array(z.string()),

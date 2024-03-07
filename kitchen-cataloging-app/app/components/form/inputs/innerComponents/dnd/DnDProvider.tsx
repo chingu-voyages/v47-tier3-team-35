@@ -10,6 +10,7 @@ import React, {
 } from "react";
 export type DndFileContextProps = {
   defaultImgUrl?: string | null;
+  defaultObjKey?: string | null;
   dndFile: File | null;
   setDndFile: (e: File | null) => void;
   newFile: boolean;
@@ -24,9 +25,12 @@ const DndFileContext = createContext<null | DndFileContextProps>(null);
 export const DndFileProvider = ({
   defaultValue,
   children,
+  defaultObjKey,
 }: {
   defaultValue?: string | null;
   children: React.ReactNode;
+  //used for storing aws key
+  defaultObjKey?: string | null;
 }) => {
   const [newFile, setNewFile] = useState(false);
   const [dndFile, setDndFile] = useState<File | null>(null);
@@ -59,6 +63,7 @@ export const DndFileProvider = ({
     <DndFileContext.Provider
       value={{
         defaultImgUrl: defaultValue,
+        defaultObjKey,
         dndFile,
         newFile,
         loading,

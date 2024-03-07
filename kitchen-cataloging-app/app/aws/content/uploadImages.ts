@@ -8,11 +8,18 @@ const uploadImages = async ({
   files,
 }: {
   files: File[];
-}) => {
+}): Promise<{
+  failed: FileMediaType[];
+  uploaded: FileMediaType[];
+}> => {
   const signedUrls = await getS3BucketPutSignedUrl({
     files: files.map((file) => ({ name: file.name, type: file.type })),
   });
-  if (!signedUrls) return [];
+  if (!signedUrls)
+    return {
+      uploaded: [],
+      failed: files.map((file) => ({ name: file.name })),
+    };
   //generate a map
   const filesMap: { [key: string]: File } = Object.assign(
     {},
@@ -48,7 +55,7 @@ const uploadImages = async ({
         return r.status === 200;
       })
     )
-      return { uploaded: uploadedKeys };
+      return { uploaded: uploadedKeys, failed: [] };
     else return { uploaded: uploadedKeys, failed: failedKeys };
   } catch (e) {
     const error = new Error();

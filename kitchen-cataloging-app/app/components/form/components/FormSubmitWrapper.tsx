@@ -7,7 +7,12 @@ import { usePriceInput } from "../inputs/wrapperInputs/price/PriceProvider";
 import { useDescriptionInput } from "../inputs/wrapperInputs/description/DescriptionProvider";
 import { useTitleInput } from "../inputs/wrapperInputs/title/TitleProvider";
 import { useSpaceInput } from "../inputs/wrapperInputs/space/SpaceProvider";
-import { FoodItemZodType } from "@/zodTypes/FoodItemSchema";
+import {
+  FoodItemVersionZodType,
+  FoodItemZodType,
+} from "@/zodTypes/FoodItemSchema";
+import uploadImages from "@/aws/content/uploadImages";
+import { useQuantityInput } from "../inputs/wrapperInputs/quantity/QuantityProvider";
 export default function FormSubmitWrapper({
   type,
   children,
@@ -23,24 +28,44 @@ export default function FormSubmitWrapper({
   const imgProps = useDndFileInput();
   const expirationDateProps = useExpirationDateInput();
   const thresholdProps = useThresholdInput();
-  const handleSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+  const quantityProps = useQuantityInput();
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!spaceProps?.space) return spaceProps?.setError(true);
     if (!titleProps?.title) return titleProps?.setError(true);
     if (typeof priceProps?.price !== "number")
       return descriptionProps?.setError(true);
+    if (!thresholdProps?.threshold) return thresholdProps?.setError(false);
+    //required food item version props
     if (!expirationDateProps?.expirationDate)
       return expirationDateProps?.setError(false);
-    if(!thresholdProps?.threshold) return thresholdProps?.setError(false)
-    const newDoc: FoodItemZodType = {
+    if (!quantityProps?.quantity) return quantityProps?.setError(true);
+    //upload image if it exists
+    let img: FoodItemZodType["image"] = {
+      s3ObjKey: imgProps?.defaultObjKey || null,
+      url: "",
+    };
+    if (imgProps?.newFile && imgProps?.dndFile) {
+      const result = await uploadImages({ files: [imgProps.dndFile] });
+      // const success = result.
+      //successful upload
+      if (result.uploaded.length > 1) {
+        const resultImg = result.uploaded[0];
+        img.s3ObjKey = resultImg.objKey || null;
+      }
+    }
+    const foodDoc: FoodItemZodType = {
       title: titleProps.title,
       labels: labelsProps?.labels || [],
-      roomId: spaceProps.space.value,
-      // expirationDate: new Date(expirationDateProps.expirationDate),
-      description: descriptionProps?.description || "",
-      // amount: ,
       threshold: thresholdProps.threshold,
-      // roomId:
+      roomId: spaceProps.space.value,
+      description: descriptionProps?.description || "",
+      image: img,
+    };
+    const foodVersionDoc: FoodItemVersionZodType = {
+      price: priceProps.price,
+      expirationDate: new Date(expirationDateProps.expirationDate),
+      quantity: quantityProps.quantity,
     };
   };
   // submit form
@@ -87,7 +112,10 @@ export default function FormSubmitWrapper({
   //   }
   // };
   return (
-    <form className="relative flex flex-col bg-default-sys-light-surface-container-low w-full h-full">
+    <form
+      className="relative flex flex-col bg-default-sys-light-surface-container-low w-full h-full"
+      onSubmit={onSubmit}
+    >
       {children}
     </form>
   );

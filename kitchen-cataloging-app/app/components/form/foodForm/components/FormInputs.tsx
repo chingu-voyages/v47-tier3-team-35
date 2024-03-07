@@ -1,24 +1,14 @@
 "use client";
-import { useRef } from "react";
 import { Box } from "@mui/material";
-import SliderInput from "../../inputs/innerComponents/slider/SliderInput";
-import PriceInput from "../../inputs/wrapperInputs/price/PriceInput";
 import DescriptionInput from "../../inputs/wrapperInputs/description/DescriptionInput";
 import TitleInput from "../../inputs/wrapperInputs/title/TitleInput";
 import LabelsInput from "../../inputs/wrapperInputs/labels/LabelsInput";
 import { ImageInput } from "../../inputs/wrapperInputs/img/ImageInput";
-import ExpirationDateInput from "../../inputs/wrapperInputs/expirationDate/ExpirationDateInput";
 import SpaceInput from "../../inputs/wrapperInputs/space/SpaceInput";
 import ThresholdInput from "../../inputs/wrapperInputs/threshold/ThresholdInput";
+import FoodItemVerInputs from "../inputs/FoodItemVerInputs";
 // COMPONENT
-const FormInputs = () => {
-  // Threshold
-  const thresholdRef = useRef<HTMLInputElement | null>(null);
-  const text = thresholdRef?.current
-    ? thresholdRef.current.children[1].getAttribute("style")
-    : "0";
-  const width = text ? text.split(/[%\s+]/) : "0"; // getting width value
-  const threshold = parseInt(width[4]) / 10; // width percentage
+const FormInputs = ({ type }: { type: "edit" | "create" }) => {
   return (
     <>
       <Box className="flew flex-col w-full mb-6">
@@ -37,14 +27,11 @@ const FormInputs = () => {
         {/* description */}
         <Box className="w-full md:w-3/6 p-0 md:pl-4 lg:pl-8 flex flex-col justify-between gap-6 md:gap-4">
           <DescriptionInput />
-          {/* price */}
-          <PriceInput />
-          {/* threshold */}
-          <ThresholdInput />
+          {type === "create" && <FoodItemVerInputs />}
           {/* labels */}
           <LabelsInput />
-          {/* expiration date */}
-          <ExpirationDateInput />
+          {/* threshold */}
+          <ThresholdInput />
         </Box>
       </section>
     </>

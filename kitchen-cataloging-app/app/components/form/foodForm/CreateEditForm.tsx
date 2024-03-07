@@ -1,56 +1,33 @@
-import { FoodType } from "@/prisma/mock/mockData";
-import FormInputs from "./components/FormInputs";
-import Modal from "@mui/material/Modal";
-import { PriceProvider } from "../inputs/wrapperInputs/price/PriceProvider";
-import { DescriptionProvider } from "../inputs/wrapperInputs/description/DescriptionProvider";
-import { TitleProvider } from "../inputs/wrapperInputs/title/TitleProvider";
 import { CreateEditFormProps } from "../types/types";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { LabelsProvider } from "../inputs/wrapperInputs/labels/LabelsProvider";
-import { SpaceProvider } from "../inputs/wrapperInputs/space/SpaceProvider";
-import { DndFileProvider } from "../inputs/innerComponents/dnd/DnDProvider";
 import { useEffect, useState } from "react";
 import { getFood } from "@/actions/food/actions";
-import { ExpirationDateProvider } from "../inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
-import FormSubmitWrapper from "../components/FormSubmitWrapper";
 import { FormActionBtns, FormCloseBtn } from "../components/FormActionBtns";
+import { Box } from "@mui/material";
+import FormInputs from "./components/FormInputs";
+import Modal from "@mui/material/Modal";
+import FormSubmitWrapper from "../components/FormSubmitWrapper";
 import FormHeader from "../components/FormHeader";
-import { ThresholdProvider } from "../inputs/wrapperInputs/threshold/ThresholdProvider";
 import FormLoading from "../components/FormLoading";
+import FoodItemVersionWrappers from "../wrappers/FoodItemVersionFormWrappers";
+import { FoodType } from "@/prisma/mock/mockData";
+import { FoodItemVersion } from "@prisma/client";
+import FoodItemFormWrappers from "../wrappers/FoodItemFormWrappers";
+type FoodItemFormType = FoodType & {
+  recentFoodItemVer?: Partial<FoodItemVersion> | null;
+};
 export const CreateEditFormWrappers = ({
   itemData,
   children,
 }: {
-  itemData: FoodType | null;
+  itemData: FoodItemFormType | null;
   children: React.ReactNode;
 }) => {
-  const spaceValue =
-    itemData && itemData.roomId
-      ? {
-          label: itemData.roomTitle,
-          value: itemData.roomId,
-        }
-      : null;
   return (
-    <SpaceProvider defaultValue={spaceValue}>
-      <TitleProvider defaultValue={itemData?.title}>
-        <DescriptionProvider defaultValue={itemData?.description}>
-          <PriceProvider defaultValue={itemData?.price}>
-            <LabelsProvider defaultValue={itemData?.labels}>
-              <DndFileProvider defaultValue={itemData?.image?.url}>
-                <ExpirationDateProvider
-                  defaultValue={itemData?.expirationDate.toString()}
-                >
-                  <ThresholdProvider defaultValue={itemData?.threshold}>
-                    {children}
-                  </ThresholdProvider>
-                </ExpirationDateProvider>
-              </DndFileProvider>
-            </LabelsProvider>
-          </PriceProvider>
-        </DescriptionProvider>
-      </TitleProvider>
-    </SpaceProvider>
+    <FoodItemFormWrappers itemData={itemData}>
+      <FoodItemVersionWrappers itemData={itemData?.recentFoodItemVer}>
+        {children}
+      </FoodItemVersionWrappers>
+    </FoodItemFormWrappers>
   );
 };
 export default function CreateEditForm({
@@ -58,11 +35,11 @@ export default function CreateEditForm({
   type,
   itemId,
   defaultData,
-}: CreateEditFormProps<FoodType>) {
+}: CreateEditFormProps<FoodItemFormType>) {
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [itemData, setItemData] = useState<FoodType | null>(
+  const [itemData, setItemData] = useState<FoodItemFormType | null>(
     defaultData || null
   );
   const handleOpen = () => setOpen(true);
@@ -73,7 +50,19 @@ export default function CreateEditForm({
     setLoading(true);
     getFood({ foodId: itemId })
       .then((res) => {
-        setItemData(res);
+        if (res?.recentFoodItemVer)
+          setItemData({
+            ...res,
+            recentFoodItemVer: {
+              ...res?.recentFoodItemVer,
+              //allows for default data quantity to override previous purchased
+              quantity:
+                typeof defaultData?.recentFoodItemVer?.quantity === "number"
+                  ? defaultData?.recentFoodItemVer?.quantity
+                  : res?.recentFoodItemVer?.quantity,
+            },
+          });
+        else setItemData(res);
         setLoading(false);
       })
       .catch((err) => {
@@ -117,7 +106,7 @@ export default function CreateEditForm({
               >
                 <FormSubmitWrapper type={type}>
                   {loading && <FormLoading />}
-                  <FormInputs />
+                  <FormInputs type={type} />
                   <FormActionBtns onClose={handleClose} />
                 </FormSubmitWrapper>
               </CreateEditFormWrappers>
