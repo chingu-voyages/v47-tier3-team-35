@@ -12,7 +12,7 @@ import {
 } from "@/zodTypes/FoodItemSchema";
 import updateFoodItemVer from "@/actions/foodVer/updateFoodVer";
 import addSingleFoodVerItem from "@/actions/foodVer/addFoodVer";
-import { FoodItemSuccessResult } from "../../types/types";
+import { FoodItemSuccessResult } from "../../../types/types";
 export const uploadFoodItemData = async ({
   newFoodData,
   newFoodItemVer,

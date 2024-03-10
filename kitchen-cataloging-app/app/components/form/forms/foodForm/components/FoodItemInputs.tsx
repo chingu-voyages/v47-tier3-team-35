@@ -1,12 +1,12 @@
 "use client";
 import { Box } from "@mui/material";
-import DescriptionInput from "../../inputs/wrapperInputs/description/DescriptionInput";
-import TitleInput from "../../inputs/wrapperInputs/title/TitleInput";
-import LabelsInput from "../../inputs/wrapperInputs/labels/LabelsInput";
-import { ImageInput } from "../../inputs/wrapperInputs/img/ImageInput";
-import SpaceInput from "../../inputs/wrapperInputs/space/SpaceInput";
-import ThresholdInput from "../../inputs/wrapperInputs/threshold/ThresholdInput";
-import FoodItemVerInputs from "../inputs/FoodItemVerInputs";
+import DescriptionInput from "@/components/form/inputs/wrapperInputs/description/DescriptionInput";
+import TitleInput from "@/components/form/inputs/wrapperInputs/title/TitleInput";
+import LabelsInput from "@/components/form/inputs/wrapperInputs/labels/LabelsInput";
+import { ImageInput } from "@/components/form/inputs/wrapperInputs/img/ImageInput";
+import SpaceInput from "@/components/form/inputs/wrapperInputs/space/SpaceInput";
+import ThresholdInput from "@/components/form/inputs/wrapperInputs/threshold/ThresholdInput";
+import FoodItemVerInputs from "./FoodItemVerInputs";
 // COMPONENT
 const FormInputs = ({ fullInputs }: { fullInputs: boolean }) => {
   return (

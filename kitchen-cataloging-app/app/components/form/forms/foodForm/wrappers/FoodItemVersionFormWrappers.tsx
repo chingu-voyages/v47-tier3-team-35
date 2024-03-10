@@ -1,6 +1,6 @@
-import { PriceProvider } from "../inputs/wrapperInputs/price/PriceProvider";
-import { ExpirationDateProvider } from "../inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
-import { QuantityProvider } from "../inputs/wrapperInputs/quantity/QuantityProvider";
+import { PriceProvider } from "@/components/form/inputs/wrapperInputs/price/PriceProvider";
+import { ExpirationDateProvider } from "@/components/form/inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
+import { QuantityProvider } from "@/components/form/inputs/wrapperInputs/quantity/QuantityProvider";
 import { FoodItemVersion } from "@prisma/client";
 
 const FoodItemVersionWrappers = ({

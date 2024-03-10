@@ -1,21 +1,24 @@
 import React from "react";
-import { useThresholdInput } from "../inputs/wrapperInputs/threshold/ThresholdProvider";
-import { useExpirationDateInput } from "../inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
-import { useDndFileInput } from "../inputs/innerComponents/dnd/DnDProvider";
-import { useLabelsInput } from "../inputs/wrapperInputs/labels/LabelsProvider";
-import { usePriceInput } from "../inputs/wrapperInputs/price/PriceProvider";
-import { useDescriptionInput } from "../inputs/wrapperInputs/description/DescriptionProvider";
-import { useTitleInput } from "../inputs/wrapperInputs/title/TitleProvider";
-import { useSpaceInput } from "../inputs/wrapperInputs/space/SpaceProvider";
+import { useThresholdInput } from "@/components/form/inputs/wrapperInputs/threshold/ThresholdProvider";
+import { useExpirationDateInput } from "@/components/form/inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
+import { useDndFileInput } from "@/components/form/inputs/innerComponents/dnd/DnDProvider";
+import { useLabelsInput } from "@/components/form/inputs/wrapperInputs/labels/LabelsProvider";
+import { usePriceInput } from "@/components/form/inputs/wrapperInputs/price/PriceProvider";
+import { useDescriptionInput } from "@/components/form/inputs/wrapperInputs/description/DescriptionProvider";
+import { useTitleInput } from "@/components/form/inputs/wrapperInputs/title/TitleProvider";
+import { useSpaceInput } from "@/components/form/inputs/wrapperInputs/space/SpaceProvider";
 import {
   FoodItemVersionZodType,
   FoodItemZodType,
 } from "@/zodTypes/FoodItemSchema";
 import uploadImages from "@/aws/content/uploadImages";
-import { useQuantityInput } from "../inputs/wrapperInputs/quantity/QuantityProvider";
+import { useQuantityInput } from "@/components/form/inputs/wrapperInputs/quantity/QuantityProvider";
 import { uploadFoodItemData } from "./actions/FoodFormServerAction";
-import { FoodItemSuccessResult, FormProps } from "../types/types";
-import FormSubmitWrapper from "../components/FormSubmitWrapper";
+import {
+  FoodItemSuccessResult,
+  FormProps,
+} from "@/components/form/types/types";
+import FormSubmitWrapper from "@/components/form/components/FormSubmitWrapper";
 import { Food } from "@prisma/client";
 export default function FoodFormSubmitWrapper({
   children,

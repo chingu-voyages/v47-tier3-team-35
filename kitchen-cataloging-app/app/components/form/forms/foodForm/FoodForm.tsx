@@ -1,16 +1,19 @@
-import { FormProps } from "../types/types";
-import { useEffect, useState } from "react";
-import { getFood } from "@/actions/food/actions";
-import { FormActionBtns, FormCloseBtn } from "../components/FormActionBtns";
-import { Box } from "@mui/material";
-import FormInputs from "./components/FormInputs";
-import Modal from "@mui/material/Modal";
-import FormHeader from "../components/FormHeader";
-import FormLoading from "../components/FormLoading";
-import FoodItemVersionWrappers from "../wrappers/FoodItemVersionFormWrappers";
 import { FoodType } from "@/prisma/mock/mockData";
 import { FoodItemVersion } from "@prisma/client";
-import FoodItemFormWrappers from "../wrappers/FoodItemFormWrappers";
+import { useEffect, useState } from "react";
+import { getFood } from "@/actions/food/actions";
+import { Box } from "@mui/material";
+import {
+  FormActionBtns,
+  FormCloseBtn,
+} from "@/components/form/components/FormActionBtns";
+import { FormProps } from "@/components/form/types/types";
+import FormInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
+import Modal from "@mui/material/Modal";
+import FormHeader from "@/components/form/components/FormHeader";
+import FormLoading from "@/components/form/components/FormLoading";
+import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemVersionFormWrappers";
+import FoodItemFormWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemFormWrappers";
 import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
