@@ -17,7 +17,6 @@ export const extractGeneralFoodProps = async (
     roomdId: newData.roomId,
     updatedAt: currDate,
     title: newData.title,
-    createdAt: newData.createdAt ? new Date(newData.createdAt) : currDate,
     description: newData.description || "",
     threshold: parseInt(newData.threshold.toString()),
     roomId: room?.id,

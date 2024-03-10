@@ -5,7 +5,7 @@ import { paginateFoods } from "./search/paginateFoods";
 import { SearchFoodProps } from "./types/types";
 import { getSingleFood } from "./crud/getSingleFood";
 import { incrementFood } from "./crud/incrementFood";
-import { createFoodLog } from "./crud/createFoodLog";
+import { createFoodLog } from "../foodLog/createFoodLog";
 import extractSignedUrls from "../utils/extractSignedUrls";
 
 export const searchFoodItems = async (props: SearchFoodProps) => {

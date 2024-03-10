@@ -2,7 +2,6 @@ import prisma from "@/prisma/client";
 import { FoodItemZodType } from "@/zodTypes/FoodItemSchema";
 import { Prisma } from "@prisma/client";
 import extractGeneralFoodProps from "./extractGeneralFoodProps";
-
 export const updateSingleFoodItem = async (
   userId: string,
   id: string,
@@ -14,12 +13,13 @@ export const updateSingleFoodItem = async (
     labels: newData.labels || [],
     image: newData.image || null,
   };
-  prisma.food.update({
+  const result = await prisma.food.update({
     where: {
       id: id,
       userId: userId,
     },
     data: newDoc,
   });
+  return result;
 };
-export default updateSingleFoodItem
+export default updateSingleFoodItem;

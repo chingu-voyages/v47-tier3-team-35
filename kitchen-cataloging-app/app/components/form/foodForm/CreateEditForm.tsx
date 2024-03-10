@@ -5,13 +5,13 @@ import { FormActionBtns, FormCloseBtn } from "../components/FormActionBtns";
 import { Box } from "@mui/material";
 import FormInputs from "./components/FormInputs";
 import Modal from "@mui/material/Modal";
-import FormSubmitWrapper from "../components/FormSubmitWrapper";
 import FormHeader from "../components/FormHeader";
 import FormLoading from "../components/FormLoading";
 import FoodItemVersionWrappers from "../wrappers/FoodItemVersionFormWrappers";
 import { FoodType } from "@/prisma/mock/mockData";
 import { FoodItemVersion } from "@prisma/client";
 import FoodItemFormWrappers from "../wrappers/FoodItemFormWrappers";
+import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };
@@ -104,11 +104,11 @@ export default function CreateEditForm({
                 key={open.toString() + loading.toString()}
                 itemData={itemData}
               >
-                <FormSubmitWrapper type={type}>
+                <FoodFormSubmitWrapper type={type} onClose={handleClose}>
                   {loading && <FormLoading />}
                   <FormInputs type={type} />
                   <FormActionBtns onClose={handleClose} />
-                </FormSubmitWrapper>
+                </FoodFormSubmitWrapper>
               </CreateEditFormWrappers>
             </Box>
           </Box>
