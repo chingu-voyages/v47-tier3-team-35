@@ -20,6 +20,7 @@ export const getFood = async ({ foodId }: { foodId: string }) => {
   const extracted = result ? await extractSignedUrls([result]) : null;
   return extracted ? extracted[0] : null;
 };
+// Increment/decrement food
 export const getIncrementFood = async (foodId: string, newValue: number) => {
   const { userId } = auth();
   return await incrementFood({ foodId, newValue, userId });

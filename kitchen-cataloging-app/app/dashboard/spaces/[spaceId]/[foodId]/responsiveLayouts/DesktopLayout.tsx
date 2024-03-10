@@ -5,7 +5,7 @@ import FoodImg from "../components/foodInfo/FoodImg";
 import FoodInfo from "../components/foodInfo/FoodInfo";
 import FoodActivity from "../components/foodActivity/FoodActivity";
 import FoodInventory from "../components/foodInventory/FoodInventory";
-import useIncrementFoodData from "@/hooks/useIncrementFoodData";
+import useIncrementFoodData from "@/dashboard/spaces/[spaceId]/[foodId]/hooks/useIncrementFoodData";
 import { FoodDataType } from "../page";
 
 export interface ResponsiveLayout {
@@ -15,7 +15,8 @@ export interface ResponsiveLayout {
 }
 
 const DesktopLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
-  const { currentFoodData, currentLogs, handleIncrement } = useIncrementFoodData(foodData);
+  const { currentFoodData, currentLogs, handleIncrement } =
+    useIncrementFoodData(foodData);
 
   return (
     <>

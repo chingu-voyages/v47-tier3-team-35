@@ -8,10 +8,11 @@ import FoodInventory from "../components/foodInventory/FoodInventory";
 
 import { FoodDataType } from "../page";
 import { ResponsiveLayout } from "./DesktopLayout";
-import useIncrementFoodData from "@/hooks/useIncrementFoodData";
+import useIncrementFoodData from "@/dashboard/spaces/[spaceId]/[foodId]/hooks/useIncrementFoodData";
 
 const MobileLayout = ({ foodData, spaces, userId }: ResponsiveLayout) => {
-  const { currentFoodData, currentLogs, handleIncrement } = useIncrementFoodData(foodData);
+  const { currentFoodData, currentLogs, handleIncrement } =
+    useIncrementFoodData(foodData);
 
   return (
     <>

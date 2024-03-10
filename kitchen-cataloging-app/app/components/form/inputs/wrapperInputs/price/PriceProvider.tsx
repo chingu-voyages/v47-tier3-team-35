@@ -23,13 +23,13 @@ export const PriceProvider = ({
   defaultValue?: number;
   children: React.ReactNode;
 }) => {
-  const [price, setPrice] = useState(defaultValue || 0.0);
+  const [price, setPrice] = useState(defaultValue || 0.00);
   const [error, setError] = useState(false);
   const onChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const val = e.target.value;
-    if (val === "") return setPrice(0.0);
+    if (val === "") return setPrice(0.00);
     //two digits since we are working with prices
     const valNum = parseFloat(val).toFixed(2);
     setPrice(parseFloat(valNum));
