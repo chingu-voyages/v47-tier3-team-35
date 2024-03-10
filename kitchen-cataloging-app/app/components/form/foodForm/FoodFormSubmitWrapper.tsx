@@ -13,17 +13,18 @@ import {
 } from "@/zodTypes/FoodItemSchema";
 import uploadImages from "@/aws/content/uploadImages";
 import { useQuantityInput } from "../inputs/wrapperInputs/quantity/QuantityProvider";
-import { uploadFoodItemData } from "./actions/CreateEditServerAction";
-import { FoodItemSuccessResult } from "../types/types";
+import { uploadFoodItemData } from "./actions/FoodFormServerAction";
+import { FoodItemSuccessResult, FormProps } from "../types/types";
 import FormSubmitWrapper from "../components/FormSubmitWrapper";
+import { Food } from "@prisma/client";
 export default function FoodFormSubmitWrapper({
-  type,
   children,
   onClose,
-}: {
-  type: "edit" | "create";
-  children: React.ReactNode;
-  onClose: (result?: FoodItemSuccessResult) => void;
+  fullInputs,
+  foodId,
+}: Pick<FormProps<Food, FoodItemSuccessResult>, "children" | "onClose"> & {
+  foodId?: string;
+  fullInputs: boolean;
 }) {
   const spaceProps = useSpaceInput();
   const titleProps = useTitleInput();
@@ -40,14 +41,23 @@ export default function FoodFormSubmitWrapper({
     if (!spaceProps?.space) return spaceProps?.setError(true);
     if (!titleProps?.title) return titleProps?.setError(true);
     if (!thresholdProps?.threshold) return thresholdProps?.setError(false);
+    let foodVersionDoc: FoodItemVersionZodType | null = null;
     //required food item version props
-    if (typeof priceProps?.price !== "number")
-      return priceProps?.setError(true);
-    if (!expirationDateProps?.expirationDate)
-      return expirationDateProps?.setError(false);
-    if (!quantityProps?.quantity) return quantityProps?.setError(true);
+    if (fullInputs) {
+      if (typeof priceProps?.price !== "number")
+        return priceProps?.setError(true);
+      if (!expirationDateProps?.expirationDate)
+        return expirationDateProps?.setError(false);
+      if (!quantityProps?.quantity) return quantityProps?.setError(true);
+      //add values
+      foodVersionDoc = {
+        price: priceProps.price,
+        expirationDate: new Date(expirationDateProps.expirationDate),
+        quantity: quantityProps.quantity,
+      };
+    }
     //upload image if it exists
-    let img: FoodItemZodType["image"] = {
+    const img: FoodItemZodType["image"] = {
       s3ObjKey: imgProps?.defaultObjKey || null,
       url: "",
     };
@@ -61,6 +71,7 @@ export default function FoodFormSubmitWrapper({
       }
     }
     const foodDoc: FoodItemZodType = {
+      id: foodId,
       title: titleProps.title,
       labels: labelsProps?.labels || [],
       threshold: thresholdProps.threshold,
@@ -68,19 +79,14 @@ export default function FoodFormSubmitWrapper({
       description: descriptionProps?.description || "",
       image: img,
     };
-    const foodVersionDoc: FoodItemVersionZodType = {
-      price: priceProps.price,
-      expirationDate: new Date(expirationDateProps.expirationDate),
-      quantity: quantityProps.quantity,
-    };
     const result = await uploadFoodItemData({
       newFoodData: foodDoc,
-      newFoodItemVer: type === "create" ? foodVersionDoc : undefined,
+      newFoodItemVer: fullInputs && foodVersionDoc ? foodVersionDoc : undefined,
     });
     //this indicates an error
     if (result.type === "error") return;
     //this indicates a success callback;
-    onClose(result);
+    if (onClose) onClose(result);
   };
   return <FormSubmitWrapper onSubmit={onSubmit}>{children}</FormSubmitWrapper>;
 }

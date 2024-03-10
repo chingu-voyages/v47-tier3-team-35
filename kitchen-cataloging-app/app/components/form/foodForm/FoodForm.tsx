@@ -1,4 +1,4 @@
-import { CreateEditFormProps } from "../types/types";
+import { FormProps } from "../types/types";
 import { useEffect, useState } from "react";
 import { getFood } from "@/actions/food/actions";
 import { FormActionBtns, FormCloseBtn } from "../components/FormActionBtns";
@@ -30,12 +30,15 @@ export const CreateEditFormWrappers = ({
     </FoodItemFormWrappers>
   );
 };
-export default function CreateEditForm({
+export default function FoodForm({
   children,
-  type,
+  actionType,
   itemId,
   defaultData,
-}: CreateEditFormProps<FoodItemFormType>) {
+  fullInputs = true,
+}: FormProps<FoodItemFormType> & {
+  fullInputs?: boolean;
+}) {
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -46,7 +49,7 @@ export default function CreateEditForm({
   const handleClose = () => setOpen(false);
   useEffect(() => {
     if (!itemId) return;
-    if (type === "create" && open) return;
+    if (actionType === "create" && open) return;
     setLoading(true);
     getFood({ foodId: itemId })
       .then((res) => {
@@ -69,7 +72,7 @@ export default function CreateEditForm({
         setLoading(false);
         setError(true);
       });
-  }, [itemId, type, open]);
+  }, [itemId, actionType, open]);
 
   return (
     <>
@@ -90,9 +93,9 @@ export default function CreateEditForm({
               <FormCloseBtn onClose={handleClose} />
               {/* Heading */}
               <FormHeader
-                header={`${type.slice(0, 1).toUpperCase()}${type.slice(
-                  1
-                )} Item`}
+                header={`${actionType
+                  .slice(0, 1)
+                  .toUpperCase()}${actionType.slice(1)} Item`}
               />
               <CreateEditFormWrappers
                 //we add this key here because we want to FORCE react
@@ -104,9 +107,13 @@ export default function CreateEditForm({
                 key={open.toString() + loading.toString()}
                 itemData={itemData}
               >
-                <FoodFormSubmitWrapper type={type} onClose={handleClose}>
+                <FoodFormSubmitWrapper
+                  foodId={actionType === "edit" ? itemData?.id : undefined}
+                  fullInputs={fullInputs}
+                  onClose={handleClose}
+                >
                   {loading && <FormLoading />}
-                  <FormInputs type={type} />
+                  <FormInputs fullInputs={fullInputs} />
                   <FormActionBtns onClose={handleClose} />
                 </FoodFormSubmitWrapper>
               </CreateEditFormWrappers>

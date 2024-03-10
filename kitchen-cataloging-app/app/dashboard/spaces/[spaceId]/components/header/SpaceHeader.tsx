@@ -11,7 +11,7 @@ import SpaceHeaderTopmostBox from "./wrappers/SpaceHeaderTopmostBox";
 import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
 import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
 import AddItemBtn from "@/components/actionBtns/AddItemBtn";
-import CreateEditForm from "@/components/form/foodForm/CreateEditForm";
+import CreateEditForm from "@/components/form/foodForm/FoodForm";
 const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
   return (
     <SpaceActionBtnsWrapper>
@@ -66,7 +66,7 @@ const SpaceHeader = ({
         <SpaceActionBtns>
           {!mediumWidth && (
             <CreateEditForm
-              type="create"
+              actionType="create"
               spaces={spaceNames.map((space) => space.title)}
               userId={userId}
             >
@@ -79,7 +79,7 @@ const SpaceHeader = ({
         <SearchBar spaceId={spaceData.id} />
         {mediumWidth && (
           <CreateEditForm
-            type="create"
+            actionType="create"
             spaces={spaceNames.map((space) => space.title)}
             userId={userId}
           >

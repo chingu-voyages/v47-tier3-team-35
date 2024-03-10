@@ -1,9 +1,9 @@
 import { Food, FoodItemVersion } from "@prisma/client";
 
-export interface CreateEditFormProps<T> {
+export interface FormProps<T, B = any> {
   children?: React.ReactNode;
-  onClose?: () => void;
-  type: "create" | "edit";
+  onClose?: (e?: B) => void;
+  actionType: "create" | "edit";
   spaces?: string[];
   userId?: string;
   itemId?: string;

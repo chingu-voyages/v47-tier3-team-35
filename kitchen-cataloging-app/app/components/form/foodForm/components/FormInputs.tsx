@@ -8,7 +8,7 @@ import SpaceInput from "../../inputs/wrapperInputs/space/SpaceInput";
 import ThresholdInput from "../../inputs/wrapperInputs/threshold/ThresholdInput";
 import FoodItemVerInputs from "../inputs/FoodItemVerInputs";
 // COMPONENT
-const FormInputs = ({ type }: { type: "edit" | "create" }) => {
+const FormInputs = ({ fullInputs }: { fullInputs: boolean }) => {
   return (
     <>
       <Box className="flew flex-col w-full mb-6">
@@ -27,7 +27,7 @@ const FormInputs = ({ type }: { type: "edit" | "create" }) => {
         {/* description */}
         <Box className="w-full md:w-3/6 p-0 md:pl-4 lg:pl-8 flex flex-col justify-between gap-6 md:gap-4">
           <DescriptionInput />
-          {type === "create" && <FoodItemVerInputs />}
+          {fullInputs && <FoodItemVerInputs />}
           {/* labels */}
           <LabelsInput />
           {/* threshold */}

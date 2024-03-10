@@ -1,10 +1,10 @@
 import { Box, Button, IconButton } from "@mui/material";
-import { CreateEditFormProps } from "../types/types";
+import { FormProps } from "../types/types";
 import CloseIcon from "@mui/icons-material/Close";
 export const FormCloseBtn = ({
   onClose,
 }: {
-  onClose: CreateEditFormProps<any>["onClose"];
+  onClose: FormProps<any>["onClose"];
 }) => {
   return (
     <IconButton
@@ -19,7 +19,7 @@ export const FormCloseBtn = ({
 export const FormActionBtns = ({
   onClose,
 }: {
-  onClose: CreateEditFormProps<any>["onClose"];
+  onClose: FormProps<any>["onClose"];
 }) => {
   return (
     <Box className="flex flex-row justify-end gap-4 py-6">

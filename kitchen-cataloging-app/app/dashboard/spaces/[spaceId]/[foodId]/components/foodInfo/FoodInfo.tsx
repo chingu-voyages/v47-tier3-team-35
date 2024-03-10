@@ -10,7 +10,7 @@ import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import CreateEditForm from "@/components/form/foodForm/CreateEditForm";
+import CreateEditForm from "@/components/form/foodForm/FoodForm";
 import { FoodDataType } from "../../page";
 import { FoodType } from "@/prisma/mock/mockData";
 import { getIncrementFood } from "@/actions/food/actions";
@@ -25,8 +25,8 @@ interface FoodInfo {
 
 const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
   const { title, roomTitle, description, price, labels } = foodData;
-  const priceDollars = price.toString().split(".")[0];
-  const priceCents = price.toFixed(2).toString().split(".")[1];
+  const priceDollars = price?.toString().split(".")[0];
+  const priceCents = price?.toFixed(2).toString().split(".")[1];
 
   const [amount, setAmount] = useState(foodData.amount);
 
@@ -85,7 +85,7 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
             className={`${iconClassList}`}
           />
           <CreateEditForm
-            type={"edit"}
+            actionType={"edit"}
             spaces={spaces}
             userId={userId}
             defaultData={foodData}
