@@ -18,7 +18,7 @@ import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };
-export const CreateEditFormWrappers = ({
+export const FoodFormWrappers = ({
   itemData,
   children,
 }: {
@@ -99,7 +99,7 @@ export default function FoodForm({
                   .slice(0, 1)
                   .toUpperCase()}${actionType.slice(1)} Item`}
               />
-              <CreateEditFormWrappers
+              <FoodFormWrappers
                 //we add this key here because we want to FORCE react
                 //to unmount and re-mount the components
                 //anew, when open or loading state changes
@@ -118,7 +118,7 @@ export default function FoodForm({
                   <FormInputs fullInputs={fullInputs} />
                   <FormActionBtns onClose={handleClose} />
                 </FoodFormSubmitWrapper>
-              </CreateEditFormWrappers>
+              </FoodFormWrappers>
             </Box>
           </Box>
         </Box>

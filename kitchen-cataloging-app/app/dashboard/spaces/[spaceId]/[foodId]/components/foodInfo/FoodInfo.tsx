@@ -10,7 +10,7 @@ import Pill from "@/components/UI/Pill";
 import { Variant } from "@mui/material/styles/createTypography";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import CreateEditForm from "@/components/form/forms/foodForm/FoodForm";
+import FoodForm from "@/components/form/forms/foodForm/FoodForm";
 import { FoodDataType } from "../../page";
 import { FoodType } from "@/prisma/mock/mockData";
 import { getIncrementFood } from "@/actions/food/actions";
@@ -84,7 +84,7 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
             color={"primary"}
             className={`${iconClassList}`}
           />
-          <CreateEditForm
+          <FoodForm
             actionType={"edit"}
             spaces={spaces}
             userId={userId}
@@ -98,7 +98,7 @@ const FoodInfo = ({ foodData, spaces, userId, handleIncrement }: FoodInfo) => {
                 onClick={props.handleOpen}
               />
             )}
-          </CreateEditForm>
+          </FoodForm>
           <DeleteForeverOutlinedIcon
             color={"error"}
             className={`${iconClassList}`}
