@@ -1,6 +1,5 @@
 import prisma from "@/prisma/client";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-
 export const createFoodLog = async ({
   foodId,
     userId,
