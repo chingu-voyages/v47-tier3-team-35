@@ -2,7 +2,7 @@ import { FoodType } from "@/prisma/mock/mockData";
 import { FoodItemVersion } from "@prisma/client";
 import { useCallback, useEffect, useState } from "react";
 import { getFood } from "@/actions/food/actions";
-import { Alert, Box, Typography } from "@mui/material";
+import { Alert, Typography } from "@mui/material";
 import {
   FormActionBtns,
   FormCloseBtn,
@@ -12,7 +12,6 @@ import {
   FormProps,
 } from "@/components/form/types/types";
 import FormInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
-import Modal from "@mui/material/Modal";
 import FormHeader from "@/components/form/components/FormHeader";
 import FormLoading from "@/components/form/components/FormLoading";
 import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemVersionFormWrappers";
@@ -20,6 +19,7 @@ import FoodItemFormWrappers from "@/components/form/forms/foodForm/wrappers/Food
 import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
 import CheckIcon from "@mui/icons-material/Check";
 import { ErrorMessage } from "@/utils/generateErrMessage";
+import FormModalWrapper from "../../components/FormModalWrapper";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };
@@ -104,7 +104,9 @@ export default function FoodForm({
         });
       });
   }, [itemId, actionType, open, savedErrFunc]);
-
+  const headerText = `${actionType.slice(0, 1).toUpperCase()}${actionType.slice(
+    1
+  )} Item`;
   return (
     <>
       {children({ handleOpen })}
@@ -122,48 +124,36 @@ export default function FoodForm({
           <Typography noWrap>{error.message}</Typography>
         </Alert>
       )}
-      <Modal
-        className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh] justify-center"
+      <FormModalWrapper
         open={open}
         onClose={() => handleClose()}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-describedby={`${headerText}-form`}
       >
-        <Box className="flex flex-col w-full h-full md:max-h-[750px] md:max-w-screen-xl my-auto">
-          <Box className="relative flex flex-col w-full h-full bg-default-sys-light-surface-container-low pt-6 px-10 pb-0 overflow-y-auto">
-            <Box className="flex flex-col w-full md:m-auto">
-              {/*Close Btn*/}
-              <FormCloseBtn onClose={handleClose} />
-              {/* Heading */}
-              <FormHeader
-                header={`${actionType
-                  .slice(0, 1)
-                  .toUpperCase()}${actionType.slice(1)} Item`}
-              />
-              <FoodFormWrappers
-                //we add this key here because we want to FORCE react
-                //to unmount and re-mount the components
-                //anew, when open or loading state changes
-                //this way we pre-fill providers with new item data everytime
-                //the modal is opened, and therefore keep form updated with
-                //most recent values
-                key={open.toString() + loading.toString()}
-                itemData={itemData}
-              >
-                <FoodFormSubmitWrapper
-                  foodId={actionType === "edit" ? itemData?.id : undefined}
-                  fullInputs={fullInputs}
-                  onClose={handleClose}
-                >
-                  {loading && <FormLoading />}
-                  <FormInputs fullInputs={fullInputs} />
-                  <FormActionBtns onClose={handleClose} />
-                </FoodFormSubmitWrapper>
-              </FoodFormWrappers>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
+        {/*Close Btn*/}
+        <FormCloseBtn onClose={handleClose} />
+        {/* Heading */}
+        <FormHeader header={headerText} />
+        <FoodFormWrappers
+          //we add this key here because we want to FORCE react
+          //to unmount and re-mount the components
+          //anew, when open or loading state changes
+          //this way we pre-fill providers with new item data everytime
+          //the modal is opened, and therefore keep form updated with
+          //most recent values
+          key={open.toString() + loading.toString()}
+          itemData={itemData}
+        >
+          <FoodFormSubmitWrapper
+            foodId={actionType === "edit" ? itemData?.id : undefined}
+            fullInputs={fullInputs}
+            onClose={handleClose}
+          >
+            {loading && <FormLoading />}
+            <FormInputs fullInputs={fullInputs} />
+            <FormActionBtns onClose={handleClose} />
+          </FoodFormSubmitWrapper>
+        </FoodFormWrappers>
+      </FormModalWrapper>
     </>
   );
 }
