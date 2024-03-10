@@ -1,13 +1,16 @@
 import { FoodType } from "@/prisma/mock/mockData";
 import { FoodItemVersion } from "@prisma/client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getFood } from "@/actions/food/actions";
-import { Box } from "@mui/material";
+import { Alert, Box, Typography } from "@mui/material";
 import {
   FormActionBtns,
   FormCloseBtn,
 } from "@/components/form/components/FormActionBtns";
-import { FormProps } from "@/components/form/types/types";
+import {
+  FoodItemSuccessResult,
+  FormProps,
+} from "@/components/form/types/types";
 import FormInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
 import Modal from "@mui/material/Modal";
 import FormHeader from "@/components/form/components/FormHeader";
@@ -15,6 +18,8 @@ import FormLoading from "@/components/form/components/FormLoading";
 import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemVersionFormWrappers";
 import FoodItemFormWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemFormWrappers";
 import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
+import CheckIcon from "@mui/icons-material/Check";
+import { ErrorMessage } from "@/utils/generateErrMessage";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };
@@ -39,18 +44,35 @@ export default function FoodForm({
   itemId,
   defaultData,
   fullInputs = true,
-}: Omit<FormProps<FoodItemFormType>, "children"> & {
+}: Omit<FormProps<FoodItemFormType, FoodItemSuccessResult>, "children"> & {
   fullInputs?: boolean;
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<ErrorMessage | null>(null);
+  const [success, setSuccess] = useState<FoodItemSuccessResult | null>(null);
   const [itemData, setItemData] = useState<FoodItemFormType | null>(
     defaultData || null
   );
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const setErrFunc = (e: ErrorMessage) => {
+    setError(e);
+    setSuccess(null);
+  };
+  const setSuccessFunc = (e: FoodItemSuccessResult) => {
+    setError(null);
+    setSuccess(e);
+  };
+  const savedSuccessFunc = useCallback(setSuccessFunc, []);
+  const savedErrFunc = useCallback(setErrFunc, []);
+  const handleOpen = () => {
+    setSuccess(null);
+    setOpen(true);
+  };
+  const handleClose = (result?: FoodItemSuccessResult) => {
+    if (result) savedSuccessFunc(result);
+    setOpen(false);
+  };
   useEffect(() => {
     if (!itemId) return;
     if (actionType === "create" && open) return;
@@ -74,17 +96,36 @@ export default function FoodForm({
       })
       .catch((err) => {
         setLoading(false);
-        setError(true);
+        savedErrFunc({
+          type: "error",
+          statusCode: err.statusCode,
+          message:
+            "Could not fetch item details. Please refresh the page, and try again",
+        });
       });
-  }, [itemId, actionType, open]);
+  }, [itemId, actionType, open, savedErrFunc]);
 
   return (
     <>
       {children({ handleOpen })}
+      {success && (
+        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+          <Typography noWrap>
+            {`Successfully ${actionType === "create" ? "added" : "updated"} ${
+              success.result.foodDoc.title
+            } located in ${success.result.foodDoc.roomTitle}`}
+          </Typography>
+        </Alert>
+      )}
+      {error && (
+        <Alert severity="error">
+          <Typography noWrap>{error.message}</Typography>
+        </Alert>
+      )}
       <Modal
         className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh] justify-center"
         open={open}
-        onClose={handleClose}
+        onClose={() => handleClose()}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import React from "react";
 export default function FormHeader({ header }: { header: string }) {
   return (
