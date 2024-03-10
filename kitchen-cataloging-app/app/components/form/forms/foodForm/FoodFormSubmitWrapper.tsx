@@ -66,7 +66,6 @@ export default function FoodFormSubmitWrapper({
     };
     if (imgProps?.newFile && imgProps?.dndFile) {
       const result = await uploadImages({ files: [imgProps.dndFile] });
-      // const success = result.
       //successful upload
       if (result.uploaded.length > 1) {
         const resultImg = result.uploaded[0];

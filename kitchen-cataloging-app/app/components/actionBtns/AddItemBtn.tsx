@@ -1,17 +1,21 @@
 "use client";
-import { Button, Typography } from "@mui/material";
+import { Button, ButtonProps, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import useWindowWidth from "@/hooks/useWindowWidth";
 const defaultProps = {
   disableTextHide: false,
 };
-const AddItemBtn = ({
-  responsive = defaultProps,
-}: {
-  responsive?: {
-    disableTextHide?: boolean;
-  };
-}) => {
+const AddItemBtn = (
+  props: ButtonProps & {
+    responsive?: {
+      disableTextHide?: boolean;
+    };
+  }
+) => {
+  const responsive = props.responsive || defaultProps;
+  //we do this so we can easily spread the values of the button
+  const btnProps = { ...props };
+  if (btnProps.responsive) delete btnProps.responsive;
   const smallWidth = useWindowWidth(400);
   const noTextClasses = "aspect-square pl-0 pr-0 min-w-10";
   const textClasses = "pl-4 pr-6";
@@ -44,6 +48,7 @@ const AddItemBtn = ({
         minHeight: "0",
         height: "fit-content",
       }}
+      {...props}
     >
       <AddIcon className="text-6xl sm:text-8xl" />
       {responsive.disableTextHide ? btnText : smallWidth && btnText}

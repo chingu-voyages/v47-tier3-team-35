@@ -39,8 +39,9 @@ export default function FoodForm({
   itemId,
   defaultData,
   fullInputs = true,
-}: FormProps<FoodItemFormType> & {
+}: Omit<FormProps<FoodItemFormType>, "children"> & {
   fullInputs?: boolean;
+  children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -79,9 +80,7 @@ export default function FoodForm({
 
   return (
     <>
-      <div className={"cursor-pointer"} onClick={handleOpen}>
-        {children}
-      </div>
+      {children({ handleOpen })}
       <Modal
         className="flex m-auto w-full h-full sm:px-[10vw] sm:py-[5vh] justify-center"
         open={open}
