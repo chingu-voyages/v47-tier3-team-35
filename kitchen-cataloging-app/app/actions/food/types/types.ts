@@ -7,11 +7,7 @@ export type SearchFoodProps = PaginationProps & SearchFuncProps;
 
 export type SearchResultFood = Pick<
   Food,
-  | "id"
-  | "title"
-  | "roomTitle"
-  | "labels"
-  | "roomId"
-  | "amount"
-  | "image"
-> & { score?: number };
+  "id" | "title" | "roomTitle" | "labels" | "roomId" | "amount" | "image"
+> & { score?: number } & {
+  earliestExpirationDate: Date | string | null;
+};

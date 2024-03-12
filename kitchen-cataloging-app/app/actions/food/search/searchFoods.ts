@@ -4,6 +4,7 @@ import FoodModel from "@/mongoDB/FoodSchema";
 import mongoose from "mongoose";
 import { SearchFoodProps, SearchResultFood } from "../types/types";
 import extractSignedUrls from "@/actions/utils/extractSignedUrls";
+import prisma from "@/prisma/client";
 const ObjectId = mongoose.Types.ObjectId;
 export const createFoodItemSearchQuery = ({
   userId,
@@ -140,10 +141,31 @@ export const searchFoods = async ({
     cursor,
   });
   const result = await FoodModel.aggregate(query).exec();
-  const serializedResult = result.map((e) => {
+  const serializedResultPromises = result.map(async (e) => {
     const id = e._id.toString();
     if (e._id) delete e._id;
-    return { ...e, id: id, roomId: e.roomId?.toString() };
-  }) as SearchResultFood[];
+    const earliestExpirationDate = await prisma.foodItemVersion.findFirst({
+      where: {
+        userId,
+        foodId: e.id,
+      },
+      orderBy: {
+        expirationDate: "asc",
+      },
+      select: {
+        expirationDate: true,
+      },
+    });
+    return {
+      ...e,
+      id: id,
+      roomId: e.roomId?.toString(),
+      earliestExpirationDate: earliestExpirationDate?.expirationDate || null,
+    };
+  });
+  const serializedResult = (await Promise.all(
+    serializedResultPromises
+  )) as SearchResultFood[];
+
   return extractSignedUrls(serializedResult);
 };

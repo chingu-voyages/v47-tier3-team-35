@@ -1,6 +1,4 @@
-"use server";
 import prisma from "@/prisma/client";
-import { UserType } from "@/prisma/mock/mockData";
 const getUserInfoServer = async ({ userId }: { userId?: string | null }) => {
   try {
     if (!userId) return null;
@@ -9,8 +7,8 @@ const getUserInfoServer = async ({ userId }: { userId?: string | null }) => {
         clerkId: userId,
       },
       include: {
-        rooms: true
-      }
+        rooms: true,
+      },
     });
     return thisUser;
   } catch (err) {

@@ -1,14 +1,10 @@
-import { Container, Grid, Typography, Button, Box, Stack } from "@mui/material";
+import { Grid, Typography, Box, Stack } from "@mui/material";
 import WavingHandTwoToneIcon from "@mui/icons-material/WavingHandTwoTone";
 import KitchenOutlinedIcon from "@mui/icons-material/KitchenOutlined";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
-
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-
 import { auth } from "@clerk/nextjs";
-import Link from "next/link";
 import ActionBtn from "./components/ActionBtn";
-
 const DashboardGreeting = async () => {
   const { userId } = auth();
   const user = await getUserInfoServer({ userId });
@@ -38,7 +34,7 @@ const DashboardGreeting = async () => {
   );
 };
 
-const DashboardContent = () => {
+const DashboardContent = async () => {
   return (
     <Grid className="my-8">
       <Grid
@@ -75,9 +71,9 @@ const DashboardContent = () => {
 
 export default async function Dashboard() {
   return (
-    <Box className="m-4 md:m-8 p-8 bg-white md:bg-transparent">
+    <div className="m-4 md:m-8 p-8 bg-white md:bg-transparent">
       <DashboardGreeting />
       <DashboardContent />
-    </Box>
+    </div>
   );
 }

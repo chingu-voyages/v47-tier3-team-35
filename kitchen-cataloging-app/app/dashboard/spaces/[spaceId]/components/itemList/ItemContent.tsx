@@ -11,7 +11,7 @@ import ItemContentWrapper, {
   ItemCardFirstRowWrapper,
   ItemCardCounterBtns,
 } from "@/components/inventoryList/wrappers/ItemContentWrapper";
-import { SearchResultFood } from "../../../../../actions/food/types/types";
+import { SearchResultFood } from "@/actions/food/types/types";
 const ItemStockInfoAndBtns = ({
   item,
   mediumWidth,
@@ -92,7 +92,11 @@ const ItemContent = ({
       <ItemContentInnerWrapper>
         <ItemStockInfoAndBtns item={item} mediumWidth={mediumWidth} />
         <ItemDescription
-          expirationDate={item.expirationDate}
+          expirationDate={
+            item.earliestExpirationDate
+              ? new Date(item.earliestExpirationDate)
+              : null
+          }
           title={item.title}
           mediumWidth={mediumWidth}
         />
