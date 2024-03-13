@@ -1,4 +1,4 @@
-import { Food, Room, Log, User } from "@prisma/client";
+import { Food, Room, Log, User, FoodItemVersion } from "@prisma/client";
 export function isErrorType(e: any): e is ErrorType {
   return !!e.error;
 }
@@ -23,6 +23,7 @@ type SeedDataResult = {
   logs: Omit<LogType, "userId" | "id" | "userId" | "foodId">[];
   rooms: Omit<RoomType, "userId" | "id">[];
   foods: Omit<FoodType, "userId" | "id" | "roomTitle" | "roomId">[];
+  foodVers: Omit<FoodItemVersion, "foodId" | "id" | "userId">[];
 };
 const rooms = [
   {
@@ -39,26 +40,20 @@ const rooms = [
 const foods = [
   {
     title: "Beer",
-    price: 10.99,
-    amount: 10,
+    amount: 3,
     labels: ["Beverage"],
-    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days from now
     description: "It's beer",
   },
   {
     title: "Donuts",
-    price: 6.5,
-    amount: 12,
+    amount: 3,
     labels: ["Pastry"],
-    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), //10 days from now
     description: "Original glazed",
   },
   {
     title: "5-Gallon bucket of Cheese Puffs",
-    price: 8.0,
-    amount: 1,
+    amount: 3,
     labels: ["Snack"],
-    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 50), //50 days from now
     description: "Don't ask",
   },
 ].map((food) => ({
@@ -69,27 +64,41 @@ const foods = [
     url: "",
   },
 }));
-
+const foodVers = [
+  {
+    quantity: 1,
+    price: 8.0,
+    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 50), //50 days from now
+  },
+  {
+    quantity: 2,
+    price: 6.5,
+    expirationDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10), //10 days from now
+  },
+];
 const logs = [
   {
     price: 10.99, //limit to 2 decimal places
     amount: 20,
-    totalCost: 109.9, //limit to 2 decimal places
   },
   {
     price: 11.99, //limit to 2 decimal places
     amount: 10,
-    totalCost: 209.9, //limit to 2 decimal places
   },
   {
     price: 1.99, //limit to 2 decimal places
     amount: 10,
-    totalCost: 19.9, //limit to 2 decimal places
   },
 ];
 export const mockData = (): SeedDataResult => {
   const newFoods = Array(10)
     .fill(foods)
+    .flat()
+    .map((val) => ({
+      ...val,
+    }));
+  const newFoodVers = Array(3)
+    .fill(foodVers)
     .flat()
     .map((val) => ({
       ...val,
@@ -106,5 +115,6 @@ export const mockData = (): SeedDataResult => {
     logs: newLogs,
     rooms,
     foods: newFoods,
+    foodVers: newFoodVers,
   };
 };

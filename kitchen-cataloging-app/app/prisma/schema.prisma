@@ -73,8 +73,8 @@ model FoodItemVersion {
   price Float //limit to 2 decimal places
   foodId String? @db.ObjectId
   userId String? @db.ObjectId
-  user User? @relation(fields: [userId], references: [id])
-  food Food? @relation(fields: [foodId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+  food Food? @relation(fields: [foodId], references: [id], onDelete: Cascade)
 }
 model GroceryItem {
   id String @id @default(auto()) @map("_id") @db.ObjectId

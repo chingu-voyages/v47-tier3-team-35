@@ -25,8 +25,12 @@ const seedData = async () => {
         rooms: {
           deleteMany: {},
         },
+        foodItemVersions: {
+          deleteMany: {},
+        },
       },
       include: {
+        foodItemVersions: true,
         foods: true,
         logs: true,
         rooms: true,
@@ -55,8 +59,19 @@ const seedData = async () => {
           foods: true,
         },
       });
+      //create all food item ver
+      const allFoodItemVersPromiseArr = roomResult.foods.map((food) => {
+        const foodItemVersCreated = prisma.foodItemVersion.createMany({
+          data: data.foodVers.map((foodItemVer) => ({
+            ...foodItemVer,
+            foodId: food.id,
+            userId: userId,
+          })),
+        });
+        return foodItemVersCreated;
+      });
       //create logs from foods returned in previous operation
-      const allFoods = roomResult.foods.map((food) => {
+      const allLogsPromiseArr = roomResult.foods.map((food) => {
         const logsCreated = prisma.log.createMany({
           data: data.logs.map((log) => ({
             ...log,
@@ -66,10 +81,19 @@ const seedData = async () => {
         });
         return logsCreated;
       });
-      const result = await Promise.all(allFoods);
+      const allLogsPromise = Promise.all(allLogsPromiseArr);
+      const allFoodItemVersPromise = Promise.all(allFoodItemVersPromiseArr);
+      const [allLogsResult, allFoodVersResult] = await Promise.all([
+        allLogsPromise,
+        allFoodItemVersPromise,
+      ]);
       return {
-        foodsCreated: result.length,
-        logsCreated: result.reduce((acc, curr) => acc + curr.count, 0),
+        foodsCreated: roomResult.foods.length,
+        logsCreated: allLogsResult.reduce((acc, curr) => acc + curr.count, 0),
+        foodVerCreated: allFoodVersResult.reduce(
+          (acc, curr) => acc + curr.count,
+          0
+        ),
       };
     });
     const createItems = await Promise.all(createOperations);
@@ -83,6 +107,7 @@ const seedData = async () => {
       totalRecordDeleted:
         deletedItems.logs.length +
         deletedItems.foods.length +
+        deletedItems.foodItemVersions.length +
         deletedItems.rooms.length,
     };
   });
