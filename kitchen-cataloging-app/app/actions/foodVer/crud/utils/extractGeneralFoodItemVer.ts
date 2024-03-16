@@ -1,7 +1,9 @@
-import { FoodItemVersionZodType } from "@/zodTypes/FoodItemSchema";
+import {
+  FoodItemVersionZodTypeAllOptional,
+} from "@/zodTypes/FoodItemSchema";
 export const extractGeneralFoodItemVerProps = async (
   userId: string,
-  newData: FoodItemVersionZodType
+  newData: FoodItemVersionZodTypeAllOptional
 ) => {
   const newDoc = {
     userId,

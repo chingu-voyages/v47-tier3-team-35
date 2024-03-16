@@ -3,10 +3,14 @@ import { auth } from "@clerk/nextjs";
 import { searchFoods } from "./search/searchFoods";
 import { paginateFoods } from "./search/paginateFoods";
 import { SearchFoodProps } from "./types/types";
-import { getSingleFood } from "./crud/getSingleFood";
-import { incrementFood } from "./crud/incrementFood";
+import { getSingleFood } from "./crud/read/getSingleFood";
 import { createFoodLog } from "../foodLog/createFoodLog";
 import extractSignedUrls from "../utils/extractSignedUrls";
+import { deleteSingleFood } from "./crud/delete/deleteSingleFood";
+import updateSingleFoodItem from "./crud/update/updateFoodItem";
+import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import { FoodItemZodTypeAllOptional } from "@/zodTypes/FoodItemSchema";
+import generateErrMessage from "@/utils/generateErrMessage";
 
 export const searchFoodItems = async (props: SearchFoodProps) => {
   const { userId } = auth();
@@ -20,11 +24,28 @@ export const getFood = async ({ foodId }: { foodId: string }) => {
   const extracted = result ? await extractSignedUrls([result]) : null;
   return extracted ? extracted[0] : null;
 };
-// Increment/decrement food
-export const getIncrementFood = async (foodId: string, newValue: number) => {
+export const deleteFood = async ({ foodId }: { foodId: string }) => {
   const { userId } = auth();
-  return await incrementFood({ foodId, newValue, userId });
+
+  return await deleteSingleFood({ foodId, userId });
 };
+export const updateFood = async ({
+  foodId,
+  newData,
+}: {
+  foodId: string;
+  newData: FoodItemZodTypeAllOptional;
+}) => {
+  const { userId } = auth();
+  const user = await getUserInfoServer({ userId });
+  if (!user?.id)
+    return generateErrMessage({
+      statusCode: 200,
+      message: "Unauthorized",
+    });
+  return await updateSingleFoodItem(user.id, foodId, newData);
+};
+
 export const createFoodLogAction = async (
   foodId: string,
   amount: number,

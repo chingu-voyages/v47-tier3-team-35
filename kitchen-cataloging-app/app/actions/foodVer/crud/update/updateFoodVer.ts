@@ -1,11 +1,11 @@
 import prisma from "@/prisma/client";
-import { FoodItemVersionZodType } from "@/zodTypes/FoodItemSchema";
+import { FoodItemVersionZodType, FoodItemVersionZodTypeAllOptional } from "@/zodTypes/FoodItemSchema";
 import { Prisma } from "@prisma/client";
-import extractGeneralFoodVerProps from "./extractGeneralFoodItemVer";
+import extractGeneralFoodVerProps from "../utils/extractGeneralFoodItemVer";
 export const updateFoodItemVer = async (
   userId: string,
   id: string,
-  newData: FoodItemVersionZodType
+  newData: FoodItemVersionZodTypeAllOptional
 ) => {
   const generalProps = await extractGeneralFoodVerProps(userId, newData);
   const newDoc: Prisma.FoodItemVersionUpdateInput = {

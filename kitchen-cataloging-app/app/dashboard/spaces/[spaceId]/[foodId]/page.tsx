@@ -4,7 +4,7 @@ import DesktopLayout from "./responsiveLayouts/DesktopLayout";
 import MobileLayout from "./responsiveLayouts/MobileLayout";
 import NavigationDepthBar from "@/components/navigation/navigationDepthBar/NavigationDepthBar";
 import { FoodType, LogType } from "@/prisma/mock/mockData";
-import { getSingleFood } from "@/actions/food/crud/getSingleFood";
+import { getSingleFood } from "@/actions/food/crud/read/getSingleFood";
 import { getAllRoomNames } from "@/actions/space/crud/getAllRooms";
 // import { useParams } from "next/navigation";
 // Types for data
