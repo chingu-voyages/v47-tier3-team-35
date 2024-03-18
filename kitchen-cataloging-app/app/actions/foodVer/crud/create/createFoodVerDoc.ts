@@ -2,16 +2,17 @@ import generateErrMessage, { ErrorMessage } from "@/utils/generateErrMessage";
 import {
   FoodItemVersionZodSchema,
   FoodItemVersionZodType,
+  FoodItemVersionZodTypeAllOptional,
 } from "@/zodTypes/FoodItemSchema";
 import addSingleFoodVerItem from "./addFoodVer";
 import updateSingleFoodItem from "@/actions/food/crud/update/updateFoodItem";
-import { FoodVerCreateResult } from "@/components/form/types/types";
+import { FoodVerCreateResult } from "../../types/types";
 export const createFoodVerDoc = async ({
   userId,
   foodId,
   newFoodItemVer,
 }: {
-  newFoodItemVer: FoodItemVersionZodType;
+  newFoodItemVer: FoodItemVersionZodType | FoodItemVersionZodTypeAllOptional;
   foodId: string;
   userId: string;
 }): Promise<FoodVerCreateResult | ErrorMessage> => {

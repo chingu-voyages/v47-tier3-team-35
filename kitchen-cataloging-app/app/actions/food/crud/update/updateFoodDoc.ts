@@ -1,10 +1,10 @@
 import updateSingleFoodItem from "@/actions/food/crud/update/updateFoodItem";
-import { FoodUpdateResult } from "@/components/form/types/types";
 import generateErrMessage, { ErrorMessage } from "@/utils/generateErrMessage";
 import {
   FoodItemZodSchemaAllOptional,
   FoodItemZodTypeAllOptional,
 } from "@/zodTypes/FoodItemSchema";
+import { FoodUpdateResult } from "../../types/types";
 export const updateFoodDoc = async ({
   userId,
   newFoodData,

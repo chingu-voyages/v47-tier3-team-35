@@ -7,19 +7,18 @@ import { usePriceInput } from "@/components/form/inputs/wrapperInputs/price/Pric
 import { useDescriptionInput } from "@/components/form/inputs/wrapperInputs/description/DescriptionProvider";
 import { useTitleInput } from "@/components/form/inputs/wrapperInputs/title/TitleProvider";
 import { useSpaceInput } from "@/components/form/inputs/wrapperInputs/space/SpaceProvider";
+import { useQuantityInput } from "@/components/form/inputs/wrapperInputs/quantity/QuantityProvider";
+import FormSubmitWrapper from "@/components/form/components/FormSubmitWrapper";
+import uploadImages from "@/aws/content/uploadImages";
+import { uploadFoodItemForm } from "../actions/FoodFormServerAction";
 import {
   FoodItemVersionZodType,
   FoodItemZodType,
+  FoodItemZodTypeAllOptional,
 } from "@/zodTypes/FoodItemSchema";
-import uploadImages from "@/aws/content/uploadImages";
-import { useQuantityInput } from "@/components/form/inputs/wrapperInputs/quantity/QuantityProvider";
-import { uploadFoodItemData } from "./actions/FoodFormServerAction";
-import {
-  FoodItemSuccessResult,
-  FormProps,
-} from "@/components/form/types/types";
-import FormSubmitWrapper from "@/components/form/components/FormSubmitWrapper";
+import { FormProps } from "@/components/form/types/types";
 import { Food } from "@prisma/client";
+import { FoodItemSuccessResult } from "@/actions/food/types/types";
 export default function FoodFormSubmitWrapper({
   children,
   onClose,
@@ -72,16 +71,16 @@ export default function FoodFormSubmitWrapper({
         img.s3ObjKey = resultImg.objKey || null;
       }
     }
-    const foodDoc: FoodItemZodType = {
+    const foodDoc: FoodItemZodTypeAllOptional = {
       id: foodId,
       title: titleProps.title,
-      labels: labelsProps?.labels || [],
+      labels: labelsProps?.labels,
       threshold: thresholdProps.threshold,
       roomId: spaceProps.space.value,
-      description: descriptionProps?.description || "",
+      description: descriptionProps?.description,
       image: img,
     };
-    const result = await uploadFoodItemData({
+    const result = await uploadFoodItemForm({
       newFoodData: foodDoc,
       newFoodItemVer: fullInputs && foodVersionDoc ? foodVersionDoc : undefined,
     });

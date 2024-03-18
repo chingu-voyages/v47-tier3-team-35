@@ -1,5 +1,4 @@
-import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
-import generateErrMessage from "@/utils/generateErrMessage";
+import generateErrMessage, { ErrorMessage } from "@/utils/generateErrMessage";
 import prisma from "@/prisma/client";
 import {
   GroceryItemZodTypeAllOptional,
@@ -7,6 +6,7 @@ import {
 } from "@/zodTypes/GroceryItemSchema";
 import { Prisma } from "@prisma/client";
 import transformToExplictUpdateQuery from "@/utils/transformToExplicitUpdateQuery";
+import { GroceryItemUpdateResult } from "../../types/types";
 const updateSingleGroceryItem = async ({
   id,
   newData,
@@ -14,17 +14,12 @@ const updateSingleGroceryItem = async ({
 }: {
   id: string;
   newData: GroceryItemZodTypeAllOptional;
-  userId?: string | null;
-}) => {
+  userId: string;
+}): Promise<ErrorMessage | GroceryItemUpdateResult> => {
   if (!id)
     return generateErrMessage({
       statusCode: 400,
       message: "Missing document id",
-    });
-  if (!userId)
-    return generateErrMessage({
-      statusCode: 401,
-      message: "Unauthorized",
     });
   const validationResult = GroceryItemZodSchemaAllOptional.safeParse(newData);
   if (!validationResult.success)
@@ -32,9 +27,6 @@ const updateSingleGroceryItem = async ({
       statusCode: 400,
       message: `Invalid object: ${validationResult.error.toString()}`,
     });
-  const user = await getUserInfoServer({ userId });
-  if (!user?.id)
-    return generateErrMessage({ statusCode: 401, message: "Unauthorized" });
   const updateQuery = transformToExplictUpdateQuery<
     GroceryItemZodTypeAllOptional,
     Prisma.GroceryItemUpdateInput
@@ -42,10 +34,14 @@ const updateSingleGroceryItem = async ({
   const result = await prisma.groceryItem.update({
     where: {
       id,
-      userId: user.id,
+      userId,
     },
     data: updateQuery,
   });
-  return result;
+  return {
+    type: "success",
+    statusCode: 200,
+    result,
+  };
 };
 export default updateSingleGroceryItem;

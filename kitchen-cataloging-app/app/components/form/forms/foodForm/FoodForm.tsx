@@ -7,19 +7,17 @@ import {
   FormActionBtns,
   FormCloseBtn,
 } from "@/components/form/components/FormActionBtns";
-import {
-  FoodItemSuccessResult,
-  FormProps,
-} from "@/components/form/types/types";
+import { FormProps } from "@/components/form/types/types";
 import FormInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
 import FormHeader from "@/components/form/components/FormHeader";
 import FormLoading from "@/components/form/components/FormLoading";
 import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemVersionFormWrappers";
 import FoodItemFormWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemFormWrappers";
-import FoodFormSubmitWrapper from "./FoodFormSubmitWrapper";
+import FoodFormSubmitWrapper from "./wrappers/FoodFormSubmitWrapper";
 import CheckIcon from "@mui/icons-material/Check";
 import { ErrorMessage } from "@/utils/generateErrMessage";
 import FormModalWrapper from "../../components/FormModalWrapper";
+import { FoodItemSuccessResult } from "@/actions/food/types/types";
 type FoodItemFormType = FoodType & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };

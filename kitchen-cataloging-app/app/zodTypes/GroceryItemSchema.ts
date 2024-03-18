@@ -1,14 +1,15 @@
 import { z } from "zod";
 const GeneralGroceryItemSchemaProps = {
-  title: z.string().nullable().optional(),
-  description: z.string().nullable().optional(),
+  id: z.string().optional(),
+  title: z.string().optional(),
+  description: z.string().optional(),
   labels: z.array(z.string()).optional(),
-  amount: z.number().nullable().optional(),
-  roomTitle: z.string().nullable().optional(),
+  amount: z.number().optional(),
+  roomId: z.string().optional(),
   image: z
     .object({
-      s3ObjKey: z.string().nullable().optional(),
-      url: z.string().nullable().optional(),
+      s3ObjKey: z.string().nullable(),
+      url: z.string().nullable(),
     })
     .optional(),
 };
@@ -16,7 +17,7 @@ export const GroceryItemZodSchema = z.object({
   ...GeneralGroceryItemSchemaProps,
   title: z.string(),
   amount: z.number(),
-  roomTitle: z.string(),
+  roomId: z.string(),
 });
 export type GroceryItemZodType = z.infer<typeof GroceryItemZodSchema>;
 export const GroceryItemZodSchemaAllOptional = z.object(

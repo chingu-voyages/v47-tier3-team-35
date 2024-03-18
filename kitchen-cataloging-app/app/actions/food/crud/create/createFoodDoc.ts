@@ -1,13 +1,18 @@
 import addSingleFoodItem from "@/actions/food/crud/create/addFoodItem";
-import { FoodCreateResult } from "@/components/form/types/types";
+import { FoodVerCreateResult } from "@/actions/foodVer/types/types";
 import generateErrMessage, { ErrorMessage } from "@/utils/generateErrMessage";
-import { FoodItemZodSchema, FoodItemZodType } from "@/zodTypes/FoodItemSchema";
+import {
+  FoodItemZodSchema,
+  FoodItemZodType,
+  FoodItemZodTypeAllOptional,
+} from "@/zodTypes/FoodItemSchema";
+import { FoodCreateResult } from "../../types/types";
 export const createFoodDoc = async ({
   userId,
   newFoodData,
 }: {
   userId: string;
-  newFoodData: FoodItemZodType;
+  newFoodData: FoodItemZodType | FoodItemZodTypeAllOptional;
 }): Promise<FoodCreateResult | ErrorMessage> => {
   //runtime check for food item
   const foodCreationValidationResult = FoodItemZodSchema.safeParse(newFoodData);

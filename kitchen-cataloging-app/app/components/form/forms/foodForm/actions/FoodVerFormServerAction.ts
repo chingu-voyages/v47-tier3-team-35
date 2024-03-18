@@ -8,11 +8,11 @@ import {
 } from "@/zodTypes/FoodItemSchema";
 import updateFoodItemVer from "@/actions/foodVer/crud/update/updateFoodVer";
 import addSingleFoodVerItem from "@/actions/foodVer/crud/create/addFoodVer";
-import { FoodItemVerSuccessResult } from "@/components/form/types/types";
 import {
   calculateNewPriceAndQuantity,
   findFoodDocWithPriceAndQuantity,
 } from "@/actions/foodVer/crud/utils/calculateNewPriceAndQuantity";
+import { FoodItemVerSuccessResult } from "@/actions/foodVer/types/types";
 export const uploadFoodItemVerData = async ({
   newFoodItemVer,
 }: {

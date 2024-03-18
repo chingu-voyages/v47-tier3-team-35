@@ -3,8 +3,8 @@ import {
   FoodItemVersionZodSchemaAllOptional,
   FoodItemVersionZodTypeAllOptional,
 } from "@/zodTypes/FoodItemSchema";
-import { FoodVerUpdateResult } from "@/components/form/types/types";
 import { updateFoodVerByQuantity } from "./updateFoodVerByQuantity";
+import { FoodVerUpdateResult } from "../../types/types";
 export const updateFoodVerDoc = async ({
   userId,
   newFoodItemVer,
