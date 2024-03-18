@@ -17,8 +17,8 @@ import {
   GroceryItemCreateResult,
   GroceryItemUpdateResult,
 } from "@/actions/groceries/types/types";
-import { uploadGroceryItemForm } from "../actions/GroceryFromServerAction";
-export default function GroceryItemFormWrapper({
+import { uploadGroceryItemForm } from "../actions/GroceryFormServerAction";
+export default function GroceryItemFormSubmitWrapper({
   groceryItemId,
   children,
   onClose,

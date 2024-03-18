@@ -8,7 +8,7 @@ import {
   FormCloseBtn,
 } from "@/components/form/components/FormActionBtns";
 import { FormProps } from "@/components/form/types/types";
-import FormInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
+import FoodItemInputs from "@/components/form/forms/foodForm/components/FoodItemInputs";
 import FormHeader from "@/components/form/components/FormHeader";
 import FormLoading from "@/components/form/components/FormLoading";
 import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemVersionFormWrappers";
@@ -147,7 +147,7 @@ export default function FoodForm({
             onClose={handleClose}
           >
             {loading && <FormLoading />}
-            <FormInputs fullInputs={fullInputs} />
+            <FoodItemInputs fullInputs={fullInputs} />
             <FormActionBtns onClose={handleClose} />
           </FoodFormSubmitWrapper>
         </FoodFormWrappers>

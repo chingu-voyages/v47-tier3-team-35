@@ -7,8 +7,10 @@ import getGroceryItem from "@/actions/groceries/crud/read/getGroceryItem";
 const transformGroceryToFoodItem = async ({
   expirationDate,
   totalPrice,
+  quantity,
   groceryItemId,
 }: {
+  quantity?: number;
   expirationDate?: Date;
   totalPrice: number;
   groceryItemId: string;
@@ -39,7 +41,10 @@ const transformGroceryToFoodItem = async ({
       statusCode: 400,
       message: `totalPrice must be a number`,
     });
-  const integerQuantity = Math.round(groceryItemData.amount);
+  const integerQuantity = Math.round(
+    //use user defined quantity over stored db value if passed
+    typeof quantity === "number" ? quantity : groceryItemData.amount
+  );
   const normalizedQuantity = integerQuantity <= 0 ? 1 : integerQuantity;
   const normalizedTotalPrice = totalPrice <= 0 ? 0.0 : totalPrice;
   const normalizedPricePerItem = normalizedTotalPrice / normalizedQuantity;

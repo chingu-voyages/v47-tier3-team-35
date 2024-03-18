@@ -8,7 +8,7 @@ import SpaceInput from "@/components/form/inputs/wrapperInputs/space/SpaceInput"
 import ThresholdInput from "@/components/form/inputs/wrapperInputs/threshold/ThresholdInput";
 import FoodItemVerInputs from "./FoodItemVerInputs";
 // COMPONENT
-const FormInputs = ({ fullInputs }: { fullInputs: boolean }) => {
+const FoodItemInputs = ({ fullInputs }: { fullInputs: boolean }) => {
   return (
     <>
       <Box className="flew flex-col w-full mb-6">
@@ -38,4 +38,4 @@ const FormInputs = ({ fullInputs }: { fullInputs: boolean }) => {
   );
 };
 
-export default FormInputs;
+export default FoodItemInputs;

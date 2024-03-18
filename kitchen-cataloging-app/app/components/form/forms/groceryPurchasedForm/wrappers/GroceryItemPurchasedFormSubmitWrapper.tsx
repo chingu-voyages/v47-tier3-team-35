@@ -6,7 +6,8 @@ import transformGroceryToFoodItem from "../actions/GroceryItemToFoodItemServerAc
 import { useExpirationDateInput } from "@/components/form/inputs/wrapperInputs/expirationDate/ExpirationDateProvider";
 import { usePriceInput } from "@/components/form/inputs/wrapperInputs/price/PriceProvider";
 import { FoodItemSuccessResult } from "@/actions/food/types/types";
-export default function GroceryItemPurchasedFormWrapper({
+import { useQuantityInput } from "@/components/form/inputs/wrapperInputs/quantity/QuantityProvider";
+export default function GroceryItemPurchasedSubmitFormWrapper({
   groceryItemId,
   children,
   onClose,
@@ -16,6 +17,7 @@ export default function GroceryItemPurchasedFormWrapper({
 > & { groceryItemId?: string }) {
   const priceProps = usePriceInput();
   const expirationDateProps = useExpirationDateInput();
+  const quantityProps = useQuantityInput();
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!groceryItemId) return;
@@ -27,6 +29,7 @@ export default function GroceryItemPurchasedFormWrapper({
     const result = await transformGroceryToFoodItem({
       totalPrice: priceProps.price,
       expirationDate: new Date(expirationDateProps.expirationDate),
+      quantity: quantityProps?.quantity,
       groceryItemId,
     });
     //this indicates an error
