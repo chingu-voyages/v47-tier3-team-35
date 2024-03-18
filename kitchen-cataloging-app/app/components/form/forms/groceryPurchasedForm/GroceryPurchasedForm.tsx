@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function GroceryFormSubmitWrapper() {
+export default function GroceryPurchasedForm() {
   return (
     <div>
       

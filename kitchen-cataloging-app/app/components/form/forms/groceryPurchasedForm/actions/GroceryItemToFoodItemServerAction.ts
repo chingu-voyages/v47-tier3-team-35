@@ -1,20 +1,17 @@
 "use server";
 import generateErrMessage from "@/utils/generateErrMessage";
 import { auth } from "@clerk/nextjs";
-import {
-  GroceryItemZodSchema,
-  GroceryItemZodType,
-} from "@/zodTypes/GroceryItemSchema";
 import { uploadFoodItemData } from "../../foodForm/actions/UploadFoodItemData";
 import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
+import getGroceryItem from "@/actions/groceries/crud/read/getGroceryItem";
 const transformGroceryToFoodItem = async ({
   expirationDate,
   totalPrice,
-  groceryItemData,
+  groceryItemId,
 }: {
   expirationDate?: Date;
   totalPrice: number;
-  groceryItemData: GroceryItemZodType;
+  groceryItemId: string;
 }) => {
   const { userId } = auth();
   const user = await getUserInfoServer({ userId });
@@ -23,12 +20,19 @@ const transformGroceryToFoodItem = async ({
       statusCode: 403,
       message: "Operation Forbidden",
     });
-  const groceryItemDataValidation =
-    GroceryItemZodSchema.safeParse(groceryItemData);
-  if (!groceryItemDataValidation.success)
+  if (!groceryItemId || typeof groceryItemId !== "string")
     return generateErrMessage({
       statusCode: 400,
-      message: `Invalid object: ${groceryItemDataValidation.error.toString()}`,
+      message: `Invalid groceryItemId: ${groceryItemId}`,
+    });
+  const groceryItemData = await getGroceryItem({
+    userId: user.id,
+    id: groceryItemId,
+  });
+  if (!groceryItemData)
+    return generateErrMessage({
+      statusCode: 404,
+      message: `Grocery item with id ${groceryItemId} not found`,
     });
   if (typeof totalPrice !== "number")
     return generateErrMessage({
@@ -44,6 +48,12 @@ const transformGroceryToFoodItem = async ({
     userId: user.id,
     newFoodData: {
       ...groceryItemData,
+      description: groceryItemData.description || "",
+      image: groceryItemData.image || undefined,
+      roomId: groceryItemData.roomId || undefined,
+      labels: groceryItemData.labels || [],
+      price: normalizedPricePerItem,
+      title: groceryItemData.title || undefined,
       amount: normalizedQuantity,
     },
     newFoodItemVer: {
