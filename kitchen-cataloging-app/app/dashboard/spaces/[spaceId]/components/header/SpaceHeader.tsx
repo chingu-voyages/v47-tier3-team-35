@@ -12,16 +12,28 @@ import SpaceHeaderBox from "./wrappers/SpaceHeaderBox";
 import SpaceActionBtnsWrapper from "./wrappers/SpaceActionBtnsWrapper";
 import AddItemBtn from "@/components/actionBtns/AddItemBtn";
 import FoodForm from "@/components/form/forms/foodForm/FoodForm";
-const SpaceActionBtns = ({ children }: { children: React.ReactNode }) => {
+import SpaceForm from "@/components/form/forms/spaceForm/SpaceForm";
+const SpaceActionBtns = ({
+  spaceId,
+  children,
+}: {
+  spaceId?: string;
+  children: React.ReactNode;
+}) => {
   return (
     <SpaceActionBtnsWrapper>
       <Box className="flex flex-grow">
-        <IconButton>
-          <EditOutlinedIcon
-            fontSize={"inherit"}
-            className="text-10xl sm:text-11xl lg:text-12xl text-default-sys-light-tertiary "
-          />
-        </IconButton>
+        <SpaceForm actionType="edit" itemId={spaceId}>
+          {(props) => (
+            <IconButton onClick={props.handleOpen}>
+              <EditOutlinedIcon
+                fontSize={"inherit"}
+                className="text-10xl sm:text-11xl lg:text-12xl text-default-sys-light-tertiary "
+              />
+            </IconButton>
+          )}
+        </SpaceForm>
+            
         <IconButton>
           <DeleteOutlineOutlinedIcon
             fontSize={"inherit"}
@@ -63,7 +75,7 @@ const SpaceHeader = ({
         >
           {spaceData.title}
         </Typography>
-        <SpaceActionBtns>
+        <SpaceActionBtns spaceId={defaultData?.id}>
           {!mediumWidth && (
             <FoodForm
               actionType="create"
