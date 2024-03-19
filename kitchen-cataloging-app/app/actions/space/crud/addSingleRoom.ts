@@ -19,7 +19,10 @@ export const addSingleRoom = async ({
   // Validate room name (between 3-30 characters)
   if (!validation.success) {
     console.error(validation.error.issues);
-    return;
+    return generateErrMessage({
+      statusCode: 400,
+      message: `Invalid obj: ${validation.error.flatten()}`
+    });
   }
   const user = await getUserInfoServer({ userId });
   if (!user)

@@ -9,7 +9,6 @@ import PaginationProvider from "@/components/pagination/PaginationProvider";
 import { searchFoodItems } from "../../../actions/food/actions";
 import { SearchResultFood } from "../../../actions/food/types/types";
 import ItemList from "./components/itemList/ItemList";
-
 const navigationDepthArr = ({
   spaceId,
   spaceName,
@@ -54,7 +53,11 @@ const Room = async ({ params }: { params: { spaceId: string } }) => {
             spaceName: roomData?.title,
           })}
         />
-        <SpaceHeader defaultData={roomData} spaceNames={spaceNames || []} userId={userId} />
+        <SpaceHeader
+          defaultData={roomData}
+          spaceNames={spaceNames || []}
+          userId={userId}
+        />
         <ItemList defaultItems={itemData} spaceId={roomData.id} />
       </PaginationProvider>
     </ResponsivePaddingWrapper>

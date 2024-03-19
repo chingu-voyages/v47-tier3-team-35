@@ -29,9 +29,27 @@ export const paginateFoods = async ({
     orderBy: {
       id: "desc",
     },
+    include: {
+      foodItemVersions: {
+        select: {
+          expirationDate: true,
+        },
+        orderBy: {
+          expirationDate: "asc",
+        },
+        take: 1,
+      },
+    },
+  });
+  const serializedResult = nextItems.map((e) => {
+    const earliestExpirationDate = e.foodItemVersions[0].expirationDate;
+    return {
+      ...e,
+      earliestExpirationDate: earliestExpirationDate || null,
+    };
   });
   //return array if rooms exist, else return null
   if (!nextItems) return null;
   if (nextItems.length <= 0) return null;
-  return await extractSignedUrls(nextItems);
+  return await extractSignedUrls(serializedResult);
 };

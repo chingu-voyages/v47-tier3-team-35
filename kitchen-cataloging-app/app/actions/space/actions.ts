@@ -30,9 +30,9 @@ export const searchRooms = async (
   if (!props.text) return await paginateRooms(props);
   else return await searchSpaces(props);
 };
-export const getRoom = async ({ id }: { id: string }) => {
+export const getRoom = async ({ id, foodData=true }: { id: string, foodData?: boolean }) => {
   const { userId } = auth();
-  return await getSingleRoom({ id, userId });
+  return await getSingleRoom({ id, userId, foodData });
 };
 
 // ADD ROOM ----------

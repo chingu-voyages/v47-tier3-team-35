@@ -1,44 +1,39 @@
-import { FoodItemSuccessResult } from "@/actions/food/types/types";
-import { FoodItemVersion, GroceryItem } from "@prisma/client";
+import { SpaceSuccessResult } from "@/actions/space/types/types";
+import { Room } from "@prisma/client";
+import React, { useCallback, useEffect, useState } from "react";
 import { FormProps } from "../../types/types";
-import { useCallback, useEffect, useState } from "react";
 import { ErrorMessage } from "@/utils/generateErrMessage";
-import { getSingleGroceryItem } from "@/actions/groceries/actions";
+import { getRoom } from "@/actions/space/actions";
 import { Alert, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import FormModalWrapper from "../../components/FormModalWrapper";
 import { FormActionBtns, FormCloseBtn } from "../../components/FormActionBtns";
 import FormHeader from "../../components/FormHeader";
-import GroceryItemPurchasedSubmitFormWrapper from "./wrappers/GroceryItemPurchasedFormSubmitWrapper";
-import GroceryItemFormPurchasedInputs from "./components/GroceryItemFormPurchasedInputs";
+import SpaceFormWrappers from "./wrappers/SpaceFormWrappers";
+import SpaceSubmitFormWrapper from "./wrappers/SpaceFormSubmitFormWrapper";
+import SpaceFormInputs from "./components/SpaceFormInputs";
 import FormLoading from "../../components/FormLoading";
-import GroceryItemPurchasedFormWrappers from "./wrappers/GroceryItemPurchasedFormWrappers";
-export type GroceryItemPurchasedProps = Partial<
-  GroceryItem & Pick<FoodItemVersion, "price" | "expirationDate" | "quantity">
->;
-export default function GroceryPurchasedForm({
+
+export default function SpaceForm({
   children,
   actionType,
   itemId,
   defaultData,
-}: Omit<
-  FormProps<GroceryItemPurchasedProps, FoodItemSuccessResult>,
-  "children"
-> & {
+}: Omit<FormProps<Partial<Room>, SpaceSuccessResult>, "children"> & {
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
   const [open, setOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ErrorMessage | null>(null);
-  const [success, setSuccess] = useState<FoodItemSuccessResult | null>(null);
-  const [itemData, setItemData] = useState<GroceryItemPurchasedProps | null>(
+  const [success, setSuccess] = useState<SpaceSuccessResult | null>(null);
+  const [itemData, setItemData] = useState<Partial<Room> | null>(
     defaultData || null
   );
   const setErrFunc = (e: ErrorMessage) => {
     setError(e);
     setSuccess(null);
   };
-  const setSuccessFunc = (e: FoodItemSuccessResult) => {
+  const setSuccessFunc = (e: SpaceSuccessResult) => {
     setError(null);
     setSuccess(e);
   };
@@ -48,7 +43,7 @@ export default function GroceryPurchasedForm({
     setSuccess(null);
     setOpen(true);
   };
-  const handleClose = (result?: FoodItemSuccessResult) => {
+  const handleClose = (result?: SpaceSuccessResult) => {
     if (result) savedSuccessFunc(result);
     setOpen(false);
   };
@@ -56,12 +51,9 @@ export default function GroceryPurchasedForm({
     if (!itemId) return;
     if (actionType === "create" && open) return;
     setLoading(true);
-    getSingleGroceryItem({ id: itemId })
+    getRoom({ id: itemId, foodData: false })
       .then((res) => {
-        setItemData((e) => {
-          if (!e) return { quantity: res?.amount };
-          return { ...e, quantity: res?.amount };
-        });
+        setItemData(res);
         setLoading(false);
       })
       .catch((err) => {
@@ -76,16 +68,16 @@ export default function GroceryPurchasedForm({
   }, [itemId, actionType, open, savedErrFunc]);
   const headerText = `${actionType.slice(0, 1).toUpperCase()}${actionType.slice(
     1
-  )} Grocery Item`;
+  )} Space`;
   return (
     <>
       {children({ handleOpen })}
       {success && (
         <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
           <Typography noWrap>
-            {`Successfully ${actionType === "create" ? "added" : "updated"} ${
-              success.result.foodDoc.title
-            } located in ${success.result.foodDoc.roomTitle}`}
+            {`Successfully ${
+              actionType === "create" ? "added" : "updated"
+            } a space called: ${success.result.title}`}
           </Typography>
         </Alert>
       )}
@@ -103,7 +95,7 @@ export default function GroceryPurchasedForm({
         <FormCloseBtn onClose={handleClose} />
         {/* Heading */}
         <FormHeader header={headerText} />
-        <GroceryItemPurchasedFormWrappers
+        <SpaceFormWrappers
           //we add this key here because we want to FORCE react
           //to unmount and re-mount the components
           //anew, when open or loading state changes
@@ -113,15 +105,12 @@ export default function GroceryPurchasedForm({
           key={open.toString() + loading.toString()}
           itemData={itemData}
         >
-          <GroceryItemPurchasedSubmitFormWrapper
-            groceryItemId={itemId}
-            onClose={handleClose}
-          >
+          <SpaceSubmitFormWrapper spaceId={itemId} onClose={handleClose}>
             {loading && <FormLoading />}
-            <GroceryItemFormPurchasedInputs />
+            <SpaceFormInputs />
             <FormActionBtns onClose={handleClose} />
-          </GroceryItemPurchasedSubmitFormWrapper>
-        </GroceryItemPurchasedFormWrappers>
+          </SpaceSubmitFormWrapper>
+        </SpaceFormWrappers>
       </FormModalWrapper>
     </>
   );

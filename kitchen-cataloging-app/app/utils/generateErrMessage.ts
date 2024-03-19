@@ -1,3 +1,10 @@
+export function isErrorMessage(e: any): e is ErrorMessage {
+  try {
+    return e.type === "error";
+  } catch {
+    return false;
+  }
+}
 export type ErrorMessage = {
   type: "error";
   statusCode: number;

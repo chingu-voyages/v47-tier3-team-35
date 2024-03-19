@@ -3,7 +3,9 @@ import getUserInfoServer from "@/auth/providers/auth/ServerAuthProvider";
 export const getSingleRoom = async ({
   id,
   userId,
+  foodData = true,
 }: {
+  foodData?: boolean;
   id: string;
   userId?: string | null;
 }) => {
@@ -15,7 +17,7 @@ export const getSingleRoom = async ({
       id: id,
     },
     include: {
-      foods: true,
+      foods: foodData,
     },
   });
   return doc;
