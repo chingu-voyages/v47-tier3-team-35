@@ -2,15 +2,21 @@ import React from "react";
 import TextInput from "../../innerComponents/text/TextInput";
 import { InputAdornment } from "@mui/material";
 import { usePriceInput } from "./PriceProvider";
-export default function PriceInput() {
+export default function PriceInput({
+  label,
+  placeholder,
+}: {
+  label?: string;
+  placeholder?: string;
+}) {
   const priceProps = usePriceInput();
   if (!priceProps) return <></>;
   const { error, price, onChange } = priceProps;
   return (
     <TextInput
       id="outlined-start-adornment"
-      label="Price"
-      placeholder="Item Price"
+      label={label || "Price"}
+      placeholder={placeholder || "Item Price"}
       value={price}
       error={error}
       helperText={
