@@ -14,6 +14,31 @@ import SpaceSubmitFormWrapper from "./wrappers/SpaceFormSubmitFormWrapper";
 import SpaceFormInputs from "./components/SpaceFormInputs";
 import FormLoading from "../../components/FormLoading";
 import useFormState from "../../hooks/useFormState";
+import useWindowWidth from "@/hooks/useWindowWidth";
+const SpaceFormModalWrapper = ({
+  open,
+  handleClose,
+  headerText,
+  children,
+}: {
+  children: React.ReactNode;
+  open: boolean;
+  handleClose: () => void;
+  headerText: string;
+}) => {
+  const smallWidth = useWindowWidth(480);
+  return (
+    <FormModalWrapper
+      open={open}
+      onClose={() => handleClose()}
+      aria-describedby={`${headerText}-form`}
+      innerContainerClassName="flex flex-col grow w-full"
+      fitForm={smallWidth}
+    >
+      {children}
+    </FormModalWrapper>
+  );
+};
 export default function SpaceForm({
   children,
   actionType,
@@ -73,11 +98,10 @@ export default function SpaceForm({
           <Typography noWrap>{error.message}</Typography>
         </Alert>
       )}
-      <FormModalWrapper
+      <SpaceFormModalWrapper
+        headerText={headerText}
         open={open}
-        onClose={() => handleClose()}
-        aria-describedby={`${headerText}-form`}
-        innerContainerClassName="flex flex-col grow w-full"
+        handleClose={handleClose}
       >
         {/*Close Btn*/}
         <FormCloseBtn onClose={handleClose} />
@@ -99,7 +123,7 @@ export default function SpaceForm({
             <FormActionBtns onClose={handleClose} />
           </SpaceSubmitFormWrapper>
         </SpaceFormWrappers>
-      </FormModalWrapper>
+      </SpaceFormModalWrapper>
     </>
   );
 }

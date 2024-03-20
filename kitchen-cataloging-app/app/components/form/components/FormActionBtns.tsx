@@ -9,7 +9,9 @@ export const FormCloseBtn = ({
   return (
     <IconButton
       className="absolute top-2 right-2"
-      onClick={onClose}
+      onClick={() => {
+        if (onClose) onClose();
+      }}
       aria-label="close"
     >
       <CloseIcon className="text-default-ref-neutral-neutral50" />
