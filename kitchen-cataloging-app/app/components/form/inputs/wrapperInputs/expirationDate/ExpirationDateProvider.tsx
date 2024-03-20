@@ -1,4 +1,5 @@
 "use client";
+import { add } from "date-fns/add";
 import React, {
   Dispatch,
   SetStateAction,
@@ -23,7 +24,12 @@ export const ExpirationDateProvider = ({
   defaultValue?: string | null;
   children: React.ReactNode;
 }) => {
-  const [expirationDate, setExpirationDate] = useState(defaultValue || "");
+  const [expirationDate, setExpirationDate] = useState(
+    defaultValue ||
+      add(new Date(), {
+        weeks: 1,
+      }).toString()
+  );
   const [error, setError] = useState(false);
   const onChange = (e: string | null) => {
     setExpirationDate(e || "");
