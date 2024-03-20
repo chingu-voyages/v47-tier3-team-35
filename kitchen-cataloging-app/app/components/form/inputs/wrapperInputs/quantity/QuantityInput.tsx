@@ -22,7 +22,7 @@ export default function QuantityInput({
       name="Quantity"
       type="number"
       InputProps={{
-        endAdornment: <InputAdornment position="end">c</InputAdornment>,
+        endAdornment: <InputAdornment position="end">/ct</InputAdornment>,
         inputProps: {
           step: 1,
         },

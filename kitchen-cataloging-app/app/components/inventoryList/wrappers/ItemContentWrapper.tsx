@@ -1,21 +1,19 @@
 import React from "react";
-import {
-  Box,
-  Button,
-  ButtonProps,
-  Typography,
-} from "@mui/material";
+import { Box, Button, ButtonProps, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-export function ItemCardButton({
+export function ItemCardButton<T>({
   text,
   children,
+  btnProps = {},
 }: {
   text: string;
   children: React.ReactNode;
+  btnProps?: ButtonProps;
 }) {
   return (
     <Button
+      {...btnProps}
       variant="contained"
       className="rounded-full space-x-0.5 sm:space-x-1 min-h-0 py-2 sm:py-2 lg:py-2.5 bg-default-sys-light-primary"
       sx={{

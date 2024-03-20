@@ -11,7 +11,7 @@ import FoodItemVerInputs from "./FoodItemVerInputs";
 const FoodItemInputs = ({ fullInputs }: { fullInputs: boolean }) => {
   return (
     <>
-      <Box className="flew flex-col w-full mb-6">
+      <Box className="flew flex-col w-full mb-4">
         <SpaceInput />
       </Box>
       {/* Main */}

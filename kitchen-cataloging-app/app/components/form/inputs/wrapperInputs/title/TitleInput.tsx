@@ -1,20 +1,26 @@
 import React from "react";
 import TextInput from "../../innerComponents/text/TextInput";
 import { useTitleInput } from "./TitleProvider";
-export default function TitleInput() {
+import { TextFieldProps } from "@mui/material";
+export default function TitleInput(props?: Partial<TextFieldProps>) {
+  const parsedProps = props || {};
+  const defaultProps = {
+    label: "Name",
+    variant: "standard",
+    placeholder: "Item Name",
+    name: "title",
+  };
   const titleProps = useTitleInput();
   if (!titleProps) return <></>;
   const { error, title, onChange } = titleProps;
   return (
     <TextInput
       id="outlined-start-adornment"
-      label="Name"
+      {...defaultProps}
+      {...parsedProps}
       defaultValue={title}
       error={error}
-      helperText={error && "Title is required"}
-      variant="standard"
-      placeholder="Item Name"
-      name="title"
+      helperText={error && `${label} is required`}
       onChange={onChange}
     />
   );

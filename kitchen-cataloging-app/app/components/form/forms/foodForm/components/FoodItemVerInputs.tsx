@@ -5,13 +5,15 @@ import QuantityInput from "@/components/form/inputs/wrapperInputs/quantity/Quant
 import ExpirationDateInput from "@/components/form/inputs/wrapperInputs/expirationDate/ExpirationDateInput";
 export default function FoodItemVerInputs() {
   return (
-    <Box className="w-full p-0 flex flex-col md:flex-row justify-between gap-6 md:gap-4">
-      {/* price */}
-      <PriceInput />
-      {/*quantity to add*/}
-      <QuantityInput />
+    <>
+      <Box className="w-full p-0 flex flex-col md:flex-row justify-between gap-6 md:gap-4 [&>*]:w-full">
+        {/* price */}
+        <PriceInput />
+        {/*quantity to add*/}
+        <QuantityInput />
+      </Box>
       {/* expiration date */}
       <ExpirationDateInput />
-    </Box>
+    </>
   );
 }

@@ -18,12 +18,11 @@ export type GroceryItemPurchasedProps = Partial<
 >;
 export default function GroceryPurchasedForm({
   children,
-  actionType,
   itemId,
   defaultData,
 }: Omit<
   FormProps<GroceryItemPurchasedProps, FoodItemSuccessResult>,
-  "children"
+  "children" | "actionType"
 > & {
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
@@ -54,7 +53,7 @@ export default function GroceryPurchasedForm({
   };
   useEffect(() => {
     if (!itemId) return;
-    if (actionType === "create" && open) return;
+    if (open) return;
     setLoading(true);
     getSingleGroceryItem({ id: itemId })
       .then((res) => {
@@ -73,19 +72,15 @@ export default function GroceryPurchasedForm({
             "Could not fetch item details. Please refresh the page, and try again",
         });
       });
-  }, [itemId, actionType, open, savedErrFunc]);
-  const headerText = `${actionType.slice(0, 1).toUpperCase()}${actionType.slice(
-    1
-  )} Grocery Item`;
+  }, [itemId, open, savedErrFunc]);
+  const headerText = `Complete Purchase of ${itemData?.title}`;
   return (
     <>
       {children({ handleOpen })}
       {success && (
         <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
           <Typography noWrap>
-            {`Successfully ${actionType === "create" ? "added" : "updated"} ${
-              success.result.foodDoc.title
-            } located in ${success.result.foodDoc.roomTitle}`}
+            {`Successfully purchased ${success.result.foodDoc.title} located in ${success.result.foodDoc.roomTitle}`}
           </Typography>
         </Alert>
       )}

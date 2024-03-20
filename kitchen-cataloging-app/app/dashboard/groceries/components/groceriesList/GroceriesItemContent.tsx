@@ -10,17 +10,28 @@ import ItemContentWrapper, {
 } from "@/components/inventoryList/wrappers/ItemContentWrapper";
 import { SearchResultGroceries } from "../../types";
 import CheckIcon from "@mui/icons-material/Check";
-const PurchasedBtn = () => {
+import GroceryPurchasedForm from "@/components/form/forms/groceryPurchasedForm/GroceryPurchasedForm";
+const PurchasedBtn = ({ groceryItemId }: { groceryItemId: string }) => {
   return (
-    <ItemCardButton text="Purchased">
-      <CheckIcon fontSize="small" className="p-[0.15rem] sm:p-0" />
-    </ItemCardButton>
+    <GroceryPurchasedForm itemId={groceryItemId}>
+      {(props) => (
+        <ItemCardButton
+          text="Purchased"
+          btnProps={{
+            onClick: props.handleOpen,
+          }}
+        >
+          <CheckIcon fontSize="small" className="p-[0.15rem] sm:p-0" />
+        </ItemCardButton>
+      )}
+    </GroceryPurchasedForm>
   );
 };
 const ItemInfoAndBtns = ({ item }: { item: SearchResultGroceries }) => {
   return (
     <ItemCardFirstRowWrapper>
       <ItemCardChip text={`${item.roomTitle}`} />
+
       <ItemCardCounterBtns
         addBtnProps={{ "aria-label": `add-${item.title}-item` }}
         removeBtnProps={{ "aria-label": `remove-${item.title}-item` }}
@@ -56,7 +67,7 @@ export default function GroceriesItemContent({
         <ItemInfoAndBtns item={item} />
         <ItemDescription title={item.title} mediumWidth={mediumWidth} />
       </ItemContentInnerWrapper>
-      <PurchasedBtn />
+      <PurchasedBtn groceryItemId={item.id} />
     </ItemContentWrapper>
   );
 }

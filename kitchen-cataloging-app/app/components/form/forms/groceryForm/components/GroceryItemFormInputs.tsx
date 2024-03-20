@@ -16,7 +16,7 @@ export default function GroceryItemFormInputs() {
       <section className="flex flex-col md:flex-row w-full">
         {/* Left Section (desktop) */}
         {/* Title */}
-        <Box className="w-full md:w-3/6 p-0 md:pr-4 lg:pr-8 container-left-desktop flex flex-col gap-6 md:gap-6 mb-6 md:mb-0">
+        <Box className="w-full md:w-3/6 p-0 md:pr-4 lg:pr-8 container-left-desktop flex flex-col gap-6 md:gap-6 mb-4 md:mb-0">
           <TitleInput />
           {/* Image  */}
           <ImageInput />

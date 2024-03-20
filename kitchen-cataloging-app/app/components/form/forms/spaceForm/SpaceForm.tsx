@@ -90,6 +90,7 @@ export default function SpaceForm({
         open={open}
         onClose={() => handleClose()}
         aria-describedby={`${headerText}-form`}
+        innerContainerClassName="flex flex-col grow w-full"
       >
         {/*Close Btn*/}
         <FormCloseBtn onClose={handleClose} />
