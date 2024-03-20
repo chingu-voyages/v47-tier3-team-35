@@ -28,6 +28,7 @@ export const SpaceProvider = ({
   const onChange = (value: ValueProps | null) => {
     const newValue = value || null;
     setSpace(newValue);
+    
   };
   const savedOnChangeFunc = useCallback(onChange, []);
   return (

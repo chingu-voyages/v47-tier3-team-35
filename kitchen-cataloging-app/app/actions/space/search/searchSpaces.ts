@@ -33,7 +33,7 @@ export const createSpaceItemSearchQuery = ({
         score: { $meta: "textScore" },
       },
     },
-    { $match: { score: { $gt: 0.5 } } },
+    { $match: { score: { $gt: 0.25 } } },
     //keep most relevant first, then sort id accordingly inside
     { $sort: { score: 1, _id: -1 } },
     { $limit: take },

@@ -68,7 +68,7 @@ const SelectInput = ({
       }
     });
   };
-  const savedLoadOptionsFunc = useCallback(debounce(loadOptionsFunc, 300), [
+  const savedLoadOptionsFunc = useCallback(debounce(loadOptionsFunc, 400), [
     savedLoadOptionsWrapperFunc,
   ]);
   const onMenuScrollToBottom = async () => {
@@ -80,8 +80,9 @@ const SelectInput = ({
   const savedOnMenuScrollToBottom = useCallback(onMenuScrollToBottom, [
     savedLoadOptionsWrapperFunc,
   ]);
-
-  const onInputChange = (e: string) => setInput(e);
+  const onInputChange = (e: string) => {
+    setInput(e);
+  };
   const savedOnInputChange = useCallback(onInputChange, []);
   return (
     <Box className="flex flex-col relative w-full">
