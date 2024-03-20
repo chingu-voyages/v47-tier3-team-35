@@ -1,8 +1,7 @@
 import { FoodItemSuccessResult } from "@/actions/food/types/types";
 import { FoodItemVersion, GroceryItem } from "@prisma/client";
 import { FormProps } from "../../types/types";
-import { useCallback, useEffect, useState } from "react";
-import { ErrorMessage } from "@/utils/generateErrMessage";
+import { useEffect } from "react";
 import { getSingleGroceryItem } from "@/actions/groceries/actions";
 import { Alert, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
@@ -13,6 +12,7 @@ import GroceryItemPurchasedSubmitFormWrapper from "./wrappers/GroceryItemPurchas
 import GroceryItemFormPurchasedInputs from "./components/GroceryItemFormPurchasedInputs";
 import FormLoading from "../../components/FormLoading";
 import GroceryItemPurchasedFormWrappers from "./wrappers/GroceryItemPurchasedFormWrappers";
+import useFormState from "../../hooks/useFormState";
 export type GroceryItemPurchasedProps = Partial<
   GroceryItem & Pick<FoodItemVersion, "price" | "expirationDate" | "quantity">
 >;
@@ -26,31 +26,20 @@ export default function GroceryPurchasedForm({
 > & {
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
-  const [open, setOpen] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorMessage | null>(null);
-  const [success, setSuccess] = useState<FoodItemSuccessResult | null>(null);
-  const [itemData, setItemData] = useState<GroceryItemPurchasedProps | null>(
-    defaultData || null
-  );
-  const setErrFunc = (e: ErrorMessage) => {
-    setError(e);
-    setSuccess(null);
-  };
-  const setSuccessFunc = (e: FoodItemSuccessResult) => {
-    setError(null);
-    setSuccess(e);
-  };
-  const savedSuccessFunc = useCallback(setSuccessFunc, []);
-  const savedErrFunc = useCallback(setErrFunc, []);
-  const handleOpen = () => {
-    setSuccess(null);
-    setOpen(true);
-  };
-  const handleClose = (result?: FoodItemSuccessResult) => {
-    if (result) savedSuccessFunc(result);
-    setOpen(false);
-  };
+  const {
+    itemData,
+    success,
+    error,
+    loading,
+    open,
+    setItemData,
+    setLoading,
+    handleOpen,
+    savedErrFunc,
+    handleClose,
+  } = useFormState<GroceryItemPurchasedProps, FoodItemSuccessResult>({
+    defaultData,
+  });
   useEffect(() => {
     if (!itemId) return;
     if (open) return;

@@ -1,6 +1,6 @@
 import { FoodType } from "@/prisma/mock/mockData";
 import { FoodItemVersion } from "@prisma/client";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getFood } from "@/actions/food/actions";
 import { Alert, Typography } from "@mui/material";
 import {
@@ -15,10 +15,10 @@ import FoodItemVersionWrappers from "@/components/form/forms/foodForm/wrappers/F
 import FoodItemFormWrappers from "@/components/form/forms/foodForm/wrappers/FoodItemFormWrappers";
 import FoodFormSubmitWrapper from "./wrappers/FoodFormSubmitWrapper";
 import CheckIcon from "@mui/icons-material/Check";
-import { ErrorMessage } from "@/utils/generateErrMessage";
 import FormModalWrapper from "../../components/FormModalWrapper";
 import { FoodItemSuccessResult } from "@/actions/food/types/types";
-type FoodItemFormType = FoodType & {
+import useFormState from "../../hooks/useFormState";
+type FoodItemFormType = Partial<FoodType> & {
   recentFoodItemVer?: Partial<FoodItemVersion> | null;
 };
 export const FoodFormWrappers = ({
@@ -46,31 +46,20 @@ export default function FoodForm({
   fullInputs?: boolean;
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
-  const [open, setOpen] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorMessage | null>(null);
-  const [success, setSuccess] = useState<FoodItemSuccessResult | null>(null);
-  const [itemData, setItemData] = useState<FoodItemFormType | null>(
-    defaultData || null
-  );
-  const setErrFunc = (e: ErrorMessage) => {
-    setError(e);
-    setSuccess(null);
-  };
-  const setSuccessFunc = (e: FoodItemSuccessResult) => {
-    setError(null);
-    setSuccess(e);
-  };
-  const savedSuccessFunc = useCallback(setSuccessFunc, []);
-  const savedErrFunc = useCallback(setErrFunc, []);
-  const handleOpen = () => {
-    setSuccess(null);
-    setOpen(true);
-  };
-  const handleClose = (result?: FoodItemSuccessResult) => {
-    if (result) savedSuccessFunc(result);
-    setOpen(false);
-  };
+  const {
+    itemData,
+    success,
+    error,
+    loading,
+    open,
+    setItemData,
+    setLoading,
+    handleOpen,
+    savedErrFunc,
+    handleClose,
+  } = useFormState<FoodItemFormType, FoodItemSuccessResult>({
+    defaultData,
+  });
   useEffect(() => {
     if (!itemId) return;
     if (actionType === "create" && open) return;

@@ -6,18 +6,17 @@ import { SpaceProvider } from "@/components/form/inputs/wrapperInputs/space/Spac
 import { TitleProvider } from "@/components/form/inputs/wrapperInputs/title/TitleProvider";
 import { GroceryItem } from "@prisma/client";
 import React from "react";
-
 export default function GroceryItemFormWrappers({
   itemData,
   children,
 }: {
-  itemData: GroceryItem | null;
+  itemData: Partial<GroceryItem> | null;
   children: React.ReactNode;
 }) {
   const spaceValue =
     itemData && itemData.roomId
       ? {
-          label: itemData.roomTitle,
+          label: itemData.roomTitle || "",
           value: itemData.roomId,
         }
       : null;

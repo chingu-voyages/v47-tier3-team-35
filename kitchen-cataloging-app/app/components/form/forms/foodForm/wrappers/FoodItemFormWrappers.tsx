@@ -10,13 +10,13 @@ export default function FoodItemFormWrappers({
   itemData,
   children,
 }: {
-  itemData: FoodType | null;
+  itemData: Partial<FoodType> | null;
   children: React.ReactNode;
 }) {
   const spaceValue =
     itemData && itemData.roomId
       ? {
-          label: itemData.roomTitle,
+          label: itemData.roomTitle || "",
           value: itemData.roomId,
         }
       : null;

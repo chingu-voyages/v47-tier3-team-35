@@ -1,8 +1,8 @@
+"use client";
 import { SpaceSuccessResult } from "@/actions/space/types/types";
 import { Room } from "@prisma/client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FormProps } from "../../types/types";
-import { ErrorMessage } from "@/utils/generateErrMessage";
 import { getRoom } from "@/actions/space/actions";
 import { Alert, Typography } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
@@ -13,7 +13,7 @@ import SpaceFormWrappers from "./wrappers/SpaceFormWrappers";
 import SpaceSubmitFormWrapper from "./wrappers/SpaceFormSubmitFormWrapper";
 import SpaceFormInputs from "./components/SpaceFormInputs";
 import FormLoading from "../../components/FormLoading";
-
+import useFormState from "../../hooks/useFormState";
 export default function SpaceForm({
   children,
   actionType,
@@ -22,31 +22,18 @@ export default function SpaceForm({
 }: Omit<FormProps<Partial<Room>, SpaceSuccessResult>, "children"> & {
   children: (props: { handleOpen: () => void }) => React.ReactNode;
 }) {
-  const [open, setOpen] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorMessage | null>(null);
-  const [success, setSuccess] = useState<SpaceSuccessResult | null>(null);
-  const [itemData, setItemData] = useState<Partial<Room> | null>(
-    defaultData || null
-  );
-  const setErrFunc = (e: ErrorMessage) => {
-    setError(e);
-    setSuccess(null);
-  };
-  const setSuccessFunc = (e: SpaceSuccessResult) => {
-    setError(null);
-    setSuccess(e);
-  };
-  const savedSuccessFunc = useCallback(setSuccessFunc, []);
-  const savedErrFunc = useCallback(setErrFunc, []);
-  const handleOpen = () => {
-    setSuccess(null);
-    setOpen(true);
-  };
-  const handleClose = (result?: SpaceSuccessResult) => {
-    if (result) savedSuccessFunc(result);
-    setOpen(false);
-  };
+  const {
+    itemData,
+    success,
+    error,
+    loading,
+    open,
+    setItemData,
+    setLoading,
+    handleOpen,
+    savedErrFunc,
+    handleClose,
+  } = useFormState<Room, SpaceSuccessResult>({ defaultData });
   useEffect(() => {
     if (!itemId) return;
     if (actionType === "create" && open) return;
