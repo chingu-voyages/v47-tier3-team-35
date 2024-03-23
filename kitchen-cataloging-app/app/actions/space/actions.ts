@@ -1,5 +1,4 @@
 "use server";
-// import { revalidatePath } from "next/cache";
 import { Room } from "@prisma/client";
 import { auth } from "@clerk/nextjs";
 import { paginateSpaces } from "./search/paginateSpaces";
@@ -66,5 +65,4 @@ export const editRoom = async (formData: FormData) => {
   const roomName = formData.get("roomName")?.toString();
   const roomId = formData.get("roomId")?.toString();
   return await editSingleRoom({ roomId, roomName, userId });
-  //revalidatePath("/spaces");
 };

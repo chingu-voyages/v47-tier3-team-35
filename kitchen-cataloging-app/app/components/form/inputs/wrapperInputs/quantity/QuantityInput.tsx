@@ -15,7 +15,7 @@ export default function QuantityInput({
       id="outlined-start-adornment"
       label={`Quantity ${type === "add" ? "added" : "removed"}`}
       placeholder={`0`}
-      value={quantity}
+      value={quantity.toString()}
       onChange={onChange}
       error={error}
       helperText={error && "Quantity is required and must be an integer"}

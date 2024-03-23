@@ -17,7 +17,7 @@ export default function PriceInput({
       id="outlined-start-adornment"
       label={label || "Price"}
       placeholder={placeholder || "Item Price"}
-      value={price}
+      value={price.toString()}
       error={error}
       helperText={
         error && "Price is required and must be formatted correctly (X.XX)"

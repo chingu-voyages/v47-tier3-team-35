@@ -5,6 +5,12 @@ export default function TextInput(props: TextFieldProps) {
     <TextField
       {...props}
       className="h-14"
+      InputLabelProps={{
+        className: "text-3xl",
+      }}
+      InputProps={{
+        className: "text-3xl",
+      }}
       variant="standard"
     />
   );

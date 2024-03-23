@@ -4,11 +4,12 @@ import { useTitleInput } from "./TitleProvider";
 import { TextFieldProps } from "@mui/material";
 export default function TitleInput(props?: Partial<TextFieldProps>) {
   const parsedProps = props || {};
-  const defaultProps = {
+  const inputProps: Partial<TextFieldProps> = {
     label: "Name",
     variant: "standard",
     placeholder: "Item Name",
     name: "title",
+    ...parsedProps,
   };
   const titleProps = useTitleInput();
   if (!titleProps) return <></>;
@@ -16,11 +17,10 @@ export default function TitleInput(props?: Partial<TextFieldProps>) {
   return (
     <TextInput
       id="outlined-start-adornment"
-      {...defaultProps}
-      {...parsedProps}
+      {...inputProps}
       defaultValue={title}
       error={error}
-      helperText={error && `${label} is required`}
+      helperText={error && `${inputProps.label} is required`}
       onChange={onChange}
     />
   );

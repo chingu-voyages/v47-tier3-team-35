@@ -32,6 +32,9 @@ const DateInput = ({
           aria-labelledby="date-input-label"
           slotProps={{
             textField: {
+              inputProps: {
+                className: "h-12 py-0 text-3xl",
+              },
               helperText: "",
               onFocus: () => setFocused(true),
               onBlur: () => setFocused(false),

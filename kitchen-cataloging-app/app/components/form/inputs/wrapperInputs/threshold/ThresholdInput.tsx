@@ -9,7 +9,7 @@ export default function ThresholdInput() {
     <SliderInput
       value={threshold}
       onChange={onChange}
-      label="Threshold"
+      label="Reminder Threshold"
       name="threshold"
     />
   );

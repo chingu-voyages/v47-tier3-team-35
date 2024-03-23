@@ -4,7 +4,7 @@ export const determineSelectStyles: ClassNamesConfig<
   any,
   GroupBase<any>
 > = {
-  container: () => "flex w-full min-h-14",
+  container: () => "flex w-full min-h-12",
   control: (props) =>
     `w-full min-h-0 bg-default-sys-light-surface-bright shadow-none ${
       props.isFocused

@@ -32,7 +32,8 @@ export const QuantityProvider = ({
     if (val === "") return setQuantity(0);
     const valNum = parseInt(val);
     if (Number.isNaN(valNum)) return setQuantity(0);
-    setQuantity(valNum);
+    const absVale = Math.abs(valNum)
+    setQuantity(absVale);
   };
   return (
     <QuantityContext.Provider
