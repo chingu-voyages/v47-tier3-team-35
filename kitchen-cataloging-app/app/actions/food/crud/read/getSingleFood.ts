@@ -33,6 +33,7 @@ export const getSingleFood = async ({
     foodPromise,
     mostRecentFoodVerPromise,
   ]);
-  const castFood = food as Food;
+  if (!food) return null;
+  const castFood = food;
   return { ...castFood, recentFoodItemVer: mostRecentFoodVer, id: castFood.id };
 };
